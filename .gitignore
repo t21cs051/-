@@ -1,6 +1,10 @@
+# 全員共通して除外するファイル
 *.log
 *.pyc
 __pycache__/
 db-volumes/
 db.sqlite3
 
+#　個人の環境によって除外するファイル（各自追加してもらって大丈夫です）
+.vscode/launch.json
+.vscode/settings.json
