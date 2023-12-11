@@ -40,6 +40,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'apps.accounts.apps.AccountsConfig',
     'apps.master.apps.MasterConfig',
+    'apps.data_export.apps.DataExportConfig',
+    'apps.measurement.apps.MeasurementConfig',
+    'apps.usage_view.apps.UsageViewConfig',
+    'apps.work_log.apps.WorkLogConfig',
 ]
 
 MIDDLEWARE = [
@@ -126,3 +130,6 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# 認証用のユーザモデルを指定
+AUTH_USER_MODEL = 'accounts.CustomUser'
