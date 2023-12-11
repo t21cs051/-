@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class UsageviewConfig(AppConfig):
+class Usage_viewConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
-    name = "usageView"
+    name = "apps.usage_view"
