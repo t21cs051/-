@@ -1,3 +1,6 @@
 from django.contrib import admin
+from apps.master.models import Rack, Ups, PowerSystem
 
-# Register your models here.
+admin.site.register(Rack)
+admin.site.register(Ups)
+admin.site.register(PowerSystem)
