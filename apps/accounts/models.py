@@ -28,7 +28,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         primary_key=True,
     )
     # 氏名
-    full_name = models.CharField(max_length=50)
+    full_name = models.CharField(max_length=30)
 
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=True)
