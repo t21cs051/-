@@ -39,4 +39,4 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = ['full_name']
 
     def __str__(self):
-        return self.employee_number
+        return f'{self.employee_number} - {self.full_name}'
