@@ -1,24 +1,35 @@
 from django.db import models
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 # ラックを表すモデル
 class Rack(models.Model):
-    rack_number = models.IntegerField() # ラック番号
+    # ラック番号(0~999)
+    rack_number = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(999)])
 
     def __str__(self):
         return str(self.rack_number)
     
 # UPSを表すモデル
 class Ups(models.Model):
-    ups_number = models.IntegerField() # UPS番号
+    # UPS番号(0~99)
+    ups_number = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(99)])
 
     def __str__(self):
         return str(self.ups_number)
 
 # 電源系統を表すモデル
 class PowerSystem(models.Model):
-    power_system_number = models.IntegerField() # 電源系統番号
-    supply_source = models.ForeignKey(Ups, on_delete=models.CASCADE) # 電源供給元のUPS
-    supply_rack = models.ForeignKey(Rack, on_delete=models.CASCADE) # 供給先のラック
+    # 電源系統番号(0~999)
+    power_system_number = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(999)])
+
+    # 電源系統の最大電流値(0.0~100.0[A])
+    max_current = models.FloatField(validators=[MinValueValidator(0.0), MaxValueValidator(100.0)])
+
+    # 電源供給元のUPS
+    supply_source = models.ForeignKey(Ups, on_delete=models.CASCADE)
+
+    # 供給先のラック
+    supply_rack = models.ForeignKey(Rack, on_delete=models.CASCADE)
 
     def __str__(self):
         return str(self.power_system_number)
