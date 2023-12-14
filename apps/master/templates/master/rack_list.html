@@ -1,0 +1,19 @@
+
+{% block title %} ラック番号 {% endblock %}
+
+{% block main %}
+<table class="table">
+        <thead class="table-dark">
+                <tr>
+                        <th>#</th>
+                </tr>
+        </thead>
+        <tbody>
+       {% for rack in object_list %}
+			<tr>
+				<th>{{ rack.id }}</th>
+			</tr>
+		{% endfor %}
+	</tbody>
+</table>
+{% endblock %}

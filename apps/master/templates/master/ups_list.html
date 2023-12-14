@@ -1,0 +1,19 @@
+
+{% block title %} UPS番号 {% endblock %}
+
+{% block main %}
+<table class="table">
+        <thead class="table-dark">
+                <tr>
+                        <th>#</th>
+                </tr>
+        </thead>
+        <tbody>
+       {% for ups in object_list %}
+			<tr>
+				<th>{{ ups.id }}</th>
+			</tr>
+		{% endfor %}
+	</tbody>
+</table>
+{% endblock %}
