@@ -12,8 +12,13 @@ class RackForm(forms.ModelForm):
         
     
 #UPS
-class UpsNumberForm(forms.Form):
-    ups_number = forms.IntegerField(label='ups_number')
+class UpsIdForm(forms.Form):
+    ups_id = forms.IntegerField(label='ups_id')
+    
+class UpsForm(forms.ModelForm):
+    class Meta:
+        model = Ups
+        fields = ['ups_number']
     
 #電源系統
 class PowerSystemNumberForm(forms.Form):

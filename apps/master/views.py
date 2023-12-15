@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.urls.base import reverse_lazy
 from django.shortcuts import get_object_or_404
 from .models import Rack, Ups, PowerSystem
-from .forms import RackIdForm, RackForm, PowerSystemForm
+from .forms import RackIdForm, RackForm,UpsIdForm, UpsForm, PowerSystemForm
 
 #ラック番号表示画面
 class RackList(TemplateView):
@@ -90,12 +90,14 @@ class RackDeleteView(TemplateView):
 
 #UPS番号表示画面
 class UpsList(TemplateView):
-    model = Ups
+    model = Ups 
     template_name = 'master/ups_list.html'
     
     def post(self, request, *args, **kwargs):
+        ups_id = self.request.POST.get('ups_id')
+        ups = get_object_or_404(Ups, pk=ups_id)
         ups_number = self.request.POST.get('ups_number')
-        ups = get_object_or_404(Rack, pk=ups_number)
+        ups.rack_number = ups_number
         ups.save()
         return HttpResponseRedirect(reverse('master:ups'))
 
@@ -109,6 +111,24 @@ class UpsAddView(CreateView):
     fields = ('ups_number',)
     template_name = 'master/ups_add.html'
     success_url = reverse_lazy('master:ups')
+
+class UpsShowView(TemplateView):
+    model =Ups
+    template_name = 'master/ups_show.html'
+
+    def post(self, request, *args, **kwargs):
+        ups_id = self.request.POST.get('ups_id')
+        ups = Ups.objects.get(pk=ups_id)
+        context = super().get_context_data(**kwargs)
+        context['form_id'] = UpsIdForm()
+        context['ups'] = ups
+        return self.render_to_response(context)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form_id'] = UpsIdForm()
+        return context
+
 
 #電源系統表示画面
 class PowerSystemList(TemplateView):
