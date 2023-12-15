@@ -103,6 +103,12 @@ class UpsList(TemplateView):
         context = super().get_context_data(**kwargs)
         context['object_list'] = Ups.objects.all()
         return context
+    
+class UpsAddView(CreateView):
+    model = Ups
+    fields = ('ups_number',)
+    template_name = 'master/ups_add.html'
+    success_url = reverse_lazy('master:ups')
 
 #電源系統表示画面
 class PowerSystemList(TemplateView):

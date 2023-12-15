@@ -5,15 +5,20 @@
 <table class="table">
         <thead class="table-dark">
                 <tr>
-                        <th>#</th>
+                        <th>UPSID</th>
+                        <th>UPS番号</th>
                 </tr>
         </thead>
         <tbody>
        {% for ups in object_list %}
 			<tr>
-				<th>{{ ups.id }}</th>
+				<td scope="row">{{ ups.id }}</td>
+				<td>{{ ups.ups_number }}</td>
 			</tr>
 		{% endfor %}
 	</tbody>
 </table>
+<ul>
+<li><a href="{% url 'master:ups_add' %}">Add</a></li>
+</ul>
 {% endblock %}
