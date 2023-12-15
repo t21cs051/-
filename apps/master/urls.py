@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import RackList,RackAddView, RackShowView,RackEditView,RackDeleteView, UpsList, UpsAddView, UpsShowView, PowerSystemList
+from .views import RackList,RackAddView, RackShowView,RackEditView,RackDeleteView, UpsList, UpsAddView, UpsShowView, UpsEditView, UpsDeleteView, PowerSystemList
 
 
 app_name = "master"
@@ -13,5 +13,7 @@ urlpatterns = [
     path('ups/', UpsList.as_view(), name='ups'),
     path('ups_add/', UpsAddView.as_view(), name='ups_add'),
     path('ups_show/', UpsShowView.as_view(), name='ups_show'),
+    path('ups_edit/<int:id>/', UpsEditView.as_view(), name='ups_edit'),
+    path('ups_delete/<int:id>/', UpsDeleteView.as_view(), name='ups_delete'),
     path('power_system/', PowerSystemList.as_view(), name='power_system'),
 ]

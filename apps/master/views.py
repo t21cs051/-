@@ -129,6 +129,44 @@ class UpsShowView(TemplateView):
         context['form_id'] = UpsIdForm()
         return context
 
+class UpsEditView(TemplateView):
+    model = Ups
+    fields = ('ups_number')
+    template_name = 'master/ups_edit.html'
+    success_url = 'ups/'
+
+    def post(self, request, *args, **kwargs):
+        ups_id = self.kwargs.get('id')
+        ups_number = self.request.POST.get('ups_number')
+        ups = get_object_or_404(Ups, pk=ups_id)
+        ups.ups_number = ups_number
+        ups.save()
+        return HttpResponseRedirect(reverse('master:ups'))
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form_id'] = UpsIdForm()
+        context['form'] = UpsForm()
+        return context
+
+class UpsDeleteView(TemplateView):
+    model = Ups
+    template_name = 'master/ups_delete.html'
+        
+    def post(self, request, *args, **kwargs):
+        ups_id = self.kwargs.get('id')
+        ups = get_object_or_404(Ups, pk=ups_id)
+        ups.delete()
+        return HttpResponseRedirect(reverse('master:ups'))
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        ups_id = self.kwargs.get('id')
+        ups = get_object_or_404(Ups, pk=ups_id)
+        context['ups'] = ups
+        context['form'] = UpsIdForm()
+        return context
+    
 
 #電源系統表示画面
 class PowerSystemList(TemplateView):
