@@ -28,7 +28,7 @@ class RackList(TemplateView):
 
 class RackAddView(CreateView):
     model = Rack
-    fields = ()
+    fields = ('rack_number',)
     template_name = 'master/rack_add.html'
     success_url = reverse_lazy('master:rack')
 
@@ -51,6 +51,7 @@ class RackShowView(TemplateView):
 
 class RackEditView(TemplateView):
     model = Rack
+    fields = ('rack_number')
     template_name = 'master/rack_edit.html'
     success_url = 'rack/'
 
