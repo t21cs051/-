@@ -1,0 +1,26 @@
+
+{% block title %} 電源系統番号 {% endblock %}
+
+{% block main %}
+<table class="table">
+        <thead class="table-dark">
+                <tr>
+                        <th>#</th>
+                        <th>最大電流値</th>
+                        <th>供給元UPS</th>
+                        <th>供給先ラック</th>
+                        
+                </tr>
+        </thead>
+        <tbody>
+       {% for power_system in object_list %}
+			<tr>
+				<th>{{ power_system.id }}</th>
+				<th>{{ power_system.max_current }}</th>
+				<th>{{ power_system.supply_source }}</th>
+				<th>{{ power_system.supply_rack }}</th>
+			</tr>
+		{% endfor %}
+	</tbody>
+</table>
+{% endblock %}
