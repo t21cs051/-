@@ -2,8 +2,14 @@ from django import forms
 from .models import Rack, Ups, PowerSystem
 
 #ラック
-class RackNumberForm(forms.Form):
-    rack_number = forms.IntegerField(label='rack_number')
+class RackIdForm(forms.Form):
+    rack_id = forms.IntegerField(label='rack_id')
+    
+class RackForm(forms.ModelForm):
+    class Meta:
+        model = Rack
+        fields = ['rack_number']
+        
     
 #UPS
 class UpsNumberForm(forms.Form):
