@@ -55,9 +55,9 @@ class RackEditView(TemplateView):
     success_url = 'rack/'
 
     def post(self, request, *args, **kwargs):
-        rack_id = self.request.POST.get('id')
-        rack = get_object_or_404(Rack, pk=rack_id)
+        rack_id = self.kwargs.get('id')
         rack_number = self.request.POST.get('rack_number')
+        rack = get_object_or_404(Rack, pk=rack_id)
         rack.rack_number = rack_number
         rack.save()
         return HttpResponseRedirect(reverse('master:rack'))

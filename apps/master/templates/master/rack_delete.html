@@ -4,7 +4,7 @@
 <a>本当に削除しますか？</a>
 <form action="{% url 'master:rack_delete' rack.id %}" method="post">
     {% csrf_token %}
-    <tr><th><label for="id_name">ID:</label></th><td><a>{{ item.id }}</a></td></tr>
+    <tr><th><label for="id_name">ID:</label></th><td><a>{{ id }}</a></td></tr>
 
     <dl>
         <dt>ラック番号</dt><dd>{{ rack.rack_number }}</dd>
