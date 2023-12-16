@@ -31,7 +31,7 @@ class WorkLogListView(ListView):
 class WorkLogAddView(CreateView):
     model = WorkLog
     template_name = 'worklog/worklog_add.html'
-    fields = ('work_date', 'rack', 'description', 'employee')
+    fields = ('work_date', 'rack', 'work_type', 'description', 'employee')
     success_url = reverse_lazy('worklog:worklog_list')
 
 # WorkLogの更新ビュー

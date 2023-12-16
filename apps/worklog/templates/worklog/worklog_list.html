@@ -1,6 +1,8 @@
 {% comment %} {% extends "base.html" %} {% endcomment %}
 
-{% block title %} 作業記録 {% endblock %}
+{% block title %}
+<h2>作業記録一覧</h2>
+{% endblock %}
 
 {% block main %}
 <table class="table table-striped">
@@ -8,6 +10,7 @@
                 <tr>
                         <th>#</th>
                         <th>作業日時</th>
+                        <th>作業区分</th>
                         <th>作業内容</th>
                         <th>作業者</th>
                         <th>編集</th>
@@ -19,6 +22,7 @@
         <tr>
             <td>{{ worklog.id }}</td>
             <td>{{ worklog.work_date }}</td>
+            <td>{{ worklog.work_type }}</td>
             <td>{{ worklog.description }}</td>
             <td>{{ worklog.employee }}</td>
             <td><a href="{% url 'worklog:worklog_update' worklog.id %}">編集</a></td>
