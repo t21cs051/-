@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'apps.data_export.apps.DataExportConfig',
     'apps.measurement.apps.MeasurementConfig',
     'apps.usage_view.apps.UsageViewConfig',
-    'apps.work_log.apps.WorkLogConfig',
+    'apps.worklog.apps.WorkLogConfig',
 ]
 
 MIDDLEWARE = [
@@ -61,7 +61,9 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR /'templates',],
+        'DIRS': [
+            BASE_DIR / "templates", # テンプレートファイルの場所を指定
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -122,7 +124,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 # staticファイルが読み込めない場合は以下を追加（参考：https://plus-info-tech.com/django-pj-directory-structure）
 STATICFILES_DIRS = [BASE_DIR / 'static']
 
