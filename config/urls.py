@@ -23,5 +23,5 @@ urlpatterns = [
     path('data_export/', include('apps.data_export.urls'), name='data_export'),
     path('measurement/', include('apps.measurement.urls'), name='measurement'),
     path('usage_view/', include('apps.usage_view.urls'), name='usage_view'),
-    path('work_log/', include('apps.work_log.urls'), name='work_log'),
+    path('worklog/', include('apps.worklog.urls'), name='worklog'),
 ]

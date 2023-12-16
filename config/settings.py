@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'apps.data_export.apps.DataExportConfig',
     'apps.measurement.apps.MeasurementConfig',
     'apps.usage_view.apps.UsageViewConfig',
-    'apps.work_log.apps.WorkLogConfig',
+    'apps.worklog.apps.WorkLogConfig',
 ]
 
 MIDDLEWARE = [
