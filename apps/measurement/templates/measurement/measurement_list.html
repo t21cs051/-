@@ -1,0 +1,13 @@
+<!-- measurement/measurement_list.html -->
+{% extends "base.html" %}
+
+{% block title %}Measurement List{% endblock %}
+
+{% block main %}
+    <h2>Measurement List</h2>
+    <ul>
+        {% for measurement in measurements %}
+            <li>{{ measurement.measurement_date }} - {{ measurement.current_value }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
