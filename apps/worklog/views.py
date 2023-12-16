@@ -9,10 +9,22 @@ from .forms import WorkLogIdForm, WorkLogForm
 
 class WorkLogListView(ListView):
     model = WorkLog
-    template_name = 'worklog/worklog_list.html'
-    context_object_name = 'worklogs'
-    paginate_by = 10
-    # ordering = ['-created_at']
+    # template_name = 'worklog/worklog_list.html'
+    # context_object_name = 'worklogs'
+    # paginate_by = 10
+    # # ordering = ['-created_at']
+    def post(self, request, *args, **kwargs):
+        worklog_id = self.request.POST.get('worklog_id')
+        worklog = get_object_or_404(WorkLog, pk=worklog_id)
+        worklog_status = self.request.POST.get('worklog_status')
+        worklog.buy = worklog_status
+        worklog.save()
+        return HttpResponseRedirect(reverse('worklog:worklog_list'))
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form_id'] = WorkLogIdForm()
+        return context
 
 
 # WorkLogの追加ビュー
@@ -20,7 +32,7 @@ class WorkLogAddView(CreateView):
     model = WorkLog
     template_name = 'worklog/worklog_add.html'
     fields = ('work_date', 'rack', 'description', 'employee')
-    success_url = '/worklog/' # 作成後に遷移するURL
+    success_url = reverse_lazy('worklog:worklog_list')
 
 # WorkLogの更新ビュー
 class WorkLogUpdateView(UpdateView):

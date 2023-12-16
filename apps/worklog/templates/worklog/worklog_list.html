@@ -1,26 +1,30 @@
+{% comment %} {% extends "base.html" %} {% endcomment %}
 
-{% block content %}
-  <h1>Work Log</h1>
-  <table>
-    <thead>
-      <tr>
-        <th>Title</th>
-        <th>Description</th>
-        <th>Created At</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for work_log in work_logs %}
+{% block title %} 作業記録 {% endblock %}
+
+{% block main %}
+<table class="table table-striped">
+        <thead class="table-dark">
+                <tr>
+                        <th>#</th>
+                        <th>作業日時</th>
+                        <th>作業内容</th>
+                        <th>作業者</th>
+                        <th>編集</th>
+                        <th>削除</th>
+                </tr>
+        </thead>
+        <tbody>
+        {% for worklog in object_list %}
         <tr>
-          <td>{{ work_log.title }}</td>
-          <td>{{ work_log.description }}</td>
-          <td>{{ work_log.created_at }}</td>
+            <td>{{ worklog.id }}</td>
+            <td>{{ worklog.work_date }}</td>
+            <td>{{ worklog.description }}</td>
+            <td>{{ worklog.employee }}</td>
+            <td><a href="{% url 'worklog:worklog_update' worklog.id %}">編集</a></td>
+            {% comment %} <td><a href="{% url 'worklog_delete' worklog.id %}">削除</a></td> {% endcomment %}
         </tr>
-      {% empty %}
-        <tr>
-          <td colspan="3">No work logs found.</td>
-        </tr>
-      {% endfor %}
+    {% endfor %}
     </tbody>
-  </table>
+</table>
 {% endblock %}

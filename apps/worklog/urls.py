@@ -4,7 +4,7 @@ from . import views
 app_name = "worklog"
 
 urlpatterns = [
-    path('', views.WorkLogListView.as_view(), name='worklog_list'),
+    path('list/', views.WorkLogListView.as_view(), name='worklog_list'),
     path('add/', views.WorkLogAddView.as_view(), name='worklog_add'),
     path('update/<int:pk>/', views.WorkLogUpdateView.as_view(), name='worklog_update'),
 ]
