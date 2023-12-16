@@ -1,9 +1,11 @@
-{% block content %}
+{% extends "base.html" %}
+
+{% block main %}
   <h2>作業記録の編集</h2>
   <form method="POST">
   {% csrf_token %}
     {{ form.as_p }}
     <button type="submit">Update</button>
   </form>
-<a href="{% url "worklog:worklog_list" %}">キャンセル</a>
+  <a href="{% url "worklog:worklog_list" %}">キャンセル</a>
 {% endblock %}

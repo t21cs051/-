@@ -1,12 +1,9 @@
-{% comment %} {% extends "base.html" %} {% endcomment %}
-
-{% block title %}
-<h2>作業記録一覧</h2>
-{% endblock %}
+{% extends "base.html" %}
 
 {% block main %}
-<table class="table table-striped">
-        <thead class="table-dark">
+<h2>作業記録一覧</h2>
+<table>
+        <thead>
                 <tr>
                         <th>#</th>
                         <th>作業日時</th>
@@ -20,16 +17,16 @@
         <tbody>
         {% for worklog in object_list %}
         <tr>
-            <td>{{ worklog.id }}</td>
-            <td>{{ worklog.work_date }}</td>
-            <td>{{ worklog.work_type }}</td>
-            <td>{{ worklog.description }}</td>
-            <td>{{ worklog.employee }}</td>
-            <td><a href="{% url 'worklog:worklog_update' worklog.id %}">編集</a></td>
-            <td><a href="{% url 'worklog:worklog_delete' worklog.id %}">削除</a></td>
+                <td>{{ worklog.id }}</td>
+                <td>{{ worklog.work_date }}</td>
+                <td>{{ worklog.get_work_type_display }}</td>
+                <td>{{ worklog.description }}</td>
+                <td>{{ worklog.employee }}</td>
+                <td><a href="{% url 'worklog:worklog_update' worklog.id %}">編集</a></td>
+                <td><a href="{% url 'worklog:worklog_delete' worklog.id %}">削除</a></td>
         </tr>
-    {% endfor %}
-    </tbody>
+        {% endfor %}
+        </tbody>
 </table>
 <a href="{% url "worklog:worklog_add" %}">作業記録の追加</a>
 {% endblock %}

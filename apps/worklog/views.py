@@ -31,14 +31,19 @@ class WorkLogListView(ListView):
 class WorkLogAddView(CreateView):
     model = WorkLog
     template_name = 'worklog/worklog_add.html'
-    fields = ('work_date', 'rack', 'work_type', 'description', 'employee')
+    form_class = WorkLogForm
     success_url = reverse_lazy('worklog:worklog_list')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form_id'] = WorkLogIdForm()
+        return context
 
 # WorkLogの更新ビュー
 class WorkLogUpdateView(UpdateView):
     model = WorkLog
     template_name = 'worklog/worklog_update.html'
-    form_class = WorkLogForm  # YourWorkLogFormには、モデルに基づく適切なフォームが指定されていると仮定します
+    form_class = WorkLogForm
     success_url = reverse_lazy('worklog:worklog_list')
     
     def get_context_data(self, **kwargs):

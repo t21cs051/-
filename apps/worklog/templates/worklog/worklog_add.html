@@ -1,4 +1,6 @@
-{% block content %}
+{% extends "base.html" %}
+
+{% block main %}
   <h2>作業記録の追加</h2>
   <form method="POST">
   {% csrf_token %}

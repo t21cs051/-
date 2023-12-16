@@ -1,22 +1,24 @@
-{% block content %}
-  <h2>作業記録の削除</h2>
+{% extends "base.html" %}
 
-  <p>以下の作業記録を本当に削除しますか？</p>
+{% block main %}
+    <h2>作業記録の削除</h2>
 
-  <table>
-    <tbody>
-      <tr><td>ID:</td><td>{{ object.id }}</td></tr>
-      <tr><td>作業日時:</td><td>{{ object.work_date }}</td></tr>
-      <tr><td>作業区分:</td><td>{{ object.work_type }}</td></tr>
-      <tr><td>作業内容:</td><td>{{ object.description }}</td></tr>
-      <tr><td>作業者:</td><td>{{ object.employee }}</td></tr>
+    <p>以下の作業記録を本当に削除しますか？</p>
+
+    <table>
+        <tbody>
+        <tr><td>ID</td><td>:</td><td>{{ object.id }}</td></tr>
+        <tr><td>作業日時</td><td>:</td><td>{{ object.work_date }}</td></tr>
+        <tr><td>作業区分</td><td>:</td><td>{{ object.get_work_type_display }}</td></tr>
+        <tr><td>作業内容</td><td>:</td><td>{{ object.description }}</td></tr>
+        <tr><td>作業者</td><td>:</td><td>{{ object.employee }}</td></tr>
     </tbody>
-  </table>
+    </table>
 
-  <form method="POST">
-  {% csrf_token %}
+    <form method="POST">
+    {% csrf_token %}
     <input type="submit" value="削除">
-  </form>
+    </form>
 
-  <a href="{% url 'worklog:worklog_list' %}">キャンセル</a>
+    <a href="{% url 'worklog:worklog_list' %}">キャンセル</a>
 {% endblock %}
