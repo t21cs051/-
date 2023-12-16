@@ -10,5 +10,5 @@ class WorkLogForm(forms.ModelForm):
         model = WorkLog
         fields = ['work_date', 'rack', 'work_type', 'description', 'employee']
         widgets = {
-            'work_type': forms.RadioSelect(attrs={'class': 'radioSelectInLine'}),
+            'work_type': forms.RadioSelect(),
         }
