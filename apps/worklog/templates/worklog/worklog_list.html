@@ -22,7 +22,7 @@
             <td>{{ worklog.description }}</td>
             <td>{{ worklog.employee }}</td>
             <td><a href="{% url 'worklog:worklog_update' worklog.id %}">編集</a></td>
-            {% comment %} <td><a href="{% url 'worklog_delete' worklog.id %}">削除</a></td> {% endcomment %}
+            <td><a href="{% url 'worklog:worklog_delete' worklog.id %}">削除</a></td>
         </tr>
     {% endfor %}
     </tbody>
