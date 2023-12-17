@@ -23,7 +23,7 @@ class PowerSystem(models.Model):
     power_system_number = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(999)])
 
     # 電源系統の最大電流値(0.0~100.0[A])
-    max_current = models.FloatField(validators=[MinValueValidator(0.0), MaxValueValidator(100.0)])
+    max_current = models.FloatField(default=0.0, validators=[MinValueValidator(0.0), MaxValueValidator(100.0)])
 
     # 電源供給元のUPS
     supply_source = models.ForeignKey(Ups, on_delete=models.CASCADE)
