@@ -174,8 +174,10 @@ class PowerSystemList(TemplateView):
     template_name = 'master/power_system_list.html'
     
     def post(self, request, *args, **kwargs):
+        power_system_id = self.request.POST.get('power_system_id')
+        power_system = get_object_or_404(PowerSystem, pk=power_system_id)
         power_system_number = self.request.POST.get('power_system_number')
-        power_system = get_object_or_404(PowerSystem, pk=power_system_number)
+        power_system.poweer_system_number = power_system_number
         max_current = self.request.POST.get('max_current')
         power_system.max_current = max_current
         power_system.save()
@@ -183,6 +185,6 @@ class PowerSystemList(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['form'] = PowerSystemForm()
+        context['object_list'] = PowerSystem.objects.all()
         return context
     

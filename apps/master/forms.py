@@ -21,10 +21,10 @@ class UpsForm(forms.ModelForm):
         fields = ['ups_number']
     
 #電源系統
-class PowerSystemNumberForm(forms.Form):
-    power_system_number = forms.IntegerField(label='power_system_number')
+class PowerSystemIdForm(forms.Form):
+    power_system_id = forms.IntegerField(label='power_system_id')
     
 class PowerSystemForm(forms.ModelForm):
     class Meta:
         model = PowerSystem
-        fields = ['max_current', 'supply_source', 'supply_rack']
+        fields = ['power_system_number', 'max_current', 'supply_source', 'supply_rack']
