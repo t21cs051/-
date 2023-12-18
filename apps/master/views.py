@@ -220,9 +220,9 @@ class PowerSystemShowView(TemplateView):
         context['form_id'] = PowerSystemIdForm()
         return context
 
-class PowerSystemEditView(TemplateView):
+class PowerSystemEditView(TemplateView):#電源系統番号しか変えられない
     model = PowerSystem
-    fields = ('power_system_number')
+    fields = ('power_system_number', 'max_current', 'supply_source', 'supply_rack')
     template_name = 'master/power_system_edit.html'
     success_url = 'power_system/'
 
