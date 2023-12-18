@@ -8,6 +8,14 @@ from django.shortcuts import get_object_or_404
 from .models import Rack, Ups, PowerSystem
 from .forms import RackIdForm, RackForm,UpsIdForm, UpsForm, PowerSystemIdForm, PowerSystemForm
 
+#メインページ表示画面
+class mainpage(TemplateView):
+    template_name = 'master/master_main.html'
+    
+    def post(self, request, *args, **kwargs):
+        return HttpResponseRedirect(reverse('master:main'))
+
+
 #ラック番号表示画面
 class RackList(TemplateView):
     model = Rack

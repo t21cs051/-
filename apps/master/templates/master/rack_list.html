@@ -1,5 +1,5 @@
 
-{% block title %} ラック番号 {% endblock %}
+{% block title %} ラックリスト {% endblock %}
 
 {% block main %}
 <table class="table">
@@ -24,6 +24,8 @@
 </table>
 
 <ul>
-<li><a href="{% url 'master:rack_add' %}">Add</a></li>
-<li><a href="{% url 'master:rack_show' %}">Show</a></li></ul>
+<li><a href="{% url 'master:rack_add' %}">追加</a></li>
+<li><a href="{% url 'master:rack_show' %}">閲覧</a></li>
+<li><a href="{% url 'master:main' %}">メインページ</a></li>
+</ul>
 {% endblock %}

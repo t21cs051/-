@@ -2,11 +2,12 @@ from django.urls import path
 from .views import RackList,RackAddView, RackShowView,RackEditView,RackDeleteView
 from .views import UpsList, UpsAddView, UpsShowView, UpsEditView, UpsDeleteView
 from .views import PowerSystemList, PowerSystemAddView, PowerSystemShowView
-from apps.master.views import PowerSystemEditView, PowerSystemDeleteView, PowerSystemEditView, PowerSystemDeleteView
+from .views import PowerSystemEditView, PowerSystemDeleteView, PowerSystemEditView, PowerSystemDeleteView, mainpage
 
 app_name = "master"
 
 urlpatterns = [
+    path('main/', mainpage.as_view(), name='main'),
     path('rack/', RackList.as_view(), name='rack'),
     path('rack_add/', RackAddView.as_view(), name='rack_add'),
     path('rack_show/', RackShowView.as_view(), name='rack_show'),

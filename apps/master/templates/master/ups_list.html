@@ -1,5 +1,5 @@
 
-{% block title %} UPS番号 {% endblock %}
+{% block title %} UPSリスト {% endblock %}
 
 {% block main %}
 <table class="table">
@@ -23,5 +23,6 @@
 <ul>
 <li><a href="{% url 'master:ups_add' %}">Add</a></li>
 <li><a href="{% url 'master:ups_show' %}">Show</a></li>
+<li><a href="{% url 'master:main' %}">メインページ</a></li>
 </ul>
 {% endblock %}

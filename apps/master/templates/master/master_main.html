@@ -1,0 +1,15 @@
+{% load static %}
+
+<p>マスタ管理仮メインページ</p>
+
+<head>
+  <meta charset="UTF-8">
+  <title>マスタ管理仮メインページ</title>
+	<link rel="stylesheet" href="{% static '/bootstrap/css/bootstrap.min.css' %}">
+</head>
+<ul>
+<li><a href="{% url 'master:rack' %}" class="btn"><div class="d-grid gap-2"><button class="btn btn-primary" type="button">[ラック]</button></div></a></li>
+<li><a href="{% url 'master:ups' %}" class="btn"><button class="btn btn-primary" type="button">[UPS]</button></a></li>
+<li><a href="{% url 'master:power_system' %}" class="btn"><button class="btn btn-primary" type="button">[電源系統]</button></a></li>
+
+</ul>

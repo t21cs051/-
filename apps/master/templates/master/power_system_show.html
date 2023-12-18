@@ -1,4 +1,4 @@
-{% block title %} 個別リスト {% endblock %}
+{% block title %} 電源系統閲覧 {% endblock %}
 
 {% block main %}
 <form action="{% url 'master:power_system_show' %}" method="post">
@@ -11,13 +11,13 @@
 <dl>
 <dt>電源系統ID</dt><dd>{{ power_system.id }}</dd>
 <dt>電源系統番号</dt><dd>{{ power_system.power_system_number }}</dd>
-<dt>max_current</dt><dd>{{ power_system.max_current }}</dd>
-<dt>supply_source</dt><dd>{{ power_system.supply_source }}</dd>
-<dt>supply_rack</dt><dd>{{ power_system.supply_rack }}</dd>
+<dt>最大電流値</dt><dd>{{ power_system.max_current }}</dd>
+<dt>供給元UPS</dt><dd>{{ power_system.supply_source }}</dd>
+<dt>供給先ラック</dt><dd>{{ power_system.supply_rack }}</dd>
 </dl>
 {% endif %}
 
 <ul>
-<li><a href="{% url 'master:rack' %}">power_system一覧へ戻る</a></li>
+<li><a href="{% url 'master:rack' %}">電源系統一覧へ戻る</a></li>
 </ul>
 {% endblock %}

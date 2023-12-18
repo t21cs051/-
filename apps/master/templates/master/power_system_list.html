@@ -1,5 +1,5 @@
 
-{% block title %} 電源系統番号 {% endblock %}
+{% block title %} 電源系統リスト {% endblock %}
 
 {% block main %}
 <table class="table">
@@ -31,6 +31,8 @@
 </table>
 
 <ul>
-<li><a href="{% url 'master:power_system_add' %}">Add</a></li>
-<li><a href="{% url 'master:power_system_show' %}">Show</a></li></ul>
+<li><a href="{% url 'master:power_system_add' %}">追加</a></li>
+<li><a href="{% url 'master:power_system_show' %}">閲覧</a></li>
+<li><a href="{% url 'master:main' %}">メインページ</a></li>
+</ul>
 {% endblock %}
