@@ -1,0 +1,23 @@
+{% block title %} 個別リスト {% endblock %}
+
+{% block main %}
+<form action="{% url 'master:power_system_show' %}" method="post">
+{% csrf_token %}
+{{ form_id }}
+<input type="submit"/>
+</form>
+
+{% if power_system %}
+<dl>
+<dt>電源系統ID</dt><dd>{{ power_system.id }}</dd>
+<dt>電源系統番号</dt><dd>{{ power_system.power_system_number }}</dd>
+<dt>max_current</dt><dd>{{ power_system.max_current }}</dd>
+<dt>supply_source</dt><dd>{{ power_system.supply_source }}</dd>
+<dt>supply_rack</dt><dd>{{ power_system.supply_rack }}</dd>
+</dl>
+{% endif %}
+
+<ul>
+<li><a href="{% url 'master:rack' %}">power_system一覧へ戻る</a></li>
+</ul>
+{% endblock %}

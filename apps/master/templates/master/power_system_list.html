@@ -10,6 +10,8 @@
                         <th>最大電流値</th>
                         <th>供給元UPS</th>
                         <th>供給先ラック</th>
+                        <th>編集</th>
+                        <th>削除</th>
                         
                 </tr>
         </thead>
@@ -21,8 +23,14 @@
 				<td>{{ power_system.max_current }}</td>
 				<td>{{ power_system.supply_source }}</td>
 				<td>{{ power_system.supply_rack }}</td>
+				<td><a href="{% url 'master:power_system_edit' id=power_system.id %}">[編集]</a></td>
+	           <td><a href="{% url 'master:power_system_delete' id=power_system.id %}">[削除]</a></td>
 			</tr>
 		{% endfor %}
 	</tbody>
 </table>
+
+<ul>
+<li><a href="{% url 'master:power_system_add' %}">Add</a></li>
+<li><a href="{% url 'master:power_system_show' %}">Show</a></li></ul>
 {% endblock %}

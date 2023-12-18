@@ -28,3 +28,4 @@ class PowerSystemForm(forms.ModelForm):
     class Meta:
         model = PowerSystem
         fields = ['power_system_number', 'max_current', 'supply_source', 'supply_rack']
+        

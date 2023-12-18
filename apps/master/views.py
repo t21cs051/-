@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.urls.base import reverse_lazy
 from django.shortcuts import get_object_or_404
 from .models import Rack, Ups, PowerSystem
-from .forms import RackIdForm, RackForm,UpsIdForm, UpsForm, PowerSystemForm
+from .forms import RackIdForm, RackForm,UpsIdForm, UpsForm, PowerSystemIdForm, PowerSystemForm
 
 #ラック番号表示画面
 class RackList(TemplateView):
@@ -188,3 +188,65 @@ class PowerSystemList(TemplateView):
         context['object_list'] = PowerSystem.objects.all()
         return context
     
+    
+class PowerSystemAddView(CreateView):
+    model = PowerSystem
+    fields = ('power_system_number', 'max_current', 'supply_source', 'supply_rack')
+    template_name = 'master/power_system_add.html'
+    success_url = reverse_lazy('master:power_system')
+    
+class PowerSystemShowView(TemplateView):
+    model = PowerSystem
+    template_name = 'master/power_system_show.html'
+
+    def post(self, request, *args, **kwargs):
+        power_system_id = self.request.POST.get('power_system_id')
+        power_system = PowerSystem.objects.get(pk=power_system_id)
+        context = super().get_context_data(**kwargs)
+        context['form_id'] = PowerSystemIdForm()
+        context['power_system'] = power_system
+        return self.render_to_response(context)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form_id'] = PowerSystemIdForm()
+        return context
+
+class PowerSystemEditView(TemplateView):
+    model = PowerSystem
+    fields = ('power_system_number')
+    template_name = 'master/power_system_edit.html'
+    success_url = 'power_system/'
+
+    def post(self, request, *args, **kwargs):
+        power_system_id = self.kwargs.get('id')
+        power_system_number = self.request.POST.get('power_system_number')
+        power_system = get_object_or_404(PowerSystem, pk=power_system_id)
+        power_system.power_system_number = power_system_number
+        power_system.save()
+        return HttpResponseRedirect(reverse('master:power_system'))
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form_id'] = PowerSystemIdForm()
+        context['form'] = PowerSystemForm()
+        return context
+
+class PowerSystemDeleteView(TemplateView):
+    model = PowerSystem
+    template_name = 'master/power_system_delete.html'
+        
+    def post(self, request, *args, **kwargs):
+        power_system_id = self.kwargs.get('id')
+        power_system = get_object_or_404(PowerSystem, pk=power_system_id)
+        power_system.delete()
+        return HttpResponseRedirect(reverse('master:power_system'))
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        power_system_id = self.kwargs.get('id')
+        power_system = get_object_or_404(PowerSystem, pk=power_system_id)
+        context['power_system'] = power_system
+        context['form'] = PowerSystemIdForm()
+        return context
+        

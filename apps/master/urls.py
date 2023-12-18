@@ -1,6 +1,8 @@
 from django.urls import path
-from .views import RackList,RackAddView, RackShowView,RackEditView,RackDeleteView, UpsList, UpsAddView, UpsShowView, UpsEditView, UpsDeleteView, PowerSystemList
-
+from .views import RackList,RackAddView, RackShowView,RackEditView,RackDeleteView
+from .views import UpsList, UpsAddView, UpsShowView, UpsEditView, UpsDeleteView
+from .views import PowerSystemList, PowerSystemAddView, PowerSystemShowView
+from apps.master.views import PowerSystemEditView, PowerSystemDeleteView, PowerSystemEditView, PowerSystemDeleteView
 
 app_name = "master"
 
@@ -16,4 +18,8 @@ urlpatterns = [
     path('ups_edit/<int:id>/', UpsEditView.as_view(), name='ups_edit'),
     path('ups_delete/<int:id>/', UpsDeleteView.as_view(), name='ups_delete'),
     path('power_system/', PowerSystemList.as_view(), name='power_system'),
+    path('power_system_add/', PowerSystemAddView.as_view(), name='power_system_add'),
+    path('power_system_show/', PowerSystemShowView.as_view(), name='power_system_show'),
+    path('power_system_edit/<int:id>/', PowerSystemEditView.as_view(), name='power_system_edit'),
+    path('power_system_delete/<int:id>/', PowerSystemDeleteView.as_view(), name='power_system_delete'),
 ]
