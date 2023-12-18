@@ -1,11 +1,13 @@
 from django.db import models
+from django.utils import timezone
 from apps.accounts.models import CustomUser as Employee
 from apps.master.models import PowerSystem
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.template.defaultfilters import default
 
 # 電流測定結果
 class CurrentMeasurement(models.Model):
-    measurement_date = models.DateTimeField() # 計測日時
+    measurement_date = models.DateTimeField(default=timezone.now) # 計測日時
     # TODO: 電流値の有効数字を指定する
     # 測定した電流値(0.0~100.0[A])
     current_value = models.FloatField(validators=[MinValueValidator(0.0), MaxValueValidator(100.0)])
