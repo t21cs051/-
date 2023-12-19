@@ -228,16 +228,18 @@ class PowerSystemEditView(TemplateView):#電源系統番号しか変えられな
 
     def post(self, request, *args, **kwargs):
         power_system_id = self.kwargs.get('id')
-        power_system_number = self.request.POST.get('power_system_number')
         power_system = get_object_or_404(PowerSystem, pk=power_system_id)
-        power_system.power_system_number = power_system_number
-        power_system.save()
+        form = PowerSystemForm(request.POST, instance=power_system)
+        form.save()
         return HttpResponseRedirect(reverse('master:power_system'))
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        power_system_id = self.kwargs.get('id')
+        power_system = get_object_or_404(PowerSystem, pk=power_system_id)
+        form = PowerSystemForm(instance=power_system)
         context['form_id'] = PowerSystemIdForm()
-        context['form'] = PowerSystemForm()
+        context['form'] = form
         return context
 
 class PowerSystemDeleteView(TemplateView):
