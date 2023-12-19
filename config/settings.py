@@ -135,3 +135,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # 認証用のユーザモデルを指定
 AUTH_USER_MODEL = 'accounts.CustomUser'
+
+LOGIN_URL = '/accounts/login' 
+LOGIN_REDIRECT_URL = '/measurement'
+LOGOUT_REDIRECT_URL='/accounts/login'
+
