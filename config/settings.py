@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'apps.measurement.apps.MeasurementConfig',
     'apps.usage_view.apps.UsageViewConfig',
     'apps.worklog.apps.WorkLogConfig',
+    
+    'widget_tweaks'
 ]
 
 MIDDLEWARE = [
