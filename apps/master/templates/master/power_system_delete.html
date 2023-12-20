@@ -1,0 +1,15 @@
+{% block title %} 電源系統削除 {% endblock %}
+
+{% block main %}
+<a>本当に削除しますか？</a>
+<form action="{% url 'master:power_system_delete' power_system.id %}" method="post">
+    {% csrf_token %}
+    <tr><th><label for="id_name">ID:</label></th><td><a>{{ id }}</a></td></tr>
+
+    <dl>
+        <dt>電源系統番号</dt><dd>{{ power_system.power_system_number }}</dd>
+    </dl>
+
+    <input type="submit" value="削除"/>
+</form>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% block title %} ラック閲覧 {% endblock %}
+
+{% block main %}
+<form action="{% url 'master:rack_show' %}" method="post">
+{% csrf_token %}
+{{ form_id }}
+<input type="submit"/>
+</form>
+
+{% if rack %}
+<dl>
+<dt>ラックID</dt><dd>{{ rack.id }}</dd>
+<dt>ラック番号</dt><dd>{{ rack.rack_number }}</dd>
+</dl>
+{% endif %}
+
+<ul>
+<li><a href="{% url 'master:rack' %}">ラック一覧へ戻る</a></li>
+</ul>
+{% endblock %}

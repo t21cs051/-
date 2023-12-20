@@ -1,0 +1,11 @@
+{% block title %} ラック追加 {% endblock %}
+
+{% block main %}
+<form action="{% url 'master:rack_add' %}" method="post">
+{% csrf_token %}
+<table>
+{{ form.as_table }}
+</table>
+<input type="submit"/>
+</form>
+{% endblock %}

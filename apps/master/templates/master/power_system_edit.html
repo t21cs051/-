@@ -1,0 +1,12 @@
+{% block title %} 電源系統編集 {% endblock %}
+
+{% block main %}
+<form action="{% url 'master:power_system_edit' id %}" method="post">
+{% csrf_token %}
+<table>
+<tr><th><label for="id_name">ID:</label></th><td><a>{{ id }}</a></td></tr>
+{{ form.as_table }}
+</table>
+<input type="submit"/>
+</form>
+{% endblock %}
