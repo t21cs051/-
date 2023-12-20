@@ -139,6 +139,6 @@ AUTH_USER_MODEL = 'accounts.CustomUser'
 
 # ログイン関連の設定
 LOGIN_URL = '/accounts/login' 
-LOGIN_REDIRECT_URL = '/measurement'
+LOGIN_REDIRECT_URL = '/measurement/list'
 LOGOUT_REDIRECT_URL='/accounts/login'
 
