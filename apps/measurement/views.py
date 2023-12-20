@@ -43,6 +43,3 @@ class MeasurementAddView(CreateView):
     fields = ('measurement_date','current_value','power_system','employee')
     template_name = 'measurement/measurement_add.html'
     success_url = reverse_lazy('measurement:list')
-    
-    
-    
