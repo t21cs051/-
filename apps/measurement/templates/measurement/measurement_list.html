@@ -20,10 +20,10 @@
                 <td>{{ CurrentMeasurement.current_value }}</td>
                 <td>{{ CurrentMeasurement.power_system }}</td>
                 <td>{{ CurrentMeasurement.employee }}</td>
-                <td><a href="{% url 'measurement:measurement_show'  %}">detail</a></td>
+                <td><a href="{% url 'measurement:show' %}">detail</a></td>
         </tr>
         {% endfor %}
         </tbody>
 </table>
-<a href="{% url "measurement:measurement_add" %}">Add Current Measurement</a>
+<a href="{% url "measurement:add" %}">Add Current Measurement</a>
 {% endblock %}

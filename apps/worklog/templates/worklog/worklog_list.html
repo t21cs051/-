@@ -22,11 +22,11 @@
                 <td>{{ worklog.get_work_type_display }}</td>
                 <td>{{ worklog.description }}</td>
                 <td>{{ worklog.employee }}</td>
-                <td><a href="{% url 'worklog:worklog_update' worklog.id %}">編集</a></td>
-                <td><a href="{% url 'worklog:worklog_delete' worklog.id %}">削除</a></td>
+                <td><a href="{% url 'worklog:update' worklog.id %}">編集</a></td>
+                <td><a href="{% url 'worklog:delete' worklog.id %}">削除</a></td>
         </tr>
         {% endfor %}
         </tbody>
 </table>
-<a href="{% url "worklog:worklog_add" %}">作業記録の追加</a>
+<a href="{% url "worklog:add" %}">作業記録の追加</a>
 {% endblock %}

@@ -40,10 +40,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'apps.accounts.apps.AccountsConfig',
     'apps.master.apps.MasterConfig',
-    'apps.data_export.apps.DataExportConfig',
+    'apps.export.apps.ExportConfig',
     'apps.measurement.apps.MeasurementConfig',
-    'apps.usage_view.apps.UsageViewConfig',
+    'apps.usage.apps.UsageConfig',
     'apps.worklog.apps.WorkLogConfig',
+    'apps.home.apps.HomeConfig',
 ]
 
 MIDDLEWARE = [
@@ -136,7 +137,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # 認証用のユーザモデルを指定
 AUTH_USER_MODEL = 'accounts.CustomUser'
 
-LOGIN_URL = '/accounts/login' 
-LOGIN_REDIRECT_URL = '/measurement'
-LOGOUT_REDIRECT_URL='/accounts/login'
+# ログイン関連の設定
+LOGIN_URL = '/accounts/login/' 
+LOGIN_REDIRECT_URL = '/home/'
+LOGOUT_REDIRECT_URL='/accounts/login/'
 

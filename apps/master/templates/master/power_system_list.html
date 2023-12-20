@@ -1,3 +1,4 @@
+{% extends "base.html" %}
 
 {% block title %} 電源系統リスト {% endblock %}
 
@@ -16,7 +17,7 @@
                 </tr>
         </thead>
         <tbody>
-       {% for power_system in object_list %}
+        {% for power_system in object_list %}
 			<tr>
 				<td scope="row">{{ power_system.id }}</td>
 				<td>{{ power_system.power_system_number }}</td>
@@ -24,7 +25,7 @@
 				<td>{{ power_system.supply_source }}</td>
 				<td>{{ power_system.supply_rack }}</td>
 				<td><a href="{% url 'master:power_system_edit' id=power_system.id %}">[編集]</a></td>
-	           <td><a href="{% url 'master:power_system_delete' id=power_system.id %}">[削除]</a></td>
+                                <td><a href="{% url 'master:power_system_delete' id=power_system.id %}">[削除]</a></td>
 			</tr>
 		{% endfor %}
 	</tbody>
