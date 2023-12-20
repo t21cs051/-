@@ -5,7 +5,6 @@ from .views import PowerSystemList, PowerSystemAddView, PowerSystemShowView
 from .views import PowerSystemEditView, PowerSystemDeleteView, PowerSystemEditView, PowerSystemDeleteView, mainpage
 
 app_name = "master"
-
 urlpatterns = [
     path('main/', mainpage.as_view(), name='main'),
     path('rack/', RackList.as_view(), name='rack'),

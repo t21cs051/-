@@ -20,8 +20,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('apps.accounts.urls'), name='accounts'),
     path('master/', include('apps.master.urls'), name='master'),
-    path('data_export/', include('apps.data_export.urls'), name='data_export'),
+    path('export/', include('apps.export.urls'), name='export'),
     path('measurement/', include('apps.measurement.urls'), name='measurement'),
-    path('usage_view/', include('apps.usage_view.urls'), name='usage_view'),
+    path('usage/', include('apps.usage.urls'), name='usage'),
     path('worklog/', include('apps.worklog.urls'), name='worklog'),
+    path('home/', include('apps.home.urls'), name='home'),
 ]

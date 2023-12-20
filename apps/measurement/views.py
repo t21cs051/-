@@ -11,17 +11,17 @@ from django.urls.base import reverse_lazy
 
 
 class MeasurementListView(ListView):
-    model = CurrentMeasurement;
+    model = CurrentMeasurement
     template_name = 'measurement/measurement_list.html'
     
     def post(self, request, *args, **kwargs):
-        meaasurement_id = self.request.POST.get('measurement_id')
-        measurement_date = self.request.POST.get('measurement_date');
-        current_value = self.request.POST.get('current_value');
-        power_system = self.request.POST.get('power_system');
-        employee = self.request.POST.get('employee');
-        CurrentMeasurement.save();
-        return HttpResponseRedirect(reverse('measurement:measurement_list'))
+        measurement_id = self.request.POST.get('measurement_id')
+        measurement_date = self.request.POST.get('measurement_date')
+        current_value = self.request.POST.get('current_value')
+        power_system = self.request.POST.get('power_system')
+        employee = self.request.POST.get('employee')
+        CurrentMeasurement.save()
+        return HttpResponseRedirect(reverse('measurement:list'))
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -29,7 +29,7 @@ class MeasurementListView(ListView):
         return context
 
 class MeasurementShowView(TemplateView):
-    model = CurrentMeasurement;
+    model = CurrentMeasurement
     template_name = 'measurement/measurement_show.html'
     
     def get_context_data(self, **kwargs):
@@ -39,10 +39,7 @@ class MeasurementShowView(TemplateView):
     
 
 class MeasurementAddView(CreateView):
-    model = CurrentMeasurement;
-    fields = ('measurement_date','current_value','power_system','employee');
+    model = CurrentMeasurement
+    fields = ('measurement_date','current_value','power_system','employee')
     template_name = 'measurement/measurement_add.html'
-    success_url = reverse_lazy('measurement:measurement_list')
-    
-    
-    
+    success_url = reverse_lazy('measurement:list')
