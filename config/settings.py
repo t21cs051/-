@@ -138,7 +138,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'accounts.CustomUser'
 
 # ログイン関連の設定
-LOGIN_URL = '/accounts/login' 
-LOGIN_REDIRECT_URL = '/measurement/list'
-LOGOUT_REDIRECT_URL='/accounts/login'
+LOGIN_URL = '/accounts/login/' 
+LOGIN_REDIRECT_URL = '/home/'
+LOGOUT_REDIRECT_URL='/accounts/login/'
 
