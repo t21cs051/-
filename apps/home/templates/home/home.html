@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+
+{% block main %}
+<h2>ホーム</h2>
+<a href="{% url "measurement:w_list" %}">測定記録</a>
+<a href="{% url "worklog:worklog_list" %}">作業記録</a>
+{% endblock %}
