@@ -1,0 +1,11 @@
+{% block title %} 電源系統追加 {% endblock %}
+
+{% block main %}
+<form action="{% url 'master:power_system_add' %}" method="post">
+{% csrf_token %}
+<table>
+{{ form.as_table }}
+</table>
+<input type="submit"/>
+</form>
+{% endblock %}

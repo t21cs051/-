@@ -1,13 +1,12 @@
 {% extends "base.html" %}
 
-{% block title %} Add {% endblock %}
-
 {% block main %}
-<form action="{% url 'measurement:add' %}" method="post">
-{% csrf_token %}
-<table>
-{{ form.as_table }}
-</table>
-<button type="submit" class="btn btn-primary">measurement</button>
-</form>
+  <h2>Add Current Measurement</h2>
+  <form method="POST">
+  {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Save</button>
+  </form>
+<a href="{% url "measurement:measurement_list" %}">キャンセル</a>
+
 {% endblock %}

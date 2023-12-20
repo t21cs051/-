@@ -33,3 +33,4 @@ class PowerSystem(models.Model):
 
     def __str__(self):
         return f'{self.power_system_number} - max[{self.max_current}] - from[{self.supply_source}] - to[{self.supply_rack}]'
+    

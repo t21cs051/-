@@ -1,0 +1,28 @@
+
+{% block title %} UPSリスト {% endblock %}
+
+{% block main %}
+<table class="table">
+        <thead class="table-dark">
+                <tr>
+                        <th>UPSID</th>
+                        <th>UPS番号</th>
+                </tr>
+        </thead>
+        <tbody>
+       {% for ups in object_list %}
+			<tr>
+				<td scope="row">{{ ups.id }}</td>
+				<td>{{ ups.ups_number }}</td>
+				<td><a href="{% url 'master:ups_edit' id=ups.id %}">[編集]</a></td>
+	            <td><a href="{% url 'master:ups_delete' id=ups.id %}">[削除]</a></td>
+			</tr>
+		{% endfor %}
+	</tbody>
+</table>
+<ul>
+<li><a href="{% url 'master:ups_add' %}">Add</a></li>
+<li><a href="{% url 'master:ups_show' %}">Show</a></li>
+<li><a href="{% url 'master:main' %}">メインページ</a></li>
+</ul>
+{% endblock %}
