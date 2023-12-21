@@ -13,10 +13,11 @@
         <nav class="menu">
             <div>電源管理システム</div>
             <ul>
-                <a href="{% url "home:home" %}">ホーム</a>
-                <a href="{% url "measurement:list" %}">測定記録</a>
-                <a href="{% url "worklog:list" %}">作業記録</a>
-                <a href="{% url "master:main" %}">マスタ管理</a>
+                <a href="{% url "home:home" %}">[ホーム]</a>
+                <a href="{% url "measurement:list" %}">[測定記録]</a>
+                <a href="{% url "worklog:list" %}">[作業記録]</a>
+                <a href="{% url "usage:main" %}">[電源使用状況閲覧]</a>
+                <a href="{% url "master:main" %}">[マスタ管理]</a>
             </ul>
         </nav>
 
