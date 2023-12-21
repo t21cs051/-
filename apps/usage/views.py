@@ -17,6 +17,7 @@ class UsageView(TemplateView):
                             fieldnames=['measurement_date', 'current_value'])
         df_line['measurement_date'] = pd.to_datetime(df_line['measurement_date'])
         df_line['current_value'] = pd.to_numeric(df_line['current_value'])
+        df_line = df_line.sort_values('measurement_date') # 日付順にソート
         measurement_date = df_line['measurement_date'].tolist()
         current_value = df_line['current_value'].tolist()
         context['measurement_date'] = measurement_date
