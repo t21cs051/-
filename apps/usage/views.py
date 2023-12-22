@@ -26,7 +26,7 @@ class UsageGraphView(TemplateView):
 
 
         end_date = datetime.now() + timedelta(days=7) # 現在の日付の７日後を取得(開発用)
-        start_date = end_date - timedelta(days=7)  # 7日前の日付を取得
+        start_date = datetime.now() - timedelta(days=7)  # 7日前の日付を取得
 
         # 条件にあった測定データを取得
         # 開始日：7日前
