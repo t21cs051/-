@@ -3,59 +3,71 @@
 {% load static %}
 
 {% block main %}
+<script src="{% static canvas.css %}"></script>
 <body>
     <h2>電力使用状況閲覧</h2>
-    <div>
-        <!-- 描画領域 -->
-        <canvas id="bar" height="70px"></canvas>
-    </div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
-<script src="{% static 'chart_js/dist/chart.umd.js' %}"></script>
-<script>
-    const lineChartCtx = document.getElementById('bar').getContext('2d');
 
-    const lineChartData = {
-        datasets: [
+        <div class="chart-container" style="position: relative; width: 1000px; height: 300px;">
+            <!-- 描画領域 -->
+            <canvas id="myChart" height="100px"></canvas>
+        </div>
+
+    <script src="{% static 'chart_js/dist/chart.umd.js' %}"></script>
+    <script src="{% static 'moment\min\moment-with-locales.js' %}"></script>
+    <script src="{% static 'moment/dist/locale/ja.js' %}"></script>
+    <script src="{% static 'chartjs-adapter-moment/dist/chartjs-adapter-moment.js' %}"></script>
+
+    <script>
+        const lineChartCtx = document.getElementById('myChart').getContext('2d');
+
+        const lineChartData = {
+            datasets: [
             {
                 label: 'current_value',
-                backgroundColor: 'rgb(255, 99, 132)',
-                borderColor: 'rgb(255, 99, 132)',
-                fill: false,
                 data : [
-                    {% for item in data %}
+                {% for item in data %}
                     {x: '{{ item.x }}', y: {{ item.y }}},
                     {% endfor %}
-                ],
-            }
-        ]
-    };
+                    ],
+                }
+                ]
+            };
 
-    const lineChart = new Chart(lineChartCtx, {
-        type: 'line',
-        data: lineChartData,
-        options: {
-            scales: {
-                x: [{
-                    type: 'time',
-                    time: {
-                        parser: 'YYYY-MM-DDTHH:mm:ss',
-                        unit: 'day',
-                        tooltipFormat: 'YYYY-MM-DDTHH:mm:ss',
-                        displayFormats: {
-                            day: 'YYYY-MM-DD'
+        const myChart = new Chart((() => {
+            return document.getElementById('myChart').getContext('2d');
+        })(), {
+            type: 'line',
+            data: lineChartData,
+            options: {
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                responsive: true, // コンテナのサイズ変更に対応したサイズ変更
+                maintainAspectRatio: false, // サイズ変更時に元の縦横比を維持しない
+                scales: {
+                    x: {
+                        scaleLabel: {
+                            display: true,
+                        },
+                        type: 'time',
+                        time: {
+                            parser: 'YYYY-MM-DDTHH:mm:ss.SSSSSSZ',
+                            unit: 'day',
+                            stepSize: 1,
+                            displayFormats: {
+                                'day': 'MM月DD日'
+                            }
                         }
                     },
-                    ticks: {
-                        source: 'auto' // 'auto' または 'data' を指定
-                    }
-                }],
-                y: [{
-                    type: 'linear',  // データが数値ならlinearを使用
-                    position: 'left'
-                }]
+                    y: {
+                        beginAtZero: true // y軸は常に0開始
+                    },
+                }
             }
-        }
-    });
-</script>
+        });
+    </script>
+
 </body>
 {% endblock %}

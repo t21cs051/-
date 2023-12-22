@@ -5,6 +5,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.views.generic.base import TemplateView
 from datetime import datetime, timedelta
+from django.utils import timezone
 from apps.master.models import Rack
 from apps.measurement.models import CurrentMeasurement
 from .forms import RackSelectForm
@@ -25,8 +26,8 @@ class UsageGraphView(TemplateView):
         rack_number = self.request.GET.get('rack', '1')  # デフォルトのラック番号は1
 
 
-        end_date = datetime.now() + timedelta(days=7) # 現在の日付の７日後を取得(開発用)
-        start_date = datetime.now() - timedelta(days=7)  # 7日前の日付を取得
+        end_date = timezone.now() + timedelta(days=7) # 現在の日付の７日後を取得(開発用)
+        start_date = timezone.now() - timedelta(days=7)  # 7日前の日付を取得
 
         # 条件にあった測定データを取得
         # 開始日：7日前
