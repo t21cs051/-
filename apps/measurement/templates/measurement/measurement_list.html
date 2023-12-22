@@ -10,6 +10,7 @@
                         <th>value</th>
                         <th>power_system</th>
                         <th>employee</th>
+                        <th>delete</th>
                 </tr>
         </thead>
         <tbody>
@@ -20,7 +21,7 @@
                 <td>{{ CurrentMeasurement.current_value }}</td>
                 <td>{{ CurrentMeasurement.power_system }}</td>
                 <td>{{ CurrentMeasurement.employee }}</td>
-                <td><a href="{% url 'measurement:show' %}">detail</a></td>
+                <td><a href="{% url 'measurement:delete' CurrentMeasurement.id %}">delete</a></td>
         </tr>
         {% endfor %}
         </tbody>

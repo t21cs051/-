@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block main %}
+    <h2>currentMeasurementの削除</h2>
+
+    <p>以下のcurrentMeasurementを本当に削除しますか？</p>
+
+    <table>
+        <tbody>
+        <tr><td>ID</td><td>:</td><td>{{ object.id }}</td></tr>
+        <tr><td>measurementDate</td><td>:</td><td>{{ object.measurement_date }}</td></tr>
+        <tr><td>currentValue</td><td>:</td><td>{{ object.current_value }}</td></tr>
+        <tr><td>powerSystem</td><td>:</td><td>{{ object.power_system }}</td></tr>
+        <tr><td>employee</td><td>:</td><td>{{ object.employee }}</td></tr>
+    </tbody>
+    </table>
+
+    <form method="POST">
+    {% csrf_token %}
+    <input type="submit" value="削除">
+    </form>
+
+    <a href="{% url 'measurement:list' %}">キャンセル</a>
+{% endblock %}
