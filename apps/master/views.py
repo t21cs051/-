@@ -279,13 +279,15 @@ class EmployeeAddView(CreateView):
 
 class EmployeeEditView(TemplateView):
     model = Employee
+    fields = ('employee_number', 'full_name', 'password')
     template_name = 'master/employee_edit.html'
     success_url = 'employee/'
 
     def post(self, request, *args, **kwargs):
         employee_number = self.request.POST.get('employee_number')
         employee = get_object_or_404(Employee, pk=employee_number)
-        employee.save()
+        form = EmployeeForm(request.POST, instance=employee)
+        form.save()
         return HttpResponseRedirect(reverse('master:employee'))
 
     def get_context_data(self, **kwargs):
@@ -305,8 +307,10 @@ class EmployeeDeleteView(TemplateView):
         return HttpResponseRedirect(reverse('master:employee'))
 
     def get_context_data(self, **kwargs):
+        employee_number = self.request.POST.get('employee_number')
+        employee = get_object_or_404(Employee, pk=employee_number)
         context = super().get_context_data(**kwargs)
-        context['form_id'] = EmployeeIdForm()
+        context['employee'] = employee
         context['form'] = EmployeeIdForm()
         return context
     

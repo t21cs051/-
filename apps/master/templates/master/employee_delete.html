@@ -6,7 +6,7 @@
 <form action="{% url 'master:employee_delete' %}" method="post">
     {% csrf_token %}
 
-{{ form.as_table }}
+{{ form }}
     <input type="submit" value="削除"/>
 </form>
 {% endblock %}
