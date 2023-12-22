@@ -1,0 +1,30 @@
+
+{% block title %} 社員リスト {% endblock %}
+
+{% block main %}
+<table class="table">
+        <thead class="table-dark">
+                <tr>
+                        <th>社員番号</th>
+                        <th>社員氏名</th>
+                </tr>
+        </thead>
+        <tbody>
+        {% for employee in object_list %}
+			<tr>
+				<td scope="row">{{ employee.employee_number }}</td>
+				<td>{{ employee.full_name }}</td>
+				
+				
+			</tr>
+		{% endfor %}
+	</tbody>
+</table>
+
+<ul>
+<li><a href="{% url 'master:employee_add' %}">追加</a></li>
+<li><a href="{% url 'master:employee_edit' %}">編集</a></li>
+<li><a href="{% url 'master:employee_delete' %}">削除</a></li>
+<li><a href="{% url 'master:main' %}">メインページ</a></li>
+</ul>
+{% endblock %}

@@ -1,5 +1,6 @@
 from django import forms
 from .models import Rack, Ups, PowerSystem
+from apps.accounts.models import CustomUser as Employee
 
 #ラック
 class RackIdForm(forms.Form):
@@ -29,3 +30,11 @@ class PowerSystemForm(forms.ModelForm):
         model = PowerSystem
         fields = ['power_system_number', 'max_current', 'supply_source', 'supply_rack']
         
+#社員マスタ
+class EmployeeIdForm(forms.Form):
+    employee_id = forms.IntegerField(label='employee_id')
+    
+class EmployeeForm(forms.ModelForm):
+    class Meta:
+        model = Employee
+        fields = ['employee_number', 'full_name', 'password']

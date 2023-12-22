@@ -1,12 +1,13 @@
+from apps.accounts.models import CustomUser as Employee
 from django.views.generic import ListView
 from django.views.generic.base import TemplateView
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, UpdateView
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.urls.base import reverse_lazy
 from django.shortcuts import get_object_or_404
 from .models import Rack, Ups, PowerSystem
-from .forms import RackIdForm, RackForm,UpsIdForm, UpsForm, PowerSystemIdForm, PowerSystemForm
+from .forms import RackIdForm, RackForm,UpsIdForm, UpsForm, PowerSystemIdForm, PowerSystemForm, EmployeeIdForm, EmployeeForm
 
 #メインページ表示画面
 class mainpage(TemplateView):
@@ -24,8 +25,6 @@ class RackList(TemplateView):
     def post(self, request, *args, **kwargs):
         rack_id = self.request.POST.get('rack_id')
         rack = get_object_or_404(Rack, pk=rack_id)
-        rack_number = self.request.POST.get('rack_number')
-        rack.rack_number = rack_number
         rack.save()
         return HttpResponseRedirect(reverse('master:rack'))
 
@@ -104,8 +103,6 @@ class UpsList(TemplateView):
     def post(self, request, *args, **kwargs):
         ups_id = self.request.POST.get('ups_id')
         ups = get_object_or_404(Ups, pk=ups_id)
-        ups_number = self.request.POST.get('ups_number')
-        ups.rack_number = ups_number
         ups.save()
         return HttpResponseRedirect(reverse('master:ups'))
 
@@ -184,10 +181,6 @@ class PowerSystemList(TemplateView):
     def post(self, request, *args, **kwargs):
         power_system_id = self.request.POST.get('power_system_id')
         power_system = get_object_or_404(PowerSystem, pk=power_system_id)
-        power_system_number = self.request.POST.get('power_system_number')
-        power_system.poweer_system_number = power_system_number
-        max_current = self.request.POST.get('max_current')
-        power_system.max_current = max_current
         power_system.save()
         return HttpResponseRedirect(reverse('master:power_system'))
 
@@ -220,7 +213,7 @@ class PowerSystemShowView(TemplateView):
         context['form_id'] = PowerSystemIdForm()
         return context
 
-class PowerSystemEditView(TemplateView):#電源系統番号しか変えられない
+class PowerSystemEditView(TemplateView):
     model = PowerSystem
     fields = ('power_system_number', 'max_current', 'supply_source', 'supply_rack')
     template_name = 'master/power_system_edit.html'
@@ -259,4 +252,61 @@ class PowerSystemDeleteView(TemplateView):
         context['power_system'] = power_system
         context['form'] = PowerSystemIdForm()
         return context
+    
+class EmployeeList(TemplateView):
+    model = Employee
+    template_name = 'master/employee_list.html'
+    
+    
+    def post(self, request, *args, **kwargs):
+        employee_number = self.request.POST.get('employee_number')
+        employee = get_object_or_404(Employee, pk=employee_number)
+        employee.employee_number = employee_number
+        employee.save()
+        return HttpResponseRedirect(reverse('master:employee'))
+    
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['object_list'] = Employee.objects.all()
+        return context
+    
+class EmployeeAddView(CreateView):
+    model = Employee
+    form_class = EmployeeForm
+    template_name = 'master/employee_add.html'
+    success_url = reverse_lazy('master:employee')
+
+class EmployeeEditView(TemplateView):
+    model = Employee
+    template_name = 'master/employee_edit.html'
+    success_url = 'employee/'
+
+    def post(self, request, *args, **kwargs):
+        employee_number = self.request.POST.get('employee_number')
+        employee = get_object_or_404(Employee, pk=employee_number)
+        employee.save()
+        return HttpResponseRedirect(reverse('master:employee'))
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form_id'] = EmployeeIdForm()
+        context['form'] = EmployeeForm()
+        return context
+    
+class EmployeeDeleteView(TemplateView):
+    model = Employee
+    template_name = 'master/employee_delete.html'
         
+    def post(self, request, *args, **kwargs):
+        employee_number = self.request.POST.get('employee_number')
+        employee = get_object_or_404(Employee, pk=employee_number)
+        employee.delete()
+        return HttpResponseRedirect(reverse('master:employee'))
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form_id'] = EmployeeIdForm()
+        context['form'] = EmployeeIdForm()
+        return context
+    
