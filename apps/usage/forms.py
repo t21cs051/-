@@ -1,6 +1,6 @@
 
 from django import forms
-from .models import Measurement, WorkLog, Rack
+from apps.master.models import Rack
 
-class WorkLogForm(forms.Form):
-    model = WorkLog
+class RackSelectForm(forms.Form):
+    rack = forms.ModelChoiceField(queryset=Rack.objects.all())

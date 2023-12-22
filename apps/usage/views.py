@@ -4,15 +4,26 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.views.generic.base import TemplateView
+from datetime import datetime, timedelta
 from apps.master.models import Rack
 from apps.measurement.models import CurrentMeasurement
-from datetime import datetime, timedelta
+from .forms import RackSelectForm
 
 class UsageView(TemplateView):
     template_name = "usage/usage_main.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['form'] = RackSelectForm()
+        return context
+
+class UsageGraphView(TemplateView):
+    template_name = "usage/usage_graph.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        rack_number = self.request.GET.get('rack', '1')  # デフォルトのラック番号は1
+
 
         end_date = datetime.now() + timedelta(days=7) # 現在の日付の７日後を取得(開発用)
         start_date = end_date - timedelta(days=7)  # 7日前の日付を取得
@@ -23,7 +34,7 @@ class UsageView(TemplateView):
         # ラック番号：1
         # 日付による昇順でソート
         measurement_queryset = CurrentMeasurement.objects.filter(
-            power_system__supply_rack='1', # 供給先ラック番号を指定
+            power_system__supply_rack=rack_number, # 供給先ラック番号を指定
             measurement_date__range=(start_date, end_date) # データを取得する範囲を指定
         ).order_by('measurement_date') # 日付による昇順でソート
 
