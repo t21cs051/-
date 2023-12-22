@@ -1,15 +1,15 @@
 {% extends "base.html" %}
 
 {% block main %}
-<h2>Current Measurement List</h2>
+<h2>電流記録一覧</h2>
 <table>
         <thead>
                 <tr>
                         <th>#</th>
-                        <th>date</th>
-                        <th>value</th>
-                        <th>power_system</th>
-                        <th>employee</th>
+                        <th>測定日時</th>
+                        <th>電流値</th>
+                        <th>電源系統</th>
+                        <th>測定者</th>
                 </tr>
         </thead>
         <tbody>
@@ -20,10 +20,14 @@
                 <td>{{ CurrentMeasurement.current_value }}</td>
                 <td>{{ CurrentMeasurement.power_system }}</td>
                 <td>{{ CurrentMeasurement.employee }}</td>
-                <td><a href="{% url 'measurement:show' %}">detail</a></td>
+                <td><a href="{% url 'measurement:update' CurrentMeasurement.id %}">編集</a></td>
+                <td><a href="{% url 'measurement:delete' CurrentMeasurement.id %}">削除</a></td>
         </tr>
         {% endfor %}
         </tbody>
 </table>
-<a href="{% url "measurement:add" %}">Add Current Measurement</a>
+<a href="{% url "measurement:add" %}">電流記録の追加</a>
+<br>
+<a href="{% url "export:csv_export" %}">CSVファイルの出力</a>
+
 {% endblock %}
