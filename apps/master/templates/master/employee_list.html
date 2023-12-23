@@ -1,3 +1,4 @@
+{% extends "base.html" %}
 
 {% block title %} 社員リスト {% endblock %}
 
@@ -7,6 +8,8 @@
                 <tr>
                         <th>社員番号</th>
                         <th>社員氏名</th>
+                        <th>編集</th>
+                        <th>削除</th>
                 </tr>
         </thead>
         <tbody>
@@ -14,7 +17,8 @@
 			<tr>
 				<td scope="row">{{ employee.employee_number }}</td>
 				<td>{{ employee.full_name }}</td>
-				
+				<td><a href="{% url 'master:employee_edit' employee.employee_number %}">[編集]</a></td>
+				<td><a href="{% url 'master:employee_delete' employee.employee_number %}">[削除]</a></td>
 				
 			</tr>
 		{% endfor %}
@@ -23,7 +27,6 @@
 
 <ul>
 <li><a href="{% url 'master:employee_add' %}">追加</a></li>
-<li><a href="{% url 'master:employee_edit' %}">編集</a></li>
 <li><a href="{% url 'master:main' %}">メインページ</a></li>
 </ul>
 {% endblock %}

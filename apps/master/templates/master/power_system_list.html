@@ -25,7 +25,7 @@
 				<td>{{ power_system.supply_source }}</td>
 				<td>{{ power_system.supply_rack }}</td>
 				<td><a href="{% url 'master:power_system_edit' power_system.id %}">[編集]</a></td>
-                                <td><a href="{% url 'master:power_system_delete' power_system.id %}">[削除]</a></td>
+              <td><a href="{% url 'master:power_system_delete' power_system.id %}">[削除]</a></td>
 			</tr>
 		{% endfor %}
 	</tbody>

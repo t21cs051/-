@@ -21,6 +21,6 @@ urlpatterns = [
     path('power_system_delete/<int:pk>/', PowerSystemDeleteView.as_view(), name='power_system_delete'),
     path('employee/', EmployeeList.as_view(), name='employee'),
     path('employee_add/', EmployeeAddView.as_view(), name='employee_add'),
-    path('employee_edit/', EmployeeEditView.as_view(), name='employee_edit'),
-    path('employee_delete/', EmployeeDeleteView.as_view(), name='employee_delete'),
+    path('employee_edit/<str:pk>/', EmployeeEditView.as_view(), name='employee_edit'),
+    path('employee_delete/<str:pk>/', EmployeeDeleteView.as_view(), name='employee_delete'),
 ]

@@ -3,10 +3,14 @@
 {% block title %} 削除 {% endblock %}
 
 {% block main %}
-<form action="{% url 'master:employee_delete' %}" method="post">
+<a>本当に削除しますか？</a>
+<form method="post">
     {% csrf_token %}
+    <dl>
+        <dt>社員番号</dt><dd>{{ employee.employee_number }}</dd>
+        <dt>社員氏名</dt><dd>{{ employee.full_name }}</dd>
+    </dl>
 
-{{ form }}
     <input type="submit" value="削除"/>
 </form>
 {% endblock %}

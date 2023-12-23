@@ -3,7 +3,7 @@
 {% block title %} 社員編集 {% endblock %}
 
 {% block main %}
-<form action="{% url 'master:employee_edit' %}" method="post">
+<form method="post">
 {% csrf_token %}
 <table>
 {{ form.as_table }}
