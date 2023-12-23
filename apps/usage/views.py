@@ -39,11 +39,11 @@ class UsageGraphView(TemplateView):
             measurement_date__range=(start_date, end_date) # データを取得する範囲を指定
         ).order_by('measurement_date') # 日付による昇順でソート
 
-        measurement_date = [obj.measurement_date for obj in measurement_queryset]
-        current_value = [obj.current_value for obj in measurement_queryset]
+        # measurement_date = [obj.measurement_date for obj in measurement_queryset]
+        # current_value = [obj.current_value for obj in measurement_queryset]
         # context['measurement_date'] = measurement_date
         # context['current_value'] = current_value
-        data = [{'x': obj.measurement_date.isoformat(), 'y': obj.current_value} for obj in measurement_queryset]
+        data = [{'x': timezone.localtime(obj.measurement_date), 'y': obj.current_value} for obj in measurement_queryset]
         context['data'] = data
         print(data)
         return context
