@@ -1,5 +1,25 @@
+<!-- home.html -->
 {% extends "base.html" %}
 
 {% block main %}
-<h2>ホーム</h2>
+  <h2>ホーム</h2>
+  <h4>測定・作業履歴</h4>
+  <table>
+    <thead>
+      <tr>
+        <th>作業者</th>
+        <th>内容</th>
+        <th>日時</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for entry in history_data %}
+        <tr>
+          <td>{{ entry.employee }}</td>
+          <td>{{ entry.content }}</td>
+          <td>{{ entry.datetime }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 {% endblock %}
