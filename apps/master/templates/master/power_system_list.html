@@ -24,8 +24,8 @@
 				<td>{{ power_system.max_current }}</td>
 				<td>{{ power_system.supply_source }}</td>
 				<td>{{ power_system.supply_rack }}</td>
-				<td><a href="{% url 'master:power_system_edit' id=power_system.id %}">[編集]</a></td>
-                                <td><a href="{% url 'master:power_system_delete' id=power_system.id %}">[削除]</a></td>
+				<td><a href="{% url 'master:power_system_edit' power_system.id %}">[編集]</a></td>
+                                <td><a href="{% url 'master:power_system_delete' power_system.id %}">[削除]</a></td>
 			</tr>
 		{% endfor %}
 	</tbody>
@@ -33,7 +33,6 @@
 
 <ul>
 <li><a href="{% url 'master:power_system_add' %}">追加</a></li>
-<li><a href="{% url 'master:power_system_show' %}">閲覧</a></li>
 <li><a href="{% url 'master:main' %}">メインページ</a></li>
 </ul>
 {% endblock %}

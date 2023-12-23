@@ -3,12 +3,9 @@
 {% block title %} ラック編集 {% endblock %}
 
 {% block main %}
-<form action="{% url 'master:rack_edit' id %}" method="post">
+<form method="POST">
 {% csrf_token %}
-<table>
-<tr><th><label for="id_name">ID:</label></th><td><a>{{ id }}</a></td></tr>
-{{ form.as_table }}
-</table>
+{{ form.as_p }}
 <input type="submit"/>
 </form>
 {% endblock %}

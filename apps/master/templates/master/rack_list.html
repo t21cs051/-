@@ -1,4 +1,4 @@
-
+{% extends "base.html" %}
 {% block title %} ラックリスト {% endblock %}
 
 {% block main %}
@@ -16,8 +16,8 @@
 			<tr>
 				<td scope="row">{{ rack.id }}</td>
 				<td>{{ rack.rack_number }}</td>
-				<td><a href="{% url 'master:rack_edit' id=rack.id %}">[編集]</a></td>
-                                <td><a href="{% url 'master:rack_delete' id=rack.id %}">[削除]</a></td>
+				<td><a href="{% url 'master:rack_edit' rack.id %}">[編集]</a></td>
+              <td><a href="{% url 'master:rack_delete' rack.id %}">[削除]</a></td>
 			</tr>
 		{% endfor %}
 	</tbody>
@@ -25,7 +25,6 @@
 
 <ul>
 <li><a href="{% url 'master:rack_add' %}">追加</a></li>
-<li><a href="{% url 'master:rack_show' %}">閲覧</a></li>
 <li><a href="{% url 'master:main' %}">メインページ</a></li>
 </ul>
 {% endblock %}
