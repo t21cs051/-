@@ -48,21 +48,15 @@ class UsageGraphView(TemplateView):
         context['start_date'] = start_date
         context['end_date'] = end_date
 
-        # 条件にあった測定データを取得
-        # 開始日：30日前
-        # 終了日：現在の日付
-        # ラック番号：1
-        # 日付による昇順でソート
-
         # power_systemごとにデータをグループ化
-        power_systems = CurrentMeasurement.objects.values('power_system').annotate(dcount=Count('power_system')).order_by('power_system')
+        power_systems = CurrentMeasurement.objects.values('power_system').annotate(count=Count('power_system')).order_by('power_system')
 
         data = {}
         for power_system in power_systems:
             measurement_queryset = CurrentMeasurement.objects.filter(
-                power_system=power_system['power_system'],
-                power_system__supply_rack=rack_number,
-                measurement_date__range=(start_date, end_date)
+                power_system=power_system['power_system'], # 電源系統で絞り込み
+                power_system__supply_rack=rack_number, # ラック番号で絞り込み
+                measurement_date__range=(start_date, end_date) # 開始日と終了日の範囲で絞り込み
             ).order_by('measurement_date')
             # measurement_querysetが空でない場合にのみ、dataに追加
             if measurement_queryset.exists():
