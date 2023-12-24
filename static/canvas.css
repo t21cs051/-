@@ -1,0 +1,10 @@
+.wrap-chart {
+    width: 100%;
+    height: 700px;
+}
+
+@media (max-width: 480px) {
+    .wrap-chart {
+        height: 400px;
+    }
+}
