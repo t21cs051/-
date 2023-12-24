@@ -11,20 +11,24 @@ from apps.master.models import Rack
 from apps.measurement.models import CurrentMeasurement
 from .forms import RackSelectForm, DateRangeForm
 
+# 電源使用状況閲覧画面のメインビュー
 class UsageView(TemplateView):
     template_name = "usage/usage_main.html"
 
+    # ラック番号を選択した場合の処理
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['form'] = RackSelectForm()
         return context
 
+# 電源使用状況グラフのビュー
 class UsageGraphView(TemplateView):
     template_name = "usage/usage_graph.html"
 
     def get(self, request, *args, **kwargs):
         form = DateRangeForm()
-        context = self.get_context_data(form=form)
+        rack_select_form = RackSelectForm()
+        context = self.get_context_data(form=form, rack_select_form=rack_select_form)
         return self.render_to_response(context)
 
     def post(self, request, *args, **kwargs):
@@ -47,6 +51,9 @@ class UsageGraphView(TemplateView):
         # start_dateとend_dateをcontextに追加
         context['start_date'] = start_date
         context['end_date'] = end_date
+
+        # ラック番号をcontextに追加
+        context['rack_number'] = rack_number
 
         # power_systemごとにデータをグループ化
         power_systems = CurrentMeasurement.objects.values('power_system').annotate(count=Count('power_system')).order_by('power_system')

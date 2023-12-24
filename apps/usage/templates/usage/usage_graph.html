@@ -7,12 +7,13 @@
 <script src="{% static 'canvas.css' %}"></script>
 <body>
     <h2>電力使用状況閲覧</h2>
+    <h3>ラック: {{ rack_number }}</h3>
     {% if not data %}
     <p>指定した期間にデータがありません。</p>
     {% endif %}
     <div class="chart-container" style="position: relative; width: 1000px; height: 300px;">
         <!-- 描画領域 -->
-        <canvas id="myChart" height="100px"></canvas>
+        <canvas id="Chart" height="100px"></canvas>
     </div>
     
     <form method="post">
@@ -28,14 +29,15 @@
     <script src="{% static 'chartjs-adapter-moment/dist/chartjs-adapter-moment.js' %}"></script>
 
     <script>
+            // データの定義
             const lineChartData = {
                 datasets: [
-                {% for power_system, measurements in data.items %}
+                {% for power_system, measurements in data.items %} // 電源系統ごとにデータを定義
                 {
-                    label: '電源系統 {{ power_system }}',
+                    label: '電源系統 {{ power_system }}', // 電源系統番号をラベルに設定
                     data : [
                     {% for item in measurements %}
-                    {x: '{{ item.x }}', y: {{ item.y }}},
+                    {x: '{{ item.x }}', y: {{ item.y }}}, // x軸には日付、y軸には電流値を設定
                     {% endfor %}
                     ],
                 },
@@ -44,14 +46,14 @@
             };
             
             const myChart = new Chart((() => {
-                return document.getElementById('myChart').getContext('2d');
+                return document.getElementById('Chart').getContext('2d');
             })(), {
-                type: 'line',
-                data: lineChartData,
+                type: 'line', // グラフの種類を指定(折れ線)
+                data: lineChartData, // 上で定義したデータを設定
                 options: {
                     plugins: {
                         legend: {
-                            display: true,
+                            display: true, // 凡例の表示
                         }
                     },
                     responsive: true, // コンテナのサイズ変更に対応したサイズ変更
@@ -59,17 +61,17 @@
                     scales: {
                         x: {
                             scaleLabel: {
-                                display: true,
+                                display: true, // 軸ラベルの表示
                             },
-                            type: 'time',
+                            type: 'time', // x軸の種類を指定(日付)
                             min: '{{ start_date }}',  // 開始日
                             max: '{{ end_date }}',  // 終了日
                             time: {
-                                parser: 'YYYY-MM-DDTHH:mm:ss.SSSSSSZ',
-                                unit: 'day',
-                                stepSize: 1,
+                                parser: 'YYYY-MM-DDTHH:mm:ss.SSSSSSZ', // 日付のフォーマット
+                                unit: 'day', // x軸の単位を日付に指定
+                                stepSize: 1, // x軸の間隔を1日に指定
                                 displayFormats: {
-                                    'day': 'MM月DD日'
+                                    'day': 'MM月DD日' // x軸の表示フォーマット
                                 }
                             },
                         },
