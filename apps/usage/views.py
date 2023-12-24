@@ -39,10 +39,10 @@ class UsageGraphView(TemplateView):
         form = kwargs.get('form')
         if form.is_valid():
             start_date = form.cleaned_data['start_date']
-            end_date = form.cleaned_data['end_date']
+            end_date = form.cleaned_data['end_date'] + timedelta(days=1)
         else:
-            end_date = timezone.now().date()
-            start_date = end_date - timedelta(days=30)
+            end_date = timezone.now().date() + timedelta(days=1)
+            start_date = end_date - timedelta(days=31)
         
         # start_dateとend_dateをcontextに追加
         context['start_date'] = start_date
@@ -61,10 +61,13 @@ class UsageGraphView(TemplateView):
         for power_system in power_systems:
             measurement_queryset = CurrentMeasurement.objects.filter(
                 power_system=power_system['power_system'],
+                power_system__supply_rack=rack_number,
                 measurement_date__range=(start_date, end_date)
             ).order_by('measurement_date')
+            # measurement_querysetが空でない場合にのみ、dataに追加
+            if measurement_queryset.exists():
+                data[power_system['power_system']] = [{'x': timezone.localtime(obj.measurement_date), 'y': obj.current_value} for obj in measurement_queryset]
         
-            data[power_system['power_system']] = [{'x': timezone.localtime(obj.measurement_date), 'y': obj.current_value} for obj in measurement_queryset]
         context['data'] = data
         
         return context

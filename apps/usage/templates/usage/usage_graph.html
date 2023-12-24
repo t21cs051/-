@@ -7,7 +7,9 @@
 <script src="{% static canvas.css %}"></script>
 <body>
     <h2>電力使用状況閲覧</h2>
-    
+    {% if not data %}
+    <p>指定した期間にデータがありません。</p>
+    {% endif %}
     <div class="chart-container" style="position: relative; width: 1000px; height: 300px;">
         <!-- 描画領域 -->
         <canvas id="myChart" height="100px"></canvas>
@@ -18,19 +20,19 @@
         {{ form.as_p }}
         <button type="submit">期間を指定</button>
     </form>
-    
+
     <!-- ライブラリの読み込み -->
     <script src="{% static 'chart_js/dist/chart.umd.js' %}"></script>
     <script src="{% static 'moment\min\moment-with-locales.js' %}"></script>
     <script src="{% static 'moment/dist/locale/ja.js' %}"></script>
     <script src="{% static 'chartjs-adapter-moment/dist/chartjs-adapter-moment.js' %}"></script>
-    
+
     <script>
             const lineChartData = {
                 datasets: [
                 {% for power_system, measurements in data.items %}
                 {
-                    label: 'Power System {{ power_system }}',
+                    label: '電源系統 {{ power_system }}',
                     data : [
                     {% for item in measurements %}
                     {x: '{{ item.x }}', y: {{ item.y }}},
@@ -78,7 +80,7 @@
                 }
             });
         </script>
-        
+
     </body>
     {% endblock %}
     
