@@ -70,6 +70,7 @@ class UsageGraphView(TemplateView):
                 data[power_system['power_system']] = [{'x': timezone.localtime(obj.measurement_date), 'y': obj.current_value} for obj in measurement_queryset]
         
         context['data'] = data
+        print(start_date, end_date)
         
         return context
     
