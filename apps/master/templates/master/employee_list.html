@@ -1,32 +1,16 @@
 {% extends "base.html" %}
 
-{% block title %} 社員リスト {% endblock %}
+{% block title %} 社員情報 {% endblock %}
 
 {% block main %}
-<table class="table">
-        <thead class="table-dark">
-                <tr>
-                        <th>社員番号</th>
-                        <th>社員氏名</th>
-                        <th>編集</th>
-                        <th>削除</th>
-                </tr>
-        </thead>
-        <tbody>
-        {% for employee in object_list %}
-			<tr>
-				<td scope="row">{{ employee.employee_number }}</td>
-				<td>{{ employee.full_name }}</td>
-				<td><a href="{% url 'master:employee_edit' employee.employee_number %}">[編集]</a></td>
-				<td><a href="{% url 'master:employee_delete' employee.employee_number %}">[削除]</a></td>
-				
-			</tr>
-		{% endfor %}
-	</tbody>
-</table>
-
+<p>ログイン中アカウント</p>
+<p>社員番号 : {{ logged_in_user.employee_number }}</p>
+<p>社員氏名 : {{ logged_in_user.full_name }}</p>
 <ul>
-<li><a href="{% url 'master:employee_add' %}">追加</a></li>
-<li><a href="{% url 'master:main' %}">メインページ</a></li>
+<a href="{% url 'master:employee_edit' logged_in_user.employee_number %}">編集</a>
+<a href="{% url 'master:employee_delete' logged_in_user.employee_number %}">削除</a>
+</ul>
+<ul>
+<a href="{% url 'master:main' %}">メインページ</a>
 </ul>
 {% endblock %}

@@ -2,7 +2,7 @@ from django.urls import path
 from .views import RackList,RackAddView,RackEditView,RackDeleteView
 from .views import UpsList, UpsAddView, UpsEditView, UpsDeleteView
 from .views import PowerSystemList, PowerSystemAddView, PowerSystemEditView, PowerSystemDeleteView, mainpage
-from .views import EmployeeList, EmployeeAddView, EmployeeEditView, EmployeeDeleteView
+from .views import EmployeeList, EmployeeEditView, EmployeeDeleteView
 
 app_name = "master"
 urlpatterns = [
@@ -20,7 +20,6 @@ urlpatterns = [
     path('power_system_edit/<int:pk>/', PowerSystemEditView.as_view(), name='power_system_edit'),
     path('power_system_delete/<int:pk>/', PowerSystemDeleteView.as_view(), name='power_system_delete'),
     path('employee/', EmployeeList.as_view(), name='employee'),
-    path('employee_add/', EmployeeAddView.as_view(), name='employee_add'),
-    path('employee_edit/<str:pk>/', EmployeeEditView.as_view(), name='employee_edit'),
-    path('employee_delete/<str:pk>/', EmployeeDeleteView.as_view(), name='employee_delete'),
+    path('employee_edit/<int:pk>/', EmployeeEditView.as_view(), name='employee_edit'),
+    path('employee_delete/<int:pk>/', EmployeeDeleteView.as_view(), name='employee_delete'),
 ]

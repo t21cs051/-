@@ -7,8 +7,8 @@
 <form method="post">
     {% csrf_token %}
     <dl>
-        <dt>社員番号</dt><dd>{{ employee.employee_number }}</dd>
-        <dt>社員氏名</dt><dd>{{ employee.full_name }}</dd>
+        <dt>社員番号</dt><dd>{{ logged_in_user.employee_number }}</dd>
+        <dt>社員氏名</dt><dd>{{ logged_in_user.full_name }}</dd>
     </dl>
 
     <input type="submit" value="削除"/>

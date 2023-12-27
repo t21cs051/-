@@ -157,47 +157,41 @@ class EmployeeList(ListView):
     model = Employee
     template_name = 'master/employee_list.html'
     
-    def post(self, request, *args, **kwargs):
-        employee_number = self.request.POST.get('employee_number')
-        employee = get_object_or_404(Employee, pk=employee_number)
-        employee.save()
-        return HttpResponseRedirect(reverse('master:employee'))
-    
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['form_id'] = EmployeeIdForm()
+        
+        # ログイン中のユーザー情報を取得
+        logged_in_user = self.request.user
+
+        context['logged_in_user'] = logged_in_user
         return context
-    
-class EmployeeAddView(CreateView):
-    model = Employee
-    fields = ('employee_number', 'full_name', 'password')
-    template_name = 'master/employee_add.html'
-    success_url = reverse_lazy('master:employee')
+
 
 class EmployeeEditView(UpdateView):
     model = Employee
     form_class = EmployeeForm
     template_name = 'master/employee_edit.html'
     success_url = reverse_lazy('master:employee')
-
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        employee_number = self.kwargs['pk']
-        employee = get_object_or_404(Employee, employee_number=employee_number)
-        context['form_id'] = EmployeeForm(instance=employee)
+        # ログイン中のユーザー情報を取得
+        logged_in_user = self.request.user
+        context['logged_in_user'] = logged_in_user
+        context['form_id'] = EmployeeForm(instance=logged_in_user)
         return context
+    
     
 class EmployeeDeleteView(DeleteView):
     model = Employee
     template_name = 'master/employee_delete.html'
-    success_url = reverse_lazy('master:employee')
+    success_url = reverse_lazy('accounts:login')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        employee_number = self.kwargs['pk']
-        employee = get_object_or_404(Employee, employee_number=employee_number)
-        context['employee'] = self.get_object()
-        context['form_id'] = EmployeeForm(instance=employee)
+        # ログイン中のユーザー情報を取得
+        logged_in_user = self.request.user
+        context['logged_in_user'] = logged_in_user
+        context['form_id'] = EmployeeForm(instance=logged_in_user)
         return context
     
