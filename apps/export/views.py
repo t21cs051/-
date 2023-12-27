@@ -8,7 +8,7 @@ import csv,urllib
 # Create your views here.
 
 def csv_export(request):
-    response = HttpResponse(content_type='text/csv; charset=Shift-JIS')
+    response = HttpResponse(content_type='text/csv; charset=UTF-8')
     
     date_time = datetime.now() # 日時
     str_time = date_time.strftime('%Y%m%d%H%M')
