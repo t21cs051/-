@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block main %}
+  <h2>c電流記録の編集</h2>
+  <form method="POST">
+  {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Update</button>
+  </form>
+  <a href="{% url "measurement:list" %}">キャンセル</a>
+{% endblock %}
