@@ -35,6 +35,12 @@ class EmployeeIdForm(forms.Form):
     employee_id = forms.IntegerField(label='employee_id')
     
 class EmployeeForm(forms.ModelForm):
+    
     class Meta:
         model = Employee
-        fields = ['employee_number', 'full_name', 'password']
+        fields = ['employee_number', 'full_name']
+        
+    def __init__(self, *args, **kwargs):
+        super(EmployeeForm, self).__init__(*args, **kwargs)
+        self.fields['employee_number'].widget.attrs['readonly'] = True
+        

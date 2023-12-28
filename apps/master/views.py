@@ -8,6 +8,9 @@ from django.urls.base import reverse_lazy
 from django.shortcuts import get_object_or_404
 from .models import Rack, Ups, PowerSystem
 from .forms import RackIdForm, RackForm,UpsIdForm, UpsForm, PowerSystemIdForm, PowerSystemForm, EmployeeIdForm, EmployeeForm
+from django.template.context_processors import request
+from django.contrib.auth.views import PasswordChangeView, PasswordChangeDoneView
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 #メインページ表示画面
 class mainpage(TemplateView):
@@ -179,6 +182,9 @@ class EmployeeEditView(UpdateView):
         logged_in_user = self.request.user
         context['logged_in_user'] = logged_in_user
         context['form_id'] = EmployeeForm(instance=logged_in_user)
+        form = EmployeeForm(instance=logged_in_user)
+        if form.is_valid():
+            form.save()
         return context
     
     
@@ -195,3 +201,15 @@ class EmployeeDeleteView(DeleteView):
         context['form_id'] = EmployeeForm(instance=logged_in_user)
         return context
     
+
+class PasswordChangeView(LoginRequiredMixin, PasswordChangeView):
+    success_url = reverse_lazy('master:password_change_done')
+    template_name = 'master/password_change.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs) # 継承元のメソッドCALL
+        context["form_name"] = "password_change"
+        return context
+
+class PasswordChangeDoneView(LoginRequiredMixin,PasswordChangeDoneView):
+    template_name = 'master/password_change_done.html'
