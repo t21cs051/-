@@ -5,9 +5,8 @@
 {% block main %}
 <body>
     <h2>電力使用状況閲覧</h2>
-    <form action="{% url 'usage:graph' %}" >
-        {{ form.as_p }}
-        <input type="submit" value="閲覧">
-    </form>
+    {% for rack in racks %}
+        <a href="{% url 'usage:graph' rack_id=rack.id %}">{{ rack }} - 最新の最大測定値: {{ rack.max_measurement }}</a>
+    {% endfor %}
 </body>
 {% endblock %}
