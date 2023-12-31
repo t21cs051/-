@@ -1,12 +1,19 @@
 {% extends "base.html" %}
 
 {% block main %}
-  <h2>電流記録の追加</h2>
+<h2>
+  <a href="{% url "measurement:add" %}">電流記録</a>
+  <a href="{% url "worklog:add" %}">作業記録</a>
+  
+</h2>
+  
+<br>
+
   <form method="POST">
   {% csrf_token %}
     {{ form.as_p }}
     <button type="submit">Save</button>
   </form>
-<a href="{% url "measurement:list" %}">キャンセル</a>
+
 
 {% endblock %}

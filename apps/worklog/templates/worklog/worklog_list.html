@@ -1,7 +1,14 @@
 {% extends "base.html" %}
 
 {% block main %}
-<h2>作業記録一覧</h2>
+<h2>
+  <a href="{% url "measurement:list" %}">電流記録</a>
+  <a href="{% url "worklog:list" %}">作業記録</a>
+  
+</h2>
+  
+<br>
+
 <table>
         <thead>
                 <tr>
