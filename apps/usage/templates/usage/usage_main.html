@@ -5,8 +5,18 @@
 {% block main %}
 <body>
     <h2>電力使用状況閲覧</h2>
-    {% for rack in racks %}
-        <a href="{% url 'usage:graph' rack_id=rack.id %}">{{ rack }} - 最新の最大測定値: {{ rack.max_measurement }}</a>
-    {% endfor %}
+    <table>
+        <tr>
+            <th>Rack</th>
+            <th>使用率</th>
+        </tr>
+        {% for rack in racks %}
+        <tr>
+            <td><a href="{% url 'usage:graph' rack_id=rack.id %}">{{ rack.id }}</a></td>
+            <td style="background-color: {% if rack.usage >= 70 %}#DC143C{% elif rack.usage >= 50 %}#FF8C00{% else %}#87CEFA{% endif %};">{{ rack.usage }}%</td>
+        </tr>
+        {% endfor %}
+    </table>
 </body>
+
 {% endblock %}
