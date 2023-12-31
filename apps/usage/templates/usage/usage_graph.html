@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% load static %}
+{% load dict_filter %}
 
 {% block main %}
 
@@ -11,10 +12,12 @@
     {% if not data %}
     <p>指定した期間にデータがありません。</p>
     {% endif %}
-    <div class="chart-container" style="position: relative; width: 1000px; height: 300px;">
-        <!-- 描画領域 -->
-        <canvas id="Chart" height="100px"></canvas>
-    </div>
+    {% for power_system, measurements in data.items %}
+        <div class="chart-container" style="position: relative; width: 1000px; height: 300px;">
+            <!-- 描画領域 -->
+            <canvas id="Chart{{ power_system }}" height="100px"></canvas>
+        </div>
+    {% endfor %}
     
     <form method="post">
         {% csrf_token %}
@@ -24,64 +27,64 @@
 
     <!-- ライブラリの読み込み -->
     <script src="{% static 'chart_js/dist/chart.umd.js' %}"></script>
-    <script src="{% static 'moment\min\moment-with-locales.js' %}"></script>
+    <script src="{% static 'moment/min/moment-with-locales.js' %}"></script>
     <script src="{% static 'moment/dist/locale/ja.js' %}"></script>
     <script src="{% static 'chartjs-adapter-moment/dist/chartjs-adapter-moment.js' %}"></script>
 
     <script>
-            // データの定義
-            const lineChartData = {
+        {% for power_system, measurements in data.items %}
+            const lineChartData{{ power_system }} = {
                 datasets: [
-                {% for power_system, measurements in data.items %} // 電源系統ごとにデータを定義
-                {
-                    label: '電源系統 {{ power_system }}', // 電源系統番号をラベルに設定
-                    data : [
-                    {% for item in measurements %}
-                    {x: '{{ item.x }}', y: {{ item.y }}}, // x軸には日付、y軸には電流値を設定
-                    {% endfor %}
-                    ],
-                },
-                {% endfor %}
+                    {
+                        label: '電源系統 {{ power_system }}',
+                        data : [
+                        {% for item in measurements %}
+                        {x: '{{ item.x }}', y: {{ item.y }}},
+                        {% endfor %}
+                        ],
+                    },
                 ]
             };
-            
-            const myChart = new Chart((() => {
-                return document.getElementById('Chart').getContext('2d');
+
+            const myChart{{ power_system }} = new Chart((() => {
+                return document.getElementById('Chart{{ power_system }}').getContext('2d');
             })(), {
-                type: 'line', // グラフの種類を指定(折れ線)
-                data: lineChartData, // 上で定義したデータを設定
+                type: 'line',
+                data: lineChartData{{ power_system }},
                 options: {
                     plugins: {
                         legend: {
-                            display: true, // 凡例の表示
+                            display: true,
                         }
                     },
-                    responsive: true, // コンテナのサイズ変更に対応したサイズ変更
-                    maintainAspectRatio: false, // サイズ変更時に元の縦横比を維持しない
+                    responsive: true,
+                    maintainAspectRatio: false,
                     scales: {
                         x: {
                             scaleLabel: {
-                                display: true, // 軸ラベルの表示
+                                display: true,
                             },
-                            type: 'time', // x軸の種類を指定(日付)
-                            min: '{{ start_date }}',  // 開始日
-                            max: '{{ end_date }}',  // 終了日
+                            type: 'time',
+                            min: '{{ start_date }}',
+                            max: '{{ end_date }}',
                             time: {
-                                parser: 'YYYY-MM-DDTHH:mm:ss.SSSSSSZ', // 日付のフォーマット
-                                unit: 'day', // x軸の単位を日付に指定
-                                stepSize: 1, // x軸の間隔を1日に指定
+                                parser: 'YYYY-MM-DDTHH:mm:ss.SSSSSSZ',
+                                unit: 'day',
+                                stepSize: 1,
                                 displayFormats: {
-                                    'day': 'MM月DD日' // x軸の表示フォーマット
+                                    'day': 'MM月DD日'
                                 }
                             },
                         },
                         y: {
-                            beginAtZero: true // y軸は常に0開始
+                            beginAtZero: true,
+                            max: {{ capacity|get_item:power_system }},
                         },
                     }
                 }
             });
-        </script>
+        {% endfor %}
+    </script>
 
     </body>
     {% endblock %}
