@@ -21,6 +21,7 @@ class UsageView(TemplateView):
         for rack in racks:  # 各Rackに対して
             power_systems = PowerSystem.objects.filter(supply_rack=rack)  # 現在のRackに供給しているPowerSystemを取得
             max_measurement = None  # 最大測定値を保存するための変数を初期化
+            capacity = 0  # 定格電流を保存するための変数を初期化
             for power_system in power_systems:  # 各PowerSystemに対して
                 # 現在のPowerSystemの最新の測定値を取得
                 latest_measurement = CurrentMeasurement.objects.filter(power_system=power_system).order_by('-measurement_date').first()
@@ -28,8 +29,10 @@ class UsageView(TemplateView):
                     # 最大測定値が未設定、または最新の測定値が現在の最大測定値より大きい場合
                     if max_measurement is None or latest_measurement.current_value > max_measurement:
                         max_measurement = latest_measurement.current_value  # 最大測定値を更新
+                        capacity = power_system.max_current # 定格電流を更新
             # Rackの最大測定値を設定（最大測定値がNoneの場合は0を設定）
             rack.max_measurement = max_measurement if max_measurement is not None else 0
+            rack.usage = round(max_measurement / capacity * 100, 1) if max_measurement is not None else 0  # Rackの使用率を設定
         context['racks'] = racks  # コンテキストデータにRackのリストを追加
         return context  # コンテキストデータを返す
 
