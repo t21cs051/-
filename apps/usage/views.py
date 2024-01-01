@@ -75,6 +75,7 @@ class UsageGraphView(TemplateView):
         power_systems = CurrentMeasurement.objects.values('power_system').annotate(count=Count('power_system')).order_by('power_system')
 
         data = {}
+        max_currents = {}
         for power_system in power_systems:
             measurement_queryset = CurrentMeasurement.objects.filter(
                 power_system=power_system['power_system'], # 電源系統で絞り込み
@@ -84,9 +85,11 @@ class UsageGraphView(TemplateView):
             # measurement_querysetが空でない場合にのみ、dataに追加
             if measurement_queryset.exists():
                 data[power_system['power_system']] = [{'x': timezone.localtime(obj.measurement_date), 'y': obj.current_value} for obj in measurement_queryset]
-        
+                max_currents[power_system['power_system']] = int(PowerSystem.objects.get(id=power_system['power_system']).max_current)
         context['data'] = data
-        print(start_date, end_date)
+        context['capacity'] = max_currents
+        print(max_currents)
+        
         
         return context
     
