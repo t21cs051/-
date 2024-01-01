@@ -24,14 +24,50 @@
         {{ form.as_p }}
         <button type="submit">期間を指定</button>
     </form>
-
+    
     <!-- ライブラリの読み込み -->
     <script src="{% static 'chart_js/dist/chart.umd.js' %}"></script>
     <script src="{% static 'moment/min/moment-with-locales.js' %}"></script>
     <script src="{% static 'moment/dist/locale/ja.js' %}"></script>
     <script src="{% static 'chartjs-adapter-moment/dist/chartjs-adapter-moment.js' %}"></script>
-
+    
     <script>
+        const plugin = {
+            id: 'custom_background_color',
+            beforeDraw: (chart, args, options) => {
+                const {ctx} = chart;
+
+                const xScale = chart.scales['x'];
+                const yScale = chart.scales['y'];
+
+                const capacity = yScale.max;
+                const rate70 = capacity * 0.7;
+                const rate50 = capacity * 0.5;
+
+                const left = xScale.left;
+                const red_top = yScale.getPixelForValue(capacity);
+                const red_height = yScale.getPixelForValue(rate70) - red_top;
+                const orange_top = yScale.getPixelForValue(rate70)
+                const orange_height = yScale.getPixelForValue(rate50) - orange_top;
+                const blue_top = yScale.getPixelForValue(rate50);
+                const blue_height = yScale.getPixelForValue(0) - blue_top;
+
+                // 赤い範囲
+                ctx.fillStyle = "rgba(255, 0, 100, 0.2)";
+                ctx.fillRect(left, red_top, xScale.width, red_height);
+
+                // オレンジの範囲
+                ctx.fillStyle = "rgba(255, 165, 0, 0.2)";
+                ctx.fillRect(left, orange_top, xScale.width, orange_height);
+
+                // 青い範囲
+                ctx.fillStyle = "rgba(0, 100, 255, 0.2)";
+                ctx.fillRect(left, blue_top, xScale.width, blue_height);
+            },
+        };
+
+        Chart.register(plugin);
+
         {% for power_system, measurements in data.items %}
             const lineChartData{{ power_system }} = {
                 datasets: [
@@ -45,47 +81,15 @@
                     },
                 ]
             };
+            
+            const ctx{{ power_system }} = document.getElementById("Chart{{ power_system }}").getContext('2d');
 
-            // TODO: Chart.jsのバージョンアップに伴い、以下の関数は非推奨になったので、代替案を探す
-            function drawBackground(target) {
-                console.log('drawBackground is called');
-                // var capacity = {{ capacity|get_item:power_system }};
-                var capacity = 30;
-                var rate70 = capacity * 0.7;
-                var rate50 = capacity * 0.5;
-                var xscale = target.scales["x-axis-0"];
-                var yscale = target.scales["y-axis-0"];
-                var left = xscale.left;
-                var high_top = yscale.height;
-                var high_height = yscale.getPixelForValue(rate70) - high_top; // 赤
-                var middle_top = yscale.getPixelForValue(rate70);
-                var middle_height = yscale.getPixelForValue(rate50) - middle_top;   // オレンジ
-                var middle_top = yscale.getPixelForValue(rate50);
-                var low_height = yscale.getPixelForValue(rate50) - low_top;   // 青
-
-                // 赤い範囲
-                ctx.fillStyle = "rgba(255, 0, 100, 0.2)";
-                ctx.fillRect(left, high_top, xscale.width, high_height);
-
-                // オレンジの範囲
-                ctx.fillStyle = "rgba(255, 165, 0, 0.2)";
-                ctx.fillRect(left, middle_top, xscale.width, middle_height);
-
-                // 青い範囲
-                ctx.fillStyle = "rgba(0, 100, 255, 0.2)";
-                ctx.fillRect(left, low_top, xscale.width, low_height);
-            }
-
-            const myChart{{ power_system }} = new Chart((() => {
-                return document.getElementById('Chart{{ power_system }}').getContext('2d');
-            })(), {
+            const chart{{ power_system }} = new Chart(ctx{{ power_system }}, {
                 type: 'line',
                 data: lineChartData{{ power_system }},
                 options: {
                     plugins: {
-                        legend: {
-                            display: true,
-                        }
+                        plugin: {},
                     },
                     responsive: true,
                     maintainAspectRatio: false,
@@ -116,6 +120,7 @@
                     }
                 }
             });
+
         {% endfor %}
     </script>
 
