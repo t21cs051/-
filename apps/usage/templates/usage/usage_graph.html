@@ -53,15 +53,15 @@
                 const blue_height = yScale.getPixelForValue(0) - blue_top;
 
                 // 赤い範囲
-                ctx.fillStyle = "rgba(255, 0, 100, 0.2)";
+                ctx.fillStyle = "rgba(255, 0, 100, 0.1)";
                 ctx.fillRect(left, red_top, xScale.width, red_height);
 
                 // オレンジの範囲
-                ctx.fillStyle = "rgba(255, 165, 0, 0.2)";
+                ctx.fillStyle = "rgba(255, 165, 0, 0.1)";
                 ctx.fillRect(left, orange_top, xScale.width, orange_height);
 
                 // 青い範囲
-                ctx.fillStyle = "rgba(0, 100, 255, 0.2)";
+                ctx.fillStyle = "rgba(0, 100, 255, 0.1)";
                 ctx.fillRect(left, blue_top, xScale.width, blue_height);
             },
         };
@@ -90,6 +90,21 @@
                 options: {
                     plugins: {
                         plugin: {},
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed !== null) {
+                                        label += context.parsed.y + ' A';
+                                    }
+                                    return label;
+                                }
+                            }
+                        },
                     },
                     responsive: true,
                     maintainAspectRatio: false,
@@ -115,6 +130,9 @@
                             max: {{ capacity|get_item:power_system }},
                             ticks: {
                                 stepSize: 5,
+                                callback: function(value, index, values) {
+                                    return value + 'A';
+                                },
                             },
                         },
                     }
