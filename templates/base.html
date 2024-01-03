@@ -10,15 +10,86 @@
 </head>
 <body>
     <div>
-        <nav class="menu">
-            <div>電源管理システム</div>
-            <ul>
-            	  <a href="{% url "accounts:logout" %}">[ログアウト]</a>
-                <a href="{% url "home:home" %}">[ホーム]</a>
-                <a href="{% url "measurement:add" %}">[記録]</a>
-                <a href="{% url "measurement:list" %}">[修正]</a>
-                <a href="{% url "usage:main" %}">[電源状況]</a>
-                <a href="{% url "master:main" %}">[設定]</a>
+    	<nav class="menu">
+			<div>電源管理システム</div>
+				<ul>
+            		<a href="{% url "accounts:logout" %}">
+            	  	<button>
+              		<img
+                  	src="{% static 'src/icon_logout.svg' %}"
+                  	alt=""
+                  	width="40"
+                  	height="40"
+                		/>
+                		<br>
+                		<span>ログアウト</span>
+                	</button>
+               	</a>
+               	
+               	<a href="{% url "home:home" %}">
+            	  	<button>
+              		<img
+                  	src="{% static 'src/icon_home.svg' %}"
+                  	alt=""
+                  	width="40"
+                  	height="40"
+                		/>
+                		<br>
+                		<span>ホーム</span>
+                	</button>
+               	</a>
+               	
+               	<a href="{% url "measurement:add" %}">
+            	  	<button>
+              		<img
+                  	src="{% static 'src/icon_pencil.svg' %}"
+                  	alt=""
+                  	width="40"
+                  	height="40"
+                		/>
+                		<br>
+                		<span>記録</span>
+                	</button>
+               	</a>
+               	
+               	<a href="{% url "measurement:list" %}">
+            	  	<button>
+              		<img
+                  	src="{% static 'src/icon_eraser.svg' %}"
+                  	alt=""
+                  	width="40"
+                  	height="40"
+                		/>
+                		<br>
+                		<span>修正</span>
+                	</button>
+               	</a>
+               	
+               	<a href="{% url "usage:main" %}">
+            	  	<button>
+              		<img
+                  	src="{% static 'src/icon_usage.svg' %}"
+                  	alt=""
+                  	width="40"
+                  	height="40"
+                		/>
+                		<br>
+                		<span>電源状況</span>
+                	</button>
+               	</a>
+               	
+               	<a href="{% url "master:main" %}">
+            	  	<button>
+              		<img
+                  	src="{% static 'src/icon_setting.svg' %}"
+                  	alt=""
+                  	width="40"
+                  	height="40"
+                		/>
+                		<br>
+                		<span>設定</span>
+                	</button>
+               	</a>
             </ul>
         </nav>
 
