@@ -9,6 +9,7 @@ from datetime import datetime, timedelta
 from django.utils import timezone
 from apps.master.models import Rack, PowerSystem
 from apps.measurement.models import CurrentMeasurement
+from apps.worklog.models import WorkLog
 from .forms import RackSelectForm, DateRangeForm
 
 # 電源使用状況閲覧画面のメインビュー
@@ -88,8 +89,14 @@ class UsageGraphView(TemplateView):
                 max_currents[power_system['power_system']] = int(PowerSystem.objects.get(id=power_system['power_system']).max_current)
         context['data'] = data
         context['capacity'] = max_currents
-        print(max_currents)
         
-        
+        # 指定された期間の作業履歴を取得
+        worklogs = WorkLog.objects.filter(
+            rack__rack_number=rack_number, # ラック番号で絞り込み
+            work_date__range=(start_date, end_date) # 開始日と終了日の範囲で絞り込み
+        ).order_by('work_date')
+
+        # worklogsをcontextに追加
+        context['worklogs'] = [{'x': timezone.localtime(obj.work_date), 'y': obj.get_work_type_display(), 'z': obj.description.replace('\r\n', '').replace('\n', '')} for obj in worklogs]        
+        print(context['worklogs'])
         return context
-    
