@@ -103,11 +103,13 @@
                     {
                         type: 'line',
                         label: '{{ worklog.y }}',
-                        data: [{x: '{{ worklog.x }}', y: 0, z: '{{ worklog.z }}'}, {x: '{{ worklog.x }}', y: {{ capacity|get_item:power_system }}, z: '{{ worklog.z }}'}],
+                        data: [ {x: '{{ worklog.x }}', y: 0, z: '{{ worklog.z }}'},
+                                {x: '{{ worklog.x }}', y: {{ capacity|get_item:power_system }}, z: '{{ worklog.z }}'}
+                        ],
                         borderColor: colors['{{ worklog.y }}'], // 作業記録の種類に基づいて色を設定
-                        borderWidth: 2,
+                        borderWidth: 3,
                         fill: false,
-                        pointRadius: 0,
+                        pointRadius: 3,
                     },
                     {% endfor %}
                 ]
@@ -120,6 +122,13 @@
                 data: lineChartData{{ power_system }},
                 options: {
                     plugins: {
+                        legend: {
+                            labels: {
+                                sort: function(item, chart) {
+                                    // ここで凡例の順番を設定
+                                }
+                            }
+                        },
                         plugin: {},
                         tooltip: {
                             mode: 'nearest',
@@ -127,16 +136,15 @@
                             callbacks: {
                                 label: function(context) {
                                     let label = context.dataset.label || '';
-                                
                                     if (label) {
                                         label += ': ';
                                     }
                                     if (label.includes('電源系統')) { // 電流測定値のデータ
                                         if (context.parsed !== null) {
-                                            label += context.parsed.y + ' A';
+                                            label = [label, context.parsed.y + ' A'];
                                         }
                                     } else { // 作業記録のデータ
-                                        label += context.raw.z; // 作業記録の詳細を表示
+                                        label = [label].concat(context.raw.z.split('\n')); // 作業記録の詳細を改行で分割して配列に追加
                                     }
                                     return label;
                                 }
