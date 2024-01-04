@@ -32,43 +32,53 @@
     <script src="{% static 'chartjs-adapter-moment/dist/chartjs-adapter-moment.js' %}"></script>
     
     <script>
+
+        // グラフの背景色を設定するプラグイン
         const plugin = {
             id: 'custom_background_color',
             beforeDraw: (chart, args, options) => {
                 const {ctx} = chart;
 
+                // 軸データを取得
                 const xScale = chart.scales['x'];
                 const yScale = chart.scales['y'];
 
+                // 電源系統の許容電流を取得し、70%、50%の値を計算
                 const capacity = yScale.max;
                 const rate70 = capacity * 0.7;
                 const rate50 = capacity * 0.5;
 
-                const left = xScale.left;
-                const red_top = yScale.getPixelForValue(capacity);
-                const red_height = yScale.getPixelForValue(rate70) - red_top;
-                const orange_top = yScale.getPixelForValue(rate70)
-                const orange_height = yScale.getPixelForValue(rate50) - orange_top;
-                const blue_top = yScale.getPixelForValue(rate50);
-                const blue_height = yScale.getPixelForValue(0) - blue_top;
+                // 背景描画に必要な座標を取得
+                const left = xScale.left;                                            // グラフの左端
+                const width = xScale.width;                                          // グラフの幅
+                const red_top = yScale.getPixelForValue(capacity);                   // 赤い範囲の上端
+                const red_height = yScale.getPixelForValue(rate70) - red_top;        // 赤い範囲の幅
+                const orange_top = yScale.getPixelForValue(rate70)                   // オレンジの範囲の上端
+                const orange_height = yScale.getPixelForValue(rate50) - orange_top;  // オレンジの範囲の幅
+                const blue_top = yScale.getPixelForValue(rate50);                    // 青い範囲の上端
+                const blue_height = yScale.getPixelForValue(0) - blue_top;           // 青い範囲の幅
 
-                // 赤い範囲
+                // 赤い範囲の描画
                 ctx.fillStyle = "rgba(255, 0, 100, 0.1)";
-                ctx.fillRect(left, red_top, xScale.width, red_height);
+                ctx.fillRect(left, red_top, width, red_height);
 
-                // オレンジの範囲
+                // オレンジの範囲を描画
                 ctx.fillStyle = "rgba(255, 165, 0, 0.1)";
-                ctx.fillRect(left, orange_top, xScale.width, orange_height);
+                ctx.fillRect(left, orange_top, width, orange_height);
 
-                // 青い範囲
+                // 青い範囲を描画
                 ctx.fillStyle = "rgba(0, 100, 255, 0.1)";
-                ctx.fillRect(left, blue_top, xScale.width, blue_height);
+                ctx.fillRect(left, blue_top, width, blue_height);
             },
         };
 
+        // プラグインを登録
         Chart.register(plugin);
 
+        // 電源系統の数だけグラフを設定
         {% for power_system, measurements in data.items %}
+
+            // データを設定
             const lineChartData{{ power_system }} = {
                 datasets: [
                     {
@@ -131,7 +141,7 @@
                             ticks: {
                                 stepSize: 5,
                                 callback: function(value, index, values) {
-                                    return value + 'A';
+                                    return value + ' A';
                                 },
                             },
                         },

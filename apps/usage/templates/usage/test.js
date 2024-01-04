@@ -79,3 +79,22 @@ var chart{{ power_system }} = new Chart(ctx, {
         }
     }
 });
+
+                        annotation: {
+                            annotations: {
+                                {% for worklog in worklogs %}
+                                'worklog{{ forloop.counter }}': {
+                                    type: 'line',
+                                    xMin: '{{ worklog.date }}',
+                                    xMax: '{{ worklog.date }}',
+                                    borderColor: 'rgb(255, 99, 132)',
+                                    borderWidth: 2,
+                                    label: {
+                                        content: '{{ worklog.description }}',
+                                        position: 'start',
+                                        enabled: true
+                                    }
+                                },
+                                {% endfor %}
+                            }
+                        }, 
