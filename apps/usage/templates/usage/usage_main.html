@@ -17,6 +17,8 @@
         </tr>
         {% endfor %}
     </table>
+    
+    <a href="{% url "export:csv_export" %}">CSVファイルの出力</a>
 </body>
 
 {% endblock %}
