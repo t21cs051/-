@@ -13,7 +13,7 @@ class WorkLogListView(ListView):
         worklog_id = self.request.POST.get('worklog_id')
         worklog = get_object_or_404(WorkLog, pk=worklog_id)
         worklog_status = self.request.POST.get('worklog_status')
-        worklog.buy = worklog_status
+        # worklog.buy = worklog_status
         worklog.save()
         return HttpResponseRedirect(reverse('worklog:list'))
     
