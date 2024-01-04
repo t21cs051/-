@@ -1,23 +1,25 @@
 {% extends "base.html" %}
 
-{% block title %} 電源系統リスト {% endblock %}
-
 {% block main %}
-<table class="table">
-        <thead class="table-dark">
-                <tr>
-                        <th>ID</th>
-                        <th>電源系統番号</th>
-                        <th>最大電流値</th>
-                        <th>供給元UPS</th>
-                        <th>供給先ラック</th>
-                        <th>編集</th>
-                        <th>削除</th>
-                        
-                </tr>
-        </thead>
-        <tbody>
-        {% for power_system in object_list %}
+<div class="d-flex flex-row">
+
+{% include "sidebar.html" %}
+
+<div class="d-flex flex-fill p-3">	
+	<table class="table">
+    	<thead class="table-dark">
+       	<tr>
+          		<th>ID</th>
+              <th>電源系統番号</th>
+              <th>最大電流値</th>
+              <th>供給元UPS</th>
+              <th>供給先ラック</th>
+              <th>編集</th>
+              <th>削除</th>        
+       	</tr>
+     	</thead>
+		<tbody>
+    		{% for power_system in object_list %}
 			<tr>
 				<td scope="row">{{ power_system.id }}</td>
 				<td>{{ power_system.power_system_number }}</td>
@@ -25,15 +27,16 @@
 				<td>{{ power_system.supply_source }}</td>
 				<td>{{ power_system.supply_rack }}</td>
 				<td><a href="{% url 'master:power_system_edit' id=power_system.id %}">[編集]</a></td>
-                                <td><a href="{% url 'master:power_system_delete' id=power_system.id %}">[削除]</a></td>
+              <td><a href="{% url 'master:power_system_delete' id=power_system.id %}">[削除]</a></td>
 			</tr>
-		{% endfor %}
-	</tbody>
-</table>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>
+</div>
 
 <ul>
 <li><a href="{% url 'master:power_system_add' %}">追加</a></li>
 <li><a href="{% url 'master:power_system_show' %}">閲覧</a></li>
-<li><a href="{% url 'master:main' %}">メインページ</a></li>
 </ul>
 {% endblock %}
