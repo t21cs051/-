@@ -76,6 +76,14 @@
         // プラグインを登録
         Chart.register(plugin);
 
+        // 作業記録の種類と色のマッピング
+        const colors = {
+            'グラフ': 'rgba(80, 89, 120, 1)',
+            '設置': 'rgba(179, 145, 113, 1)',
+            '撤去': 'rgba(125, 134, 167, 1)',
+            'その他': 'rgba(178, 197, 0, 1)',
+        };
+
         // 電源系統の数だけグラフを設定
         {% for power_system, measurements in data.items %}
 
@@ -89,7 +97,19 @@
                         {x: '{{ item.x }}', y: {{ item.y }}},
                         {% endfor %}
                         ],
+                        borderColor: colors['グラフ'],
                     },
+                    {% for worklog in worklogs %}
+                    {
+                        type: 'line',
+                        label: '{{ worklog.y }}',
+                        data: [{x: '{{ worklog.x }}', y: 0, z: '{{ worklog.z }}'}, {x: '{{ worklog.x }}', y: {{ capacity|get_item:power_system }}, z: '{{ worklog.z }}'}],
+                        borderColor: colors['{{ worklog.y }}'], // 作業記録の種類に基づいて色を設定
+                        borderWidth: 2,
+                        fill: false,
+                        pointRadius: 0,
+                    },
+                    {% endfor %}
                 ]
             };
             
@@ -102,6 +122,8 @@
                     plugins: {
                         plugin: {},
                         tooltip: {
+                            mode: 'nearest',
+                                intersect: false,
                             callbacks: {
                                 label: function(context) {
                                     let label = context.dataset.label || '';
@@ -109,31 +131,16 @@
                                     if (label) {
                                         label += ': ';
                                     }
-                                    if (context.parsed !== null) {
-                                        label += context.parsed.y + ' A';
+                                    if (label.includes('電源系統')) { // 電流測定値のデータ
+                                        if (context.parsed !== null) {
+                                            label += context.parsed.y + ' A';
+                                        }
+                                    } else { // 作業記録のデータ
+                                        label += context.raw.z; // 作業記録の詳細を表示
                                     }
                                     return label;
                                 }
                             }
-                        },
-                        annotation: {
-                            annotations: [
-                            {% for worklog in worklogs %}
-                            {
-                                type: 'line', // 直線
-                                mode: 'vertical', // 縦方向
-                                scaleID: 'x',
-                                value: '{{ worklog.x }}',
-                                borderColor: 'red',
-                                borderWidth: 2,
-                                label: {
-                                    display: true,
-                                    content: '{{ worklog.y }}',
-                                    position: 'center'
-                                }
-                            },
-                            {% endfor %}
-                            ]
                         },
                     },
                     responsive: true,

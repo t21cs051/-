@@ -97,6 +97,6 @@ class UsageGraphView(TemplateView):
         ).order_by('work_date')
 
         # worklogsをcontextに追加
-        context['worklogs'] = [{'x': timezone.localtime(obj.work_date), 'y': obj.get_work_type_display()} for obj in worklogs]        
-        
+        context['worklogs'] = [{'x': timezone.localtime(obj.work_date), 'y': obj.get_work_type_display(), 'z': obj.description} for obj in worklogs]        
+        print(context['worklogs'])
         return context

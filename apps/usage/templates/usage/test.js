@@ -98,3 +98,23 @@ var chart{{ power_system }} = new Chart(ctx, {
                                 {% endfor %}
                             }
                         }, 
+
+                        annotation: {
+                            annotations: [
+                            {% for worklog in worklogs %}
+                            {
+                                type: 'line', // 直線
+                                mode: 'vertical', // 縦方向
+                                scaleID: 'x',
+                                value: '{{ worklog.x }}',
+                                borderColor: 'red',
+                                borderWidth: 2,
+                                label: {
+                                    display: true,
+                                    content: '{{ worklog.y }}',
+                                    position: 'end'
+                                }
+                            },
+                            {% endfor %}
+                            ]
+                        },
