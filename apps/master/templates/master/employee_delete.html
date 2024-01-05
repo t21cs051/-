@@ -1,13 +1,14 @@
 {% extends "base.html" %}
 
-{% block title %} UPS削除 {% endblock %}
+{% block title %} 削除 {% endblock %}
 
 {% block main %}
 <a>本当に削除しますか？</a>
 <form method="post">
     {% csrf_token %}
     <dl>
-        <dt>UPS番号</dt><dd>{{ ups.ups_number }}</dd>
+        <dt>社員番号</dt><dd>{{ logged_in_user.employee_number }}</dd>
+        <dt>社員氏名</dt><dd>{{ logged_in_user.full_name }}</dd>
     </dl>
 
     <input type="submit" value="削除"/>

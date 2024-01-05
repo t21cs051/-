@@ -8,6 +8,14 @@ class WorkLogIdForm(forms.Form):
 class WorkLogForm(forms.ModelForm):
     class Meta:
         model = WorkLog
+        fields = ['work_date', 'rack', 'work_type', 'description']
+        widgets = {
+            'work_type': forms.RadioSelect(),
+        }
+
+class WorkLogUpdateForm(forms.ModelForm):
+    class Meta:
+        model = WorkLog
         fields = ['work_date', 'rack', 'work_type', 'description', 'employee']
         widgets = {
             'work_type': forms.RadioSelect(),
