@@ -63,5 +63,5 @@ class MeasurementDeleteView(DeleteView):
         context = super().get_context_data(**kwargs)
         context['form_id'] = MeasurementIdForm()
         return context
-    
+
     
