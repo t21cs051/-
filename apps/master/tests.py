@@ -1,7 +1,9 @@
 import unittest
 from django.test import TestCase
+from django.urls import reverse
 from django.core.exceptions import ValidationError
 from django.core.exceptions import ObjectDoesNotExist
+from apps.accounts.models import CustomUser
 from apps.master.models import Rack, Ups, PowerSystem
 
 """
@@ -14,54 +16,69 @@ class RackModelTest(TestCase):
 
     def test_valid_rack_number(self):
         """
-        正しいラック番号が与えられた場合、ValidationErrorが発生しないことを確認する。
+        正しいrack_numberを指定してPOSTリクエストを送信することで、ラックが追加されることを確認
         """
-        # 正常なラック番号
-        rack_number = 42
+        # テストに使用するデータ
+        rack_number = 123
 
-        try:
-            # テスト対象のラックを作成
-            rack = Rack(rack_number=rack_number)
-            # 例外が発生しないことを確認
-            rack.full_clean()
-        except ValidationError:
-            self.fail("ValidationErrorが発生しました。")
+        # RackAddViewに対するURLを取得
+        url = reverse('master:rack_add')
+
+        # POSTリクエストを送信
+        response = self.client.post(url, {'rack_number': rack_number})
+
+        # リダイレクトが成功したかどうかを確認
+        self.assertEqual(response.status_code, 302)
+
+        # データベースにラックが正しく追加されたかを確認
+        self.assertTrue(Rack.objects.filter(rack_number=rack_number).exists())
 
     def test_invalid_negative_rack_number(self):
         """
-        ラック番号が負の値の場合、ValidationErrorが発生することを確認する。
+        負のrack_numberを指定してPOSTリクエストを送信した場合、エラーが返されることを確認
         """
-        # 負のラック番号
-        rack_number = -1
 
-        # ValidationErrorが発生することを確認
-        with self.assertRaises(ValidationError):
-            rack = Rack(rack_number=rack_number)
-            rack.full_clean()
+        # テストに使用するデータ（無効なrack_number）
+        invalid_rack_number = -1
+
+        # RackAddViewに対するURLを取得
+        url = reverse('master:rack_add') 
+
+        # POSTリクエストを送信
+        response = self.client.post(url, {'rack_number': invalid_rack_number})
+
+        # リダイレクトが成功したかどうかを確認
+        self.assertEqual(response.status_code, 302)
+        
+        # フォームがエラーを含んでいることを確認
+        form = response.context['form']
+        self.assertTrue(form.errors)
+
+        # データベースにラックが追加されていないことを確認
+        self.assertFalse(Rack.objects.filter(rack_number=invalid_rack_number).exists())
 
     def test_invalid_large_rack_number(self):
         """
-        ラック番号が上限値を超える場合、ValidationErrorが発生することを確認する。
+        上限を超えるrack_numberを指定してPOSTリクエストを送信した場合、エラーが返されることを確認
         """
-        # 上限を超えるラック番号
-        rack_number = 1000
+        # テストに使用するデータ（無効なrack_number）
+        invalid_rack_number = 1000
 
-        # ValidationErrorが発生することを確認
-        with self.assertRaises(ValidationError):
-            rack = Rack(rack_number=rack_number)
-            rack.full_clean()
+        # RackAddViewに対するURLを取得
+        url = reverse('master:rack_add') 
 
-    def test_invalid_non_integer_rack_number(self):
-        """
-        ラック番号が整数でない場合、ValidationErrorが発生することを確認する。
-        """
-        # 不正なラック番号（文字列）
-        rack_number = "invalid"
+        # POSTリクエストを送信
+        response = self.client.post(url, {'rack_number': invalid_rack_number})
 
-        # ValidationErrorが発生することを確認
-        with self.assertRaises(ValidationError):
-            rack = Rack(rack_number=rack_number)
-            rack.full_clean()
+        # リダイレクトが成功したかどうかを確認
+        self.assertEqual(response.status_code, 302)
+        
+        # フォームがエラーを含んでいることを確認
+        form = response.context['form']
+        self.assertTrue(form.errors)
+
+        # データベースにラックが追加されていないことを確認
+        self.assertFalse(Rack.objects.filter(rack_number=invalid_rack_number).exists())
   
     
 class RackDeleteTest(TestCase):
@@ -77,28 +94,20 @@ class RackDeleteTest(TestCase):
         """
         存在するラックを削除した場合、該当のラックが削除されることを確認する。
         """
-        # ラックの数を記録
-        initial_rack_count = Rack.objects.count()
+        # RackDeleteViewに対するURLを取得
+        url = reverse('master:rack_delete', args=[self.rack.id])
 
-        # ラックを削除
-        self.rack.delete()
+        # DELETEリクエストを送信
+        response = self.client.delete(url)
 
-        # ラックが正常に削除されたことを確認
-        self.assertEqual(Rack.objects.count(), initial_rack_count - 1)
+        # リダイレクトが成功したかどうかを確認
+        self.assertEqual(response.status_code, 302)
 
-        # ラックが存在しないことを確認
-        with self.assertRaises(ObjectDoesNotExist):
-            Rack.objects.get(rack_number=42)
+        # データベースからラックが削除されたかを確認
+        self.assertFalse(Rack.objects.filter(id=self.rack.id).exists())
 
-    def test_delete_nonexistent_rack(self):
-        """
-        存在しないラックを削除しようとした場合、ObjectDoesNotExist例外が発生することを確認する。
-        """
-        # 存在しないラック番号を指定して削除を試みる
-        nonexistent_rack_number = 999
-        with self.assertRaises(ObjectDoesNotExist):
-            Rack.objects.get(rack_number=nonexistent_rack_number).delete()
 
+        #存在しないラック番号がフォームに渡されることはないのでテストケースは割愛している
 
 class RackEditTest(TestCase):
     """
@@ -113,93 +122,139 @@ class RackEditTest(TestCase):
         """
         正しいラック番号を指定してラックを編集した場合、変更が正しく反映されることを確認する。
         """
-        # ラックの番号を変更
-        new_rack_number = 100
-        self.rack.rack_number = new_rack_number
-        self.rack.full_clean() #バリデーションを確認
-        self.rack.save()
+        # RackEditViewに対するURLを取得
+        url = reverse('master:rack_edit', args=[self.rack.id])
 
-        # データベースから再度取得して変更が反映されていることを確認
-        updated_rack = Rack.objects.get(pk=self.rack.pk)
-        self.assertEqual(updated_rack.rack_number, new_rack_number)
+        # テストに使用する新しいラック番号
+        new_rack_number = 456
 
-    def test_edit_invalid_rack_number(self):
+        # POSTリクエストを送信
+        response = self.client.post(url, {'rack_number': new_rack_number})
+
+        # リダイレクトが成功したかどうかを確認
+        self.assertEqual(response.status_code, 302)
+
+        # データベースのラックが正しく更新されたかを確認
+        self.rack.refresh_from_db()
+        self.assertEqual(self.rack.rack_number, new_rack_number)
+
+    def test_edit_invalid_negative_rack_number(self):
         """
-        不正なラック番号を指定してラックを編集しようとした場合、ValidationErrorが発生することを確認する。
+        負のラック番号を指定してラックを編集しようとした場合、ValidationErrorが発生することを確認する。
         """
-        # 不正なラック番号
+        # RackEditViewに対するURLを取得
+        url = reverse('master:rack_edit', args=[self.rack.id])
+
+        # 負のラック番号
         invalid_rack_number = -1
 
-        # ラックの番号を不正に変更しようとした場合、ValidationErrorが発生することを確認
-        with self.assertRaises(ValidationError):
-            self.rack.rack_number = invalid_rack_number
-            self.rack.full_clean()
+        # POSTリクエストを送信
+        response = self.client.post(url, {'rack_number': invalid_rack_number})
 
-        # データベースから再度取得して変更が反映されていないことを確認
-        not_updated_rack = Rack.objects.get(pk=self.rack.pk)
-        self.assertNotEqual(not_updated_rack.rack_number, invalid_rack_number)
+        # ラックが更新されていないことを確認
+        self.rack.refresh_from_db()
+        self.assertNotEqual(self.rack.rack_number, invalid_rack_number)
 
+        # フォームがエラーを含んでいることを確認
+        form = response.context['form']
+        self.assertTrue(form.errors)
 
+    def test_edit_invalid_large_rack_number(self):
+        """
+        上限を超えるラック番号を指定してラックを編集しようとした場合、ValidationErrorが発生することを確認する。
+        """
+        # RackEditViewに対するURLを取得
+        url = reverse('master:rack_edit', args=[self.rack.id])
+
+        # 上限を超えるラック番号
+        invalid_rack_number = 1000
+
+        # POSTリクエストを送信
+        response = self.client.post(url, {'rack_number': invalid_rack_number})
+
+        # ラックが更新されていないことを確認
+        self.rack.refresh_from_db()
+        self.assertNotEqual(self.rack.rack_number, invalid_rack_number)
+
+        # フォームがエラーを含んでいることを確認
+        form = response.context['form']
+        self.assertTrue(form.errors)
 
 """
 UPSマスタのテストケース
 """
-class UpsAddTest(TestCase):
+class UpsModelTest(TestCase):
     """
     UPS追加機能のテストケース
     """
+
     def test_valid_ups_number(self):
         """
-        正しいUPS番号が与えられた場合、ValidationErrorが発生しないことを確認する。
+        正しいups_numberを指定してPOSTリクエストを送信することで、UPSが追加されることを確認
         """
-        # 正常なUPS番号
-        ups_number = 42
+        # テストに使用するデータ
+        ups_number = 12
 
-        try:
-            # テスト対象のUPSを作成
-            ups = Ups(ups_number=ups_number)
-            # 例外が発生しないことを確認
-            ups.full_clean()
-        except ValidationError:
-            self.fail("ValidationErrorが発生しました。")
+        # UpsAddViewに対するURLを取得
+        url = reverse('master:ups_add')
+
+        # POSTリクエストを送信
+        response = self.client.post(url, {'ups_number': ups_number})
+
+        # リダイレクトが成功したかどうかを確認
+        self.assertEqual(response.status_code, 302)
+
+        # データベースにUPSが正しく追加されたかを確認
+        self.assertTrue(Ups.objects.filter(ups_number=ups_number).exists())
 
     def test_invalid_negative_ups_number(self):
         """
-        UPS番号が負の値の場合、ValidationErrorが発生することを確認する。
+        負のups_numberを指定してPOSTリクエストを送信した場合、エラーが返されることを確認
         """
-        # 負のUPS番号
-        ups_number = -1
 
-        # ValidationErrorが発生することを確認
-        with self.assertRaises(ValidationError):
-            ups = Ups(ups_number=ups_number)
-            ups.full_clean()
+        # テストに使用するデータ（無効なups_number）
+        invalid_ups_number = -1
+
+        # UpsAddViewに対するURLを取得
+        url = reverse('master:ups_add') 
+
+        # POSTリクエストを送信
+        response = self.client.post(url, {'ups_number': invalid_ups_number})
+
+        # リダイレクトが成功したかどうかを確認
+        self.assertEqual(response.status_code, 302)
+        
+        # フォームがエラーを含んでいることを確認
+        form = response.context['form']
+        self.assertTrue(form.errors)
+
+        # データベースにUPSが追加されていないことを確認
+        self.assertFalse(Ups.objects.filter(ups_number=invalid_ups_number).exists())
 
     def test_invalid_large_ups_number(self):
         """
-        UPS番号が上限値を超える場合、ValidationErrorが発生することを確認する。
+        上限を超えるups_numberを指定してPOSTリクエストを送信した場合、エラーが返されることを確認
         """
-        # 上限を超えるUPS番号
-        ups_number = 1000
+        # テストに使用するデータ（無効なups_number）
+        invalid_ups_number = 100
 
-        # ValidationErrorが発生することを確認
-        with self.assertRaises(ValidationError):
-            ups = Ups(ups_number=ups_number)
-            ups.full_clean()
+        # UpsAddViewに対するURLを取得
+        url = reverse('master:ups_add') 
 
-    def test_invalid_non_integer_ups_number(self):
-        """
-        UPS番号が整数でない場合、ValidationErrorが発生することを確認する。
-        """
-        # 不正なUPS番号（文字列）
-        ups_number = "invalid"
+        # POSTリクエストを送信
+        response = self.client.post(url, {'ups_number': invalid_ups_number})
 
-        # ValidationErrorが発生することを確認
-        with self.assertRaises(ValidationError):
-            ups = Ups(ups_number=ups_number)
-            ups.full_clean()
-   
-         
+        # リダイレクトが成功したかどうかを確認
+        self.assertEqual(response.status_code, 302)
+        
+        # フォームがエラーを含んでいることを確認
+        form = response.context['form']
+        self.assertTrue(form.errors)
+
+        # データベースにUPSが追加されていないことを確認
+        self.assertFalse(Ups.objects.filter(ups_number=invalid_ups_number).exists())
+  
+    
 class UpsDeleteTest(TestCase):
     """
     UPS削除機能のテストケース
@@ -213,28 +268,20 @@ class UpsDeleteTest(TestCase):
         """
         存在するUPSを削除した場合、該当のUPSが削除されることを確認する。
         """
-        # UPSの数を記録
-        initial_ups_count = Ups.objects.count()
+        # UpsDeleteViewに対するURLを取得
+        url = reverse('master:ups_delete', args=[self.ups.id])
 
-        # UPSを削除
-        self.ups.delete()
+        # DELETEリクエストを送信
+        response = self.client.delete(url)
 
-        # UPSが正常に削除されたことを確認
-        self.assertEqual(Ups.objects.count(), initial_ups_count - 1)
+        # リダイレクトが成功したかどうかを確認
+        self.assertEqual(response.status_code, 302)
 
-        # UPSが存在しないことを確認
-        with self.assertRaises(ObjectDoesNotExist):
-            Ups.objects.get(ups_number=42)
+        # データベースからUPSが削除されたかを確認
+        self.assertFalse(Ups.objects.filter(id=self.ups.id).exists())
 
-    def test_delete_nonexistent_ups(self):
-        """
-        存在しないUPSを削除しようとした場合、ObjectDoesNotExist例外が発生することを確認する。
-        """
-        # 存在しないUPS番号を指定して削除を試みる
-        nonexistent_ups_number = 999
-        with self.assertRaises(ObjectDoesNotExist):
-            Ups.objects.get(ups_number=nonexistent_ups_number).delete()
 
+        #存在しないUPS番号がフォームに渡されることはないのでテストケースは割愛している
 
 class UpsEditTest(TestCase):
     """
@@ -249,31 +296,63 @@ class UpsEditTest(TestCase):
         """
         正しいUPS番号を指定してUPSを編集した場合、変更が正しく反映されることを確認する。
         """
-        # UPSの番号を変更
-        new_ups_number = 99
-        self.ups.ups_number = new_ups_number
-        self.ups.full_clean() #バリデーションを確認
-        self.ups.save()
+        # UpsEditViewに対するURLを取得
+        url = reverse('master:ups_edit', args=[self.ups.id])
 
-        # データベースから再度取得して変更が反映されていることを確認
-        updated_ups = Ups.objects.get(pk=self.ups.pk)
-        self.assertEqual(updated_ups.ups_number, new_ups_number)
+        # テストに使用する新しいUPS番号
+        new_ups_number = 45
 
-    def test_edit_invalid_ups_number(self):
+        # POSTリクエストを送信
+        response = self.client.post(url, {'ups_number': new_ups_number})
+
+        # リダイレクトが成功したかどうかを確認
+        self.assertEqual(response.status_code, 302)
+
+        # データベースのUPSが正しく更新されたかを確認
+        self.ups.refresh_from_db()
+        self.assertEqual(self.ups.ups_number, new_ups_number)
+
+    def test_edit_invalid_negative_ups_number(self):
         """
-        不正なUPS番号を指定してUPSを編集しようとした場合、ValidationErrorが発生することを確認する。
+        負のUPS番号を指定してUPSを編集しようとした場合、ValidationErrorが発生することを確認する。
         """
-        # 不正なUPS番号
+        # UpsEditViewに対するURLを取得
+        url = reverse('master:ups_edit', args=[self.ups.id])
+
+        # 負のUPS番号
         invalid_ups_number = -1
 
-        # UPSの番号を不正に変更しようとした場合、ValidationErrorが発生することを確認
-        with self.assertRaises(ValidationError):
-            self.ups.ups_number = invalid_ups_number
-            self.ups.full_clean()
+        # POSTリクエストを送信
+        response = self.client.post(url, {'ups_number': invalid_ups_number})
 
-        # データベースから再度取得して変更が反映されていないことを確認
-        not_updated_ups = Ups.objects.get(pk=self.ups.pk)
-        self.assertNotEqual(not_updated_ups.ups_number, invalid_ups_number)
+        # UPSが更新されていないことを確認
+        self.ups.refresh_from_db()
+        self.assertNotEqual(self.ups.ups_number, invalid_ups_number)
+
+        # フォームがエラーを含んでいることを確認
+        form = response.context['form']
+        self.assertTrue(form.errors)
+
+    def test_edit_invalid_large_ups_number(self):
+        """
+        上限を超えるUPS番号を指定してUPSを編集しようとした場合、ValidationErrorが発生することを確認する。
+        """
+        # UpsEditViewに対するURLを取得
+        url = reverse('master:ups_edit', args=[self.ups.id])
+
+        # 上限を超えるUPS番号
+        invalid_ups_number = 100
+
+        # POSTリクエストを送信
+        response = self.client.post(url, {'ups_number': invalid_ups_number})
+
+        # UPSが更新されていないことを確認
+        self.ups.refresh_from_db()
+        self.assertNotEqual(self.ups.ups_number, invalid_ups_number)
+
+        # フォームがエラーを含んでいることを確認
+        form = response.context['form']
+        self.assertTrue(form.errors)
         
         
     
@@ -457,3 +536,5 @@ class PowerSystemEditTest(TestCase):
         with self.assertRaises(ValidationError):
             edited_power_system.full_clean()
             edited_power_system.save()
+            
+            
