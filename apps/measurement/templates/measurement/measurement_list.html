@@ -18,7 +18,6 @@
     <table class="table">
       <thead class="table-dark">
         <tr>
-          <th>#</th>
           <th>測定日時</th>
           <th>電流値</th>
           <th>電源系統</th>
@@ -29,8 +28,7 @@
       <tbody>
         {% for CurrentMeasurement in object_list %}
         <tr>
-          <td><a href="{% url 'measurement:update' CurrentMeasurement.id %}">{{ CurrentMeasurement.id }}</a></td>
-          <td>{{ CurrentMeasurement.measurement_date }}</td>
+          <td><a href="{% url 'measurement:update' CurrentMeasurement.id %}">{{ CurrentMeasurement.measurement_date }}</a></td>
           <td>{{ CurrentMeasurement.current_value }}</td>
           <td>{{ CurrentMeasurement.power_system }}</td>
           <td>{{ CurrentMeasurement.employee }}</td>

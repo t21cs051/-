@@ -17,15 +17,23 @@
 	<table class="table">
    		<thead class="table-dark">
       		<tr>
-      			<th>#</th>
           		<th>作業日時</th>
          		<th>作業区分</th>
           		<th>作業内容</th>
          		<th>作業者</th>
+         		<th>削除</th>
       		</tr>
  		</thead>
        <tbody>
-
+			{% for worklog in object_list %}
+    		<tr>
+	           <td><a href="{% url 'worklog:update' worklog.id %}">{{ worklog.work_date }}</a></td>
+	           <td>{{ worklog.get_work_type_display }}</td>
+	           <td>{{ worklog.description }}</td>
+	           <td>{{ worklog.employee }}</td>
+	           <td><a href="{% url 'worklog:delete' worklog.id %}">削除</a></td>
+        	</tr>
+        	{% endfor %}
         </tbody>
 	</table>
   </div>
@@ -36,10 +44,8 @@
   {% csrf_token %}
     {{ form.as_p }}
     <div>
-	    <button>Delete</button>
 	    <button type="submit">Update</button>
 	    <button><a href="{% url "worklog:list" %}">キャンセル</a></button>
 	</div>
   </form>
-
 {% endblock %}

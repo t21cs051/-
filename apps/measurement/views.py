@@ -42,7 +42,7 @@ class MeasurementAddView(CreateView):
         return context
 
 
-class MeasurementUpdateView(UpdateView):
+class MeasurementUpdateView(UpdateView, ListView):
     model = CurrentMeasurement
     template_name = 'measurement/measurement_update.html'
     form_class = MeasurementForm

@@ -17,7 +17,6 @@
 	<table class="table">
    		<thead class="table-dark">
       		<tr>
-      			<th>#</th>
           		<th>作業日時</th>
          		<th>作業区分</th>
           		<th>作業内容</th>
@@ -28,8 +27,7 @@
        <tbody>
 			{% for worklog in object_list %}
     		<tr>
-	      		<td><a href="{% url 'worklog:update' worklog.id %}">{{ worklog.id }}</a></td>
-	           <td>{{ worklog.work_date }}</td>
+	           <td><a href="{% url 'worklog:update' worklog.id %}">{{ worklog.work_date }}</a></td>
 	           <td>{{ worklog.get_work_type_display }}</td>
 	           <td>{{ worklog.description }}</td>
 	           <td>{{ worklog.employee }}</td>
