@@ -4,12 +4,14 @@
 
 {% block main %}
 <a>本当に削除しますか？</a>
-<form action="{% url 'master:power_system_delete' power_system.id %}" method="post">
+<form method="post">
     {% csrf_token %}
-    <tr><th><label for="id_name">ID:</label></th><td><a>{{ id }}</a></td></tr>
 
     <dl>
         <dt>電源系統番号</dt><dd>{{ power_system.power_system_number }}</dd>
+        <dt>最大電流値</dt><dd>{{ power_system.max_current }}</dd>
+        <dt>供給元UPS</dt><dd>{{ power_system.supply_source }}</dd>
+        <dt>供給先ラック</dt><dd>{{ power_system.supply_rack }}</dd>
     </dl>
 
     <input type="submit" value="削除"/>
