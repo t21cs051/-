@@ -99,14 +99,17 @@
                         ],
                         borderColor: colors['グラフ'],
                     },
-                    {% for worklog in worklogs %}
+                    {% for worklog_type, worklogs in worklogs.items %}
                     {
                         type: 'line',
-                        label: '{{ worklog.y }}',
-                        data: [ {x: '{{ worklog.x }}', y: 0, z: '{{ worklog.z }}'},
-                                {x: '{{ worklog.x }}', y: {{ capacity|get_item:power_system }}, z: '{{ worklog.z }}'}
+                        label: '{{ worklog_type }}',
+                        data: [
+                        {% for worklog in worklogs %}
+                        {x: '{{ worklog.x }}', y: 0, z: '{{ worklog.z }}'},
+                        {x: '{{ worklog.x }}', y: {{ capacity|get_item:power_system }}, z: '{{ worklog.z }}'},
+                        {% endfor %}
                         ],
-                        borderColor: colors['{{ worklog.y }}'], // 作業記録の種類に基づいて色を設定
+                        borderColor: colors['{{ worklog_type }}'], // 作業記録の種類に基づいて色を設定
                         borderWidth: 3,
                         fill: false,
                         pointRadius: 3,
