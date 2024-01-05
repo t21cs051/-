@@ -1,11 +1,15 @@
 {% extends "base.html" %}
 
 {% block main %}
-<h2>
-  <a href="{% url "measurement:add" %}">電流記録</a>
-  <a href="{% url "worklog:add" %}">作業記録</a>
-  
-</h2>
+<ul class="nav nav-tabs">
+	<li class="nav-item">
+  		<a class="nav-link" aria-current="page" href="{% url "measurement:add" %}">電流記録</a>
+  	</li>
+  	<li class="nav-item">
+  		<a class="nav-link active" aria-current="page" href="{% url "worklog:add" %}">作業記録</a>
+  	</li>
+</ul>
+
   
 <br>
 
