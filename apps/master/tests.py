@@ -274,3 +274,186 @@ class UpsEditTest(TestCase):
         # データベースから再度取得して変更が反映されていないことを確認
         not_updated_ups = Ups.objects.get(pk=self.ups.pk)
         self.assertNotEqual(not_updated_ups.ups_number, invalid_ups_number)
+        
+        
+    
+"""
+電源系統マスタのテストケース
+"""
+class PowerSystemAddTest(TestCase):
+    """
+    電源系統追加機能のテストケース
+    """
+
+    def setUp(self):
+        # テスト用のUPSとラックを作成
+        self.ups = Ups.objects.create(ups_number=42)
+        self.rack = Rack.objects.create(rack_number=100)
+
+    def test_add_valid_power_system(self):
+        """
+        正しいデータで電源系統を追加した場合、データベースに正しく保存されることを確認する。
+        """
+        # 正しいデータで電源系統を作成
+        power_system_data = {
+            'power_system_number': 1,
+            'max_current': 50.0,
+            'supply_source': self.ups,
+            'supply_rack': self.rack,
+        }
+
+        try:
+            # バリデーションを実行し、データベースに保存
+            power_system = PowerSystem(**power_system_data)
+            power_system.full_clean()
+            power_system.save()
+        except ValidationError:
+            self.fail("バリデーションエラーが発生しました。")
+
+        # データベースから取得して確認
+        added_power_system = PowerSystem.objects.get(power_system_number=1)
+        self.assertEqual(added_power_system.max_current, 50.0)
+        
+    def test_add_invalid_ups_number_power_system(self):
+        """
+        不正な電源系統番号で電源系統を追加しようとした場合、ValidationErrorが発生することを確認する。
+        """
+        # 不正な電源系統番号で電源系統を作成しようとした場合、ValidationErrorが発生することを確認
+        invalid_power_system_data = {
+            'power_system_number': -1, # 不正な電源系統番号
+            'max_current': 2.0,  
+            'supply_source': self.ups,
+            'supply_rack': self.rack,
+        }
+
+        with self.assertRaises(ValidationError):
+            power_system = PowerSystem(**invalid_power_system_data)
+            power_system.full_clean()
+            power_system.save()
+
+
+    def test_add_invalid_max_current_power_system(self):
+        """
+        不正な最大電流値で電源系統を追加しようとした場合、ValidationErrorが発生することを確認する。
+        """
+        # 不正な最大電流値で電源系統を作成しようとした場合、ValidationErrorが発生することを確認
+        invalid_power_system_data = {
+            'power_system_number': 2,
+            'max_current': 150.0,  # 不正な最大電流値
+            'supply_source': self.ups,
+            'supply_rack': self.rack,
+        }
+
+        with self.assertRaises(ValidationError):
+            power_system = PowerSystem(**invalid_power_system_data)
+            power_system.full_clean()
+            power_system.save()
+            
+
+class PowerSystemDeleteTest(TestCase):
+    """
+    電源系統削除機能のテストケース
+    """
+
+    def setUp(self):
+        # テスト用のUPSとラックを作成
+        self.ups = Ups.objects.create(ups_number=42)
+        self.rack = Rack.objects.create(rack_number=100)
+
+        # テスト用の電源系統を作成
+        self.power_system = PowerSystem.objects.create(
+            power_system_number=1,
+            max_current=50.0,
+            supply_source=self.ups,
+            supply_rack=self.rack,
+        )
+
+    def test_delete_existing_power_system(self):
+        """
+        存在する電源系統を削除した場合、該当の電源系統が削除されることを確認する。
+        """
+        # 電源系統の数を記録
+        initial_power_system_count = PowerSystem.objects.count()
+
+        # 電源系統を削除
+        self.power_system.delete()
+
+        # 電源系統が正常に削除されたことを確認
+        self.assertEqual(PowerSystem.objects.count(), initial_power_system_count - 1)
+
+        # 電源系統が存在しないことを確認
+        with self.assertRaises(ObjectDoesNotExist):
+            PowerSystem.objects.get(power_system_number=1)
+
+    def test_delete_nonexistent_power_system(self):
+        """
+        存在しない電源系統を削除しようとした場合、ObjectDoesNotExist例外が発生することを確認する。
+        """
+        # 存在しない電源系統番号を指定して削除を試みる
+        nonexistent_power_system_number = 999
+        with self.assertRaises(ObjectDoesNotExist):
+            PowerSystem.objects.get(power_system_number=nonexistent_power_system_number).delete()
+
+
+class PowerSystemEditTest(TestCase):
+    """
+    電源系統編集機能のテストケース
+    """
+
+    def setUp(self):
+        # テスト用のUPSとラックを作成
+        self.ups = Ups.objects.create(ups_number=42)
+        self.rack = Rack.objects.create(rack_number=100)
+
+        # テスト用の電源系統を作成
+        self.power_system = PowerSystem.objects.create(
+            power_system_number=1,
+            max_current=50.0,
+            supply_source=self.ups,
+            supply_rack=self.rack,
+        )
+
+    def test_edit_valid_power_system(self):
+        """
+        正しいデータで電源系統を編集した場合、データベースに正しく変更が反映されることを確認する。
+        """
+        # 正しいデータで電源系統を編集
+        edited_power_system_data = {
+            'power_system_number': 1,
+            'max_current': 75.0,  # 新しい最大電流値
+            'supply_source': self.ups,
+            'supply_rack': self.rack,
+        }
+
+        # バリデーションを実行し、データベースに保存
+        edited_power_system = PowerSystem.objects.get(power_system_number=1)
+        edited_power_system.max_current = edited_power_system_data['max_current']
+
+        try:
+            edited_power_system.full_clean()
+            edited_power_system.save()
+        except ValidationError:
+            self.fail("バリデーションエラーが発生しました。")
+
+        # データベースから取得して変更が反映されていることを確認
+        updated_power_system = PowerSystem.objects.get(power_system_number=1)
+        self.assertEqual(updated_power_system.max_current, 75.0)
+
+    def test_edit_invalid_power_system(self):
+        """
+        不正なデータで電源系統を編集しようとした場合、ValidationErrorが発生することを確認する。
+        """
+        # 不正なデータで電源系統を編集しようとした場合、ValidationErrorが発生することを確認
+        invalid_power_system_data = {
+            'power_system_number': 1,
+            'max_current': 150.0,  # 許容範囲外の値
+            'supply_source': self.ups,
+            'supply_rack': self.rack,
+        }
+
+        edited_power_system = PowerSystem.objects.get(power_system_number=1)
+        edited_power_system.max_current = invalid_power_system_data['max_current']
+
+        with self.assertRaises(ValidationError):
+            edited_power_system.full_clean()
+            edited_power_system.save()
