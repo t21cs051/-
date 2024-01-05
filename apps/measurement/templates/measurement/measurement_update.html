@@ -36,7 +36,11 @@
   <form method="POST">
   {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">Update</button>
+    <div>
+	    <button>Delete</button>
+	    <button type="submit">Update</button>
+	    <button><a href="{% url "measurement:list" %}">キャンセル</a></button>
+	</div>
   </form>
   
 {% endblock %}
