@@ -1,11 +1,13 @@
 {% extends "base.html" %}
 
-{% block title %} ラック編集 {% endblock %}
+{% block title %} 社員編集 {% endblock %}
 
 {% block main %}
-<form method="POST">
+<form method="post">
 {% csrf_token %}
-{{ form.as_p }}
+<table>
+{{ form.as_table }}
+</table>
 <input type="submit"/>
 </form>
 {% endblock %}

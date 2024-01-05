@@ -5,7 +5,7 @@ from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from .models import WorkLog
 from django.shortcuts import get_object_or_404
 from .models import WorkLog
-from .forms import WorkLogIdForm, WorkLogForm
+from .forms import WorkLogIdForm, WorkLogForm, WorkLogUpdateForm
 
 class WorkLogListView(ListView):
     model = WorkLog
@@ -29,6 +29,10 @@ class WorkLogAddView(CreateView):
     template_name = 'worklog/worklog_add.html'
     form_class = WorkLogForm
     success_url = reverse_lazy('worklog:list')
+
+    def form_valid(self, form):
+        form.instance.employee = self.request.user
+        return super().form_valid(form)
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -39,7 +43,7 @@ class WorkLogAddView(CreateView):
 class WorkLogUpdateView(UpdateView, ListView):
     model = WorkLog
     template_name = 'worklog/worklog_update.html'
-    form_class = WorkLogForm
+    form_class = WorkLogUpdateForm
     success_url = reverse_lazy('worklog:list')
     
     def get_context_data(self, **kwargs):

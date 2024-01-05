@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from .models import CurrentMeasurement;
-from .forms import MeasurementIdForm, MeasurementForm
+from .forms import MeasurementIdForm, MeasurementForm, MeasurementUpdateForm
 from django.views.generic import ListView
 from django.views.generic.edit import CreateView,  UpdateView, DeleteView
 from django.http import HttpResponseRedirect
@@ -29,30 +29,31 @@ class MeasurementListView(ListView):
         context['form_id'] = MeasurementIdForm()
         return context
     
-
 class MeasurementAddView(CreateView):
     model = CurrentMeasurement
-    fields = ('measurement_date','current_value','power_system','employee')
     template_name = 'measurement/measurement_add.html'
+    form_class = MeasurementForm
     success_url = reverse_lazy('measurement:list')
     
+    def form_valid(self, form):
+        form.instance.employee = self.request.user
+        return super().form_valid(form)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['form_id'] = MeasurementIdForm()
         return context
-
 
 class MeasurementUpdateView(UpdateView, ListView):
     model = CurrentMeasurement
     template_name = 'measurement/measurement_update.html'
-    form_class = MeasurementForm
+    form_class = MeasurementUpdateForm
     success_url = reverse_lazy('measurement:list')
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['form_id'] = MeasurementIdForm()
         return context
-    
     
 class MeasurementDeleteView(DeleteView):
     model = CurrentMeasurement
