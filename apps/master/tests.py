@@ -1,7 +1,3 @@
-from django.test import TestCase
-
-# Create your tests here.
-
 import unittest
 from django.test import TestCase
 from django.core.exceptions import ValidationError
@@ -104,6 +100,46 @@ class RackDeleteTest(TestCase):
             Rack.objects.get(rack_number=nonexistent_rack_number).delete()
 
 
+class RackEditTest(TestCase):
+    """
+    ラック編集機能のテストケース
+    """
+
+    def setUp(self):
+        # テスト用のラックを作成
+        self.rack = Rack.objects.create(rack_number=42)
+
+    def test_edit_valid_rack_number(self):
+        """
+        正しいラック番号を指定してラックを編集した場合、変更が正しく反映されることを確認する。
+        """
+        # ラックの番号を変更
+        new_rack_number = 100
+        self.rack.rack_number = new_rack_number
+        self.rack.full_clean() #バリデーションを確認
+        self.rack.save()
+
+        # データベースから再度取得して変更が反映されていることを確認
+        updated_rack = Rack.objects.get(pk=self.rack.pk)
+        self.assertEqual(updated_rack.rack_number, new_rack_number)
+
+    def test_edit_invalid_rack_number(self):
+        """
+        不正なラック番号を指定してラックを編集しようとした場合、ValidationErrorが発生することを確認する。
+        """
+        # 不正なラック番号
+        invalid_rack_number = -1
+
+        # ラックの番号を不正に変更しようとした場合、ValidationErrorが発生することを確認
+        with self.assertRaises(ValidationError):
+            self.rack.rack_number = invalid_rack_number
+            self.rack.full_clean()
+
+        # データベースから再度取得して変更が反映されていないことを確認
+        not_updated_rack = Rack.objects.get(pk=self.rack.pk)
+        self.assertNotEqual(not_updated_rack.rack_number, invalid_rack_number)
+
+
 
 """
 UPSマスタのテストケース
@@ -198,3 +234,43 @@ class UpsDeleteTest(TestCase):
         nonexistent_ups_number = 999
         with self.assertRaises(ObjectDoesNotExist):
             Ups.objects.get(ups_number=nonexistent_ups_number).delete()
+
+
+class UpsEditTest(TestCase):
+    """
+    UPS編集機能のテストケース
+    """
+
+    def setUp(self):
+        # テスト用のUPSを作成
+        self.ups = Ups.objects.create(ups_number=42)
+
+    def test_edit_valid_ups_number(self):
+        """
+        正しいUPS番号を指定してUPSを編集した場合、変更が正しく反映されることを確認する。
+        """
+        # UPSの番号を変更
+        new_ups_number = 99
+        self.ups.ups_number = new_ups_number
+        self.ups.full_clean() #バリデーションを確認
+        self.ups.save()
+
+        # データベースから再度取得して変更が反映されていることを確認
+        updated_ups = Ups.objects.get(pk=self.ups.pk)
+        self.assertEqual(updated_ups.ups_number, new_ups_number)
+
+    def test_edit_invalid_ups_number(self):
+        """
+        不正なUPS番号を指定してUPSを編集しようとした場合、ValidationErrorが発生することを確認する。
+        """
+        # 不正なUPS番号
+        invalid_ups_number = -1
+
+        # UPSの番号を不正に変更しようとした場合、ValidationErrorが発生することを確認
+        with self.assertRaises(ValidationError):
+            self.ups.ups_number = invalid_ups_number
+            self.ups.full_clean()
+
+        # データベースから再度取得して変更が反映されていないことを確認
+        not_updated_ups = Ups.objects.get(pk=self.ups.pk)
+        self.assertNotEqual(not_updated_ups.ups_number, invalid_ups_number)
