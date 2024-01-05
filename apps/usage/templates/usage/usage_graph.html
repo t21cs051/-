@@ -101,7 +101,7 @@
                     },
                     {% for worklog_type, worklogs in worklogs.items %}
                     {
-                        type: 'line',
+                        type: 'scatter',
                         label: '{{ worklog_type }}',
                         data: [
                         {% for worklog in worklogs %}
@@ -125,12 +125,20 @@
                 data: lineChartData{{ power_system }},
                 options: {
                     plugins: {
-                        legend: {
-                            labels: {
-                                sort: function(item, chart) {
-                                    // ここで凡例の順番を設定
-                                }
-                            }
+                        annotation: {
+                            annotations: [
+                                {% for worklog_type, worklogs in worklogs.items %}
+                                    {% for worklog in worklogs %}
+                                        {
+                                            type: 'line',
+                                            xMin: '{{ worklog.x }}',
+                                            xMax: '{{ worklog.x }}',
+                                            borderColor: colors['{{ worklog_type }}'],
+                                            borderWidth: 3,
+                                        },
+                                    {% endfor %}
+                                {% endfor %}
+                            ]
                         },
                         plugin: {},
                         tooltip: {
