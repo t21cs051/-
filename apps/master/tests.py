@@ -573,3 +573,200 @@ class PowerSystemEditTest(TestCase):
         self.assertTrue(form.errors)
             
             
+    
+"""
+アカウント管理のテストケース
+"""
+class EmployeeDeleteTest(TestCase):
+    """
+    アカウント削除機能のテストケース
+    """
+
+    def setUp(self):
+
+        # テスト用のアカウントを作成
+        self.user = CustomUser.objects.create_user(
+            employee_number='123456',
+            full_name='田中太郎',
+            password='password123',
+        )
+
+    def test_delete_existing_employee(self):
+        """
+        アカウントが正常に削除されることを確認する。
+        """
+        # EmployeeDeleteViewに対するURLを取得
+        url = reverse('master:employee_delete', args=[self.user.employee_number])
+        
+        # ログイン状態にするためにログイン処理を実行
+        self.client.login(username='123456', password='password123')
+
+        # DELETEリクエストを送信
+        response = self.client.delete(url)
+
+        # リダイレクトが成功したかどうかを確認
+        self.assertEqual(response.status_code, 302)
+
+        # データベースからアカウントが正しく削除されたかを確認
+        self.assertFalse(CustomUser.objects.filter(employee_number='123456').exists())
+
+
+class EmployeeEditViewTest(TestCase):
+    def setUp(self):
+        # テスト用のアカウントを作成
+        self.user = CustomUser.objects.create_user(
+            employee_number='123456',
+            full_name='田中太郎',
+            password='password123',
+        )
+
+    def test_employee_edit_view_success(self):
+        # 社員名が正常に編集されることを確認するテストケース
+
+        # EmployeeEditViewに対するURLを取得
+        url = reverse('master:employee_edit', args=[self.user.employee_number])
+
+        # テストに使用する新しい社員名
+        new_employee_data = {
+            'employee_number':'123456',
+            'full_name':'Jane Doe',
+        }
+        # ログイン状態にするためにログイン処理を実行
+        self.client.login(username='123456', password='password123')
+
+        # ログインしているユーザーのデータを取得
+        logged_in_user = CustomUser.objects.get(employee_number='123456')
+
+        # POSTリクエストを送信
+        response = self.client.post(url, new_employee_data)
+
+        # リダイレクトが成功したかどうかを確認
+        self.assertEqual(response.status_code, 302)
+
+        # データベースのユーザーが正しく更新されたかを確認
+        logged_in_user.refresh_from_db()
+        self.assertEqual(logged_in_user.full_name, new_employee_data['full_name'])
+
+    def test_employee_edit_view_invalid_data(self):
+        # 無効なデータを使用して社員名を編集した場合、データベースが更新されないことを確認するテストケース
+
+        # EmployeeEditViewに対するURLを取得
+        url = reverse('master:employee_edit', args=[self.user.employee_number])
+        
+        # テストに使用する無効な社員名のデータ
+        invalid_employee_data = {
+            'employee_number':'123456',
+            'full_name':'', #無効な社員名
+        }
+        
+        # ログイン状態にするためにログイン処理を実行
+        self.client.login(username='123456', password='password123')
+
+        # ログインしているユーザーのデータを取得
+        logged_in_user = CustomUser.objects.get(employee_number='123456')
+
+        # POSTリクエストを送信
+        response = self.client.post(url, invalid_employee_data)
+
+        # データベースが更新されていないことを確認
+        logged_in_user.refresh_from_db()
+        self.assertNotEqual(logged_in_user.full_name, invalid_employee_data['full_name'])
+        
+        
+class PasswordChangeViewTest(TestCase):
+    def setUp(self):
+        # テスト用のアカウントを作成
+        self.user = CustomUser.objects.create_user(
+            employee_number='123456',
+            full_name='田中太郎',
+            password='password123',
+        )
+
+    def test_password_change_view_success(self):
+        # パスワードが正常に変更されることを確認するテストケース
+
+        # PasswordChangeViewに対するURLを取得
+        url = reverse('master:password_change_form')
+
+        # テストに使用する新しいパスワードのデータ
+        new_password_data = {
+            'old_password': 'password123',
+            'new_password1': 'newtestpassword',
+            'new_password2': 'newtestpassword',
+        }
+
+        # ログイン状態でPOSTリクエストを送信
+        self.client.login(username='123456', password='password123')
+        response = self.client.post(url, new_password_data)
+
+        # リダイレクトが成功したかどうかを確認
+        self.assertEqual(response.status_code, 302)
+
+        # データベースのユーザーが正しく更新されたかを確認
+        self.user.refresh_from_db()
+        self.assertTrue(self.user.check_password(new_password_data['new_password1']))
+
+    def test_password_change_view_invalid_data(self):
+        # 無効なデータを使用してパスワードを変更した場合、データベースが更新されないことを確認するテストケース
+
+        # PasswordChangeViewに対するURLを取得
+        url = reverse('master:password_change_form')
+
+        # テストに使用する無効なパスワードのデータ（新しいパスワードが異なる）
+        invalid_password_data = {
+            'old_password': 'password123',
+            'new_password1': '1234',
+            'new_password2': '1234',  # 無効な値
+        }
+
+        # ログイン状態でPOSTリクエストを送信
+        self.client.login(username='123456', password='password123')
+        response = self.client.post(url, invalid_password_data)
+
+        # データベースが更新されていないことを確認
+        self.user.refresh_from_db()
+        self.assertFalse(self.user.check_password(invalid_password_data['new_password1']))
+        
+        
+    def test_password_change_view_same_data(self):
+        # 同じパスワードを変更した場合、フォームがエラーとなることを確認するテストケース
+
+        # PasswordChangeViewに対するURLを取得
+        url = reverse('master:password_change_form')
+
+        # テストに使用する無効なパスワードのデータ（新しいパスワードが異なる）
+        invalid_password_data = {
+            'old_password': 'password123',
+            'new_password1': 'password123',
+            'new_password2': 'password123',  # 同じパスワード
+        }
+
+        # ログイン状態でPOSTリクエストを送信
+        self.client.login(username='123456', password='password123')
+        response = self.client.post(url, invalid_password_data)
+
+        # フォームがエラーを含んでいることを確認
+        form = response.context['form']
+        self.assertTrue(form.errors)
+        
+    def test_password_change_view_invalid_nowpass_data(self):
+        # 現在のパスワードが間違っている場合、フォームがエラーとなることを確認するテストケース
+
+        # PasswordChangeViewに対するURLを取得
+        url = reverse('master:password_change_form')
+
+        # テストに使用する無効なパスワードのデータ（新しいパスワードが異なる）
+        invalid_password_data = {
+            'old_password': 'testpass123',# 間違ったパスワード
+            'new_password1': 'password123',
+            'new_password2': 'password123',  
+        }
+
+        # ログイン状態でPOSTリクエストを送信
+        self.client.login(username='123456', password='password123')
+        response = self.client.post(url, invalid_password_data)
+
+        # フォームがエラーを含んでいることを確認
+        form = response.context['form']
+        self.assertTrue(form.errors)
+        
