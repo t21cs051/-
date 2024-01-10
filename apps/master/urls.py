@@ -21,7 +21,7 @@ urlpatterns = [
     path('power_system_edit/<int:pk>/', PowerSystemEditView.as_view(), name='power_system_edit'),
     path('power_system_delete/<int:pk>/', PowerSystemDeleteView.as_view(), name='power_system_delete'),
     path('employee/', EmployeeList.as_view(), name='employee'),
-    path('employee_edit/<int:pk>/', EmployeeEditView.as_view(), name='employee_edit'),
+    path('employee_edit/<str:pk>/', EmployeeEditView.as_view(), name='employee_edit'),
     path('password_change_form/', PasswordChangeView.as_view(template_name='master/password_change.html'), name='password_change_form'),
     path('password_change_done/', PasswordChangeDoneView.as_view(template_name='master/password_change_done.html'), name='password_change_done'),
     path('employee_delete/<int:pk>/', EmployeeDeleteView.as_view(), name='employee_delete'),

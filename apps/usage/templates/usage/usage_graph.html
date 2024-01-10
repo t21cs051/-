@@ -99,14 +99,17 @@
                         ],
                         borderColor: colors['グラフ'],
                     },
-                    {% for worklog in worklogs %}
+                    {% for worklog_type, worklogs in worklogs.items %}
                     {
-                        type: 'line',
-                        label: '{{ worklog.y }}',
-                        data: [ {x: '{{ worklog.x }}', y: 0, z: '{{ worklog.z }}'},
-                                {x: '{{ worklog.x }}', y: {{ capacity|get_item:power_system }}, z: '{{ worklog.z }}'}
+                        type: 'scatter',
+                        label: '{{ worklog_type }}',
+                        data: [
+                        {% for worklog in worklogs %}
+                        {x: '{{ worklog.x }}', y: 0, z: '{{ worklog.z }}'},
+                        {x: '{{ worklog.x }}', y: {{ capacity|get_item:power_system }}, z: '{{ worklog.z }}'},
+                        {% endfor %}
                         ],
-                        borderColor: colors['{{ worklog.y }}'], // 作業記録の種類に基づいて色を設定
+                        borderColor: colors['{{ worklog_type }}'], // 作業記録の種類に基づいて色を設定
                         borderWidth: 3,
                         fill: false,
                         pointRadius: 3,
@@ -122,12 +125,20 @@
                 data: lineChartData{{ power_system }},
                 options: {
                     plugins: {
-                        legend: {
-                            labels: {
-                                sort: function(item, chart) {
-                                    // ここで凡例の順番を設定
-                                }
-                            }
+                        annotation: {
+                            annotations: [
+                                {% for worklog_type, worklogs in worklogs.items %}
+                                    {% for worklog in worklogs %}
+                                        {
+                                            type: 'line',
+                                            xMin: '{{ worklog.x }}',
+                                            xMax: '{{ worklog.x }}',
+                                            borderColor: colors['{{ worklog_type }}'],
+                                            borderWidth: 3,
+                                        },
+                                    {% endfor %}
+                                {% endfor %}
+                            ]
                         },
                         plugin: {},
                         tooltip: {

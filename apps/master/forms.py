@@ -9,7 +9,7 @@ class RackIdForm(forms.Form):
 class RackForm(forms.ModelForm):
     class Meta:
         model = Rack
-        fields = ['rack_number']
+        fields = ['rack_number', 'description']
         
     
 #UPS
@@ -19,7 +19,7 @@ class UpsIdForm(forms.Form):
 class UpsForm(forms.ModelForm):
     class Meta:
         model = Ups
-        fields = ['ups_number']
+        fields = ['ups_number', 'description']
     
 #電源系統
 class PowerSystemIdForm(forms.Form):
