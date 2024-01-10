@@ -10,19 +10,21 @@
 	<table class="table">
 		<thead class="table-dark">
 			<tr>
-		  		<th>ラックID</th>
-		       <th>ラック番号</th>
-		       <th>編集</th>
-		       <th>削除</th>
-		 	</tr>
+				<th>ラックID</th>
+				<th>ラック番号</th>
+				<th>備考</th>
+				<th>編集</th>
+				<th>削除</th>
+			</tr>
 		</thead>
 		<tbody>
 			{% for rack in object_list %}
 			<tr>
 				<td scope="row">{{ rack.id }}</td>
 				<td>{{ rack.rack_number }}</td>
+				<td>{{ rack.description }}</td>
 				<td><a href="{% url 'master:rack_edit' rack.id %}">[編集]</a></td>
-              <td><a href="{% url 'master:rack_delete' rack.id %}">[削除]</a></td>
+				<td><a href="{% url 'master:rack_delete' rack.id %}">[削除]</a></td>
 			</tr>
 			{% endfor %}
 		</tbody>
