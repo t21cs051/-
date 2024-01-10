@@ -377,21 +377,22 @@ class PowerSystemAddTest(TestCase):
         power_system_data = {
             'power_system_number': 1,
             'max_current': 50.0,
-            'supply_source': self.ups,
-            'supply_rack': self.rack,
+            'supply_source': self.ups.id,
+            'supply_rack': self.rack.id,
         }
+        
+        # PowerSystemAddViewに対するURLを取得
+        url = reverse('master:power_system_add')
+        
+        # POSTリクエストを送信
+        response = self.client.post(url, power_system_data)
 
-        try:
-            # バリデーションを実行し、データベースに保存
-            power_system = PowerSystem(**power_system_data)
-            power_system.full_clean()
-            power_system.save()
-        except ValidationError:
-            self.fail("バリデーションエラーが発生しました。")
+        # リダイレクトが成功したかどうかを確認
+        self.assertEqual(response.status_code, 302)
 
-        # データベースから取得して確認
-        added_power_system = PowerSystem.objects.get(power_system_number=1)
-        self.assertEqual(added_power_system.max_current, 50.0)
+        # データベースに電源系統が正しく追加されたかを確認
+        self.assertTrue(PowerSystem.objects.filter(power_system_number=power_system_data['power_system_number']).exists())
+
         
     def test_add_invalid_ups_number_power_system(self):
         """
@@ -401,14 +402,22 @@ class PowerSystemAddTest(TestCase):
         invalid_power_system_data = {
             'power_system_number': -1, # 不正な電源系統番号
             'max_current': 2.0,  
-            'supply_source': self.ups,
-            'supply_rack': self.rack,
+            'supply_source': self.ups.id,
+            'supply_rack': self.rack.id,
         }
+        
+        # PowerSystemAddViewに対するURLを取得
+        url = reverse('master:power_system_add')
 
-        with self.assertRaises(ValidationError):
-            power_system = PowerSystem(**invalid_power_system_data)
-            power_system.full_clean()
-            power_system.save()
+        # POSTリクエストを送信
+        response = self.client.post(url, invalid_power_system_data)
+
+        # 電源系統が追加されていないことを確認
+        self.assertFalse(PowerSystem.objects.filter(power_system_number=invalid_power_system_data['power_system_number']).exists())
+
+        # フォームがエラーを含んでいることを確認
+        form = response.context['form']
+        self.assertTrue(form.errors)
 
 
     def test_add_invalid_max_current_power_system(self):
@@ -419,15 +428,22 @@ class PowerSystemAddTest(TestCase):
         invalid_power_system_data = {
             'power_system_number': 2,
             'max_current': 150.0,  # 不正な最大電流値
-            'supply_source': self.ups,
-            'supply_rack': self.rack,
+            'supply_source': self.ups.id,
+            'supply_rack': self.rack.id,
         }
 
-        with self.assertRaises(ValidationError):
-            power_system = PowerSystem(**invalid_power_system_data)
-            power_system.full_clean()
-            power_system.save()
-            
+        # PowerSystemAddViewに対するURLを取得
+        url = reverse('master:power_system_add')
+
+        # POSTリクエストを送信
+        response = self.client.post(url, invalid_power_system_data)
+
+        # 電源系統が追加されていないことを確認
+        self.assertFalse(PowerSystem.objects.filter(power_system_number=invalid_power_system_data['power_system_number']).exists())
+
+        # フォームがエラーを含んでいることを確認
+        form = response.context['form']
+        self.assertTrue(form.errors)
 
 class PowerSystemDeleteTest(TestCase):
     """
@@ -451,27 +467,35 @@ class PowerSystemDeleteTest(TestCase):
         """
         存在する電源系統を削除した場合、該当の電源系統が削除されることを確認する。
         """
-        # 電源系統の数を記録
-        initial_power_system_count = PowerSystem.objects.count()
+        # PowerSystemDeleteViewに対するURLを取得
+        url = reverse('master:power_system_delete', args=[self.power_system.id])
 
-        # 電源系統を削除
-        self.power_system.delete()
+        # DELETEリクエストを送信
+        response = self.client.delete(url)
 
-        # 電源系統が正常に削除されたことを確認
-        self.assertEqual(PowerSystem.objects.count(), initial_power_system_count - 1)
+        # リダイレクトが成功したかどうかを確認
+        self.assertEqual(response.status_code, 302)
 
-        # 電源系統が存在しないことを確認
-        with self.assertRaises(ObjectDoesNotExist):
-            PowerSystem.objects.get(power_system_number=1)
+        # データベースから電源系統が正しく削除されたかを確認
+        self.assertFalse(PowerSystem.objects.filter(id=self.power_system.id).exists())
+
+
 
     def test_delete_nonexistent_power_system(self):
         """
         存在しない電源系統を削除しようとした場合、ObjectDoesNotExist例外が発生することを確認する。
         """
         # 存在しない電源系統番号を指定して削除を試みる
-        nonexistent_power_system_number = 999
-        with self.assertRaises(ObjectDoesNotExist):
-            PowerSystem.objects.get(power_system_number=nonexistent_power_system_number).delete()
+        invalid_power_system_id = self.power_system.id + 1
+        
+        # PowerSystemDeleteViewに対するURLを取得
+        url = reverse('master:power_system_delete', args=[invalid_power_system_id])
+
+        # DELETEリクエストを送信
+        response = self.client.delete(url)
+
+        # 電源系統が削除されていないことを確認
+        self.assertTrue(PowerSystem.objects.filter(id=self.power_system.id).exists())
 
 
 class PowerSystemEditTest(TestCase):
@@ -500,23 +524,23 @@ class PowerSystemEditTest(TestCase):
         edited_power_system_data = {
             'power_system_number': 1,
             'max_current': 75.0,  # 新しい最大電流値
-            'supply_source': self.ups,
-            'supply_rack': self.rack,
+            'supply_source': self.ups.id,
+            'supply_rack': self.rack.id,
         }
+        
+        # PowerSystemEditViewに対するURLを取得
+        url = reverse('master:power_system_edit', args=[self.power_system.id])
 
-        # バリデーションを実行し、データベースに保存
-        edited_power_system = PowerSystem.objects.get(power_system_number=1)
-        edited_power_system.max_current = edited_power_system_data['max_current']
+        # POSTリクエストを送信
+        response = self.client.post(url, edited_power_system_data)
 
-        try:
-            edited_power_system.full_clean()
-            edited_power_system.save()
-        except ValidationError:
-            self.fail("バリデーションエラーが発生しました。")
+        # リダイレクトが成功したかどうかを確認
+        self.assertEqual(response.status_code, 302)
 
-        # データベースから取得して変更が反映されていることを確認
-        updated_power_system = PowerSystem.objects.get(power_system_number=1)
-        self.assertEqual(updated_power_system.max_current, 75.0)
+        # データベースの電源系統が正しく更新されたかを確認
+        self.power_system.refresh_from_db()
+        self.assertEqual(self.power_system.power_system_number, edited_power_system_data['power_system_number'])
+        self.assertEqual(self.power_system.max_current, edited_power_system_data['max_current'])
 
     def test_edit_invalid_power_system(self):
         """
@@ -524,17 +548,28 @@ class PowerSystemEditTest(TestCase):
         """
         # 不正なデータで電源系統を編集しようとした場合、ValidationErrorが発生することを確認
         invalid_power_system_data = {
-            'power_system_number': 1,
+            'power_system_number': 2,
             'max_current': 150.0,  # 許容範囲外の値
-            'supply_source': self.ups,
-            'supply_rack': self.rack,
+            'supply_source': self.ups.id,
+            'supply_rack': self.rack.id,
         }
 
-        edited_power_system = PowerSystem.objects.get(power_system_number=1)
-        edited_power_system.max_current = invalid_power_system_data['max_current']
+        # PowerSystemEditViewに対するURLを取得
+        url = reverse('master:power_system_edit', args=[self.power_system.id])
 
-        with self.assertRaises(ValidationError):
-            edited_power_system.full_clean()
-            edited_power_system.save()
+        # POSTリクエストを送信
+        response = self.client.post(url, invalid_power_system_data)
+
+        # リダイレクトが成功したかどうかを確認
+        self.assertEqual(response.status_code, 302)
+
+        # データベースの電源系統が更新されていないことを確認
+        self.power_system.refresh_from_db()
+        self.assertNotEqual(self.power_system.power_system_number, invalid_power_system_data['power_system_number'])
+        self.assertNotEqual(self.power_system.max_current, invalid_power_system_data['max_current'])
+        
+        # フォームがエラーを含んでいることを確認
+        form = response.context['form']
+        self.assertTrue(form.errors)
             
             
