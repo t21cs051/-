@@ -1,23 +1,56 @@
 {% extends "base.html" %}
 
 {% block main %}
-<ul class="nav nav-tabs">
-	<li class="nav-item">
-  		<a class="nav-link" aria-current="page" href="{% url "measurement:add" %}">電流記録</a>
-  	</li>
-  	<li class="nav-item">
-  		<a class="nav-link active" aria-current="page" href="{% url "worklog:add" %}">作業記録</a>
-  	</li>
-</ul>
-
-  
 <br>
 
-  <form method="POST">
-  {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Save</button>
-  </form>
+<div class="container">
+	<!-- tabs -->
+	<div class="col-12">
+		<ul class="nav nav-tabs">
+			<li class="nav-item">
+		  		<a class="nav-link" aria-current="page" href="{% url "measurement:add" %}">電流記録</a>
+		  	</li>
+		  	<li class="nav-item">
+		  		<a class="nav-link active" aria-current="page" href="{% url "worklog:add" %}">作業記録</a>
+		  	</li>
+		</ul>
+	</div>
 
+	<div class="row">
+		<!-- forms -->
+		<div class="col-5">
+		  <form method="POST">
+		  {% csrf_token %}
+		    {{ form.as_p }}
+		    <button type="submit">Save</button>
+		  </form>
+		 </div>
+
+		 <!-- table -->
+		 <div class="col-7 p-3">
+			<table class="table">
+		   		<thead class="table-dark">
+		      		<tr>
+		          		<th>作業日時</th>
+		         		<th>作業区分</th>
+		          		<th>作業内容</th>
+		         		<th>作業者</th>
+		      		</tr>
+		 		</thead>
+		       <tbody>
+					{% for worklog in object_list %}
+		    		<tr>
+			           <td>{{ worklog.work_date }}</td>
+			           <td>{{ worklog.get_work_type_display }}</td>
+			           <td>{{ worklog.description }}</td>
+			           <td>{{ worklog.employee }}</td>
+		        	</tr>
+		        	{% endfor %}
+		        </tbody>
+			</table>
+		  </div>
+	</div>
+
+</div>
 
 {% endblock %}
