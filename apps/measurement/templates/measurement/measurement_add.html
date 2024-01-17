@@ -1,23 +1,56 @@
 {% extends "base.html" %}
 
 {% block main %}
-<ul class="nav nav-tabs">
-	<li class="nav-item">
-  		<a class="nav-link active" aria-current="page" href="{% url "measurement:add" %}">電流記録</a>
-  	</li>
-  	<li class="nav-item">
-  		<a class="nav-link" aria-current="page" href="{% url "worklog:add" %}">作業記録</a>
-  	</li>
-</ul>
-
-  
 <br>
 
-  <form method="POST">
-  {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Save</button>
-  </form>
+<div class="container">
+	<!-- tabs -->
+	<div class="col-12">
+		<ul class="nav nav-tabs">
+			<li class="nav-item">
+				<a class="nav-link active" aria-current="page" href="{% url "measurement:add" %}">電流記録</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" aria-current="page" href="{% url "worklog:add" %}">作業記録</a>
+			</li>
+		</ul>
+	</div>
+
+	<div class="row">
+		<!-- forms -->
+		<div class="col-5">
+		  <form method="POST">
+		  {% csrf_token %}
+		    {{ form.as_p }}
+		    <button type="submit">Save</button>
+		  </form>
+  		</div>
+  		<!-- table -->
+		<div class="col-7 p-3">
+			<table class="table links">
+			<thead class="table-dark">
+				<tr>
+				<th>測定日時</th>
+				<th>電流値</th>
+				<th>電源系統</th>
+				<th>測定者</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for CurrentMeasurement in object_list %}
+				<tr>
+				<td>{{ CurrentMeasurement.measurement_date }}</td>
+				<td>{{ CurrentMeasurement.current_value }}</td>
+				<td>{{ CurrentMeasurement.power_system }}</td>
+				<td>{{ CurrentMeasurement.employee }}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+			</table>
+		</div>
+	</div>
+
+</div>
 
 
 {% endblock %}
