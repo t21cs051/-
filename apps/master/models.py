@@ -6,6 +6,9 @@ class Rack(models.Model):
     # ラック番号(0~999)
     rack_number = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(999)])
 
+    # ラックの説明
+    description = models.TextField(default='')
+
     def __str__(self):
         return str(self.rack_number)
     
@@ -13,6 +16,9 @@ class Rack(models.Model):
 class Ups(models.Model):
     # UPS番号(0~99)
     ups_number = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(99)])
+
+    # UPSの説明
+    description = models.TextField(default='')
 
     def __str__(self):
         return str(self.ups_number)
