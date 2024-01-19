@@ -74,7 +74,8 @@ class UsageGraphView(TemplateView):
 
         # power_systemごとにデータをグループ化
         power_systems = CurrentMeasurement.objects.values('power_system').annotate(count=Count('power_system')).order_by('power_system')
-        print(power_systems)
+        a = PowerSystem.objects.filter(supply_rack__rack_number=rack_number).order_by('power_system_number')
+        print(a)
 
         data = {}
         max_currents = {}
