@@ -10,7 +10,8 @@ from django.utils import timezone
 from apps.master.models import Rack, PowerSystem
 from apps.measurement.models import CurrentMeasurement
 from apps.worklog.models import WorkLog
-from .forms import RackSelectForm, DateRangeForm
+from apps.usage.forms import RackSelectForm
+from .forms import DateRangeForm
 
 # 電源使用状況閲覧画面のメインビュー
 class UsageView(TemplateView):
@@ -72,25 +73,27 @@ class UsageGraphView(TemplateView):
         # ラック番号をcontextに追加
         context['rack_number'] = rack_number
 
-        # power_systemごとにデータをグループ化
-        power_systems = CurrentMeasurement.objects.values('power_system').annotate(count=Count('power_system')).order_by('power_system')
-        a = PowerSystem.objects.filter(supply_rack__rack_number=rack_number).order_by('power_system_number')
-        print(a)
+        # ラック番号でフィルタリングを行い、関連する電源系統を取得
+        power_systems = PowerSystem.objects.filter(supply_rack=rack_number).values('power_system_number').order_by('power_system_number')
 
-        data = {}
+        # 各電源系統をキーとする辞書を初期化
+        data = {power_system['power_system_number']: [] for power_system in power_systems}
+        print(f'データ: {data}')
+
         max_currents = {}
         for power_system in power_systems:
             measurement_queryset = CurrentMeasurement.objects.filter(
-                power_system=power_system['power_system'], # 電源系統で絞り込み
+                power_system=power_system['power_system_number'], # 電源系統で絞り込み
                 power_system__supply_rack=rack_number, # ラック番号で絞り込み
                 measurement_date__range=(start_date, end_date) # 開始日と終了日の範囲で絞り込み
             ).order_by('measurement_date')
-            # measurement_querysetが空でない場合にのみ、dataに追加
-            if measurement_queryset.exists():
-                data[power_system['power_system']] = [{'x': timezone.localtime(obj.measurement_date), 'y': obj.current_value} for obj in measurement_queryset]
-                max_currents[power_system['power_system']] = int(PowerSystem.objects.get(id=power_system['power_system']).max_current)
+            # querysetのデータを辞書に追加
+            data[power_system['power_system_number']] = [{'x': timezone.localtime(obj.measurement_date), 'y': obj.current_value} for obj in measurement_queryset]
+            max_currents[power_system['power_system_number']] = int(PowerSystem.objects.get(id=power_system['power_system_number']).max_current)
         context['data'] = data
         context['capacity'] = max_currents
+
+        print(f'データ: {data}')
         
         # 指定された期間の作業履歴を取得
         worklogs = WorkLog.objects.filter(
