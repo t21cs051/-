@@ -213,3 +213,7 @@ class PasswordChangeView(LoginRequiredMixin, PasswordChangeView):
 
 class PasswordChangeDoneView(LoginRequiredMixin,PasswordChangeDoneView):
     template_name = 'master/password_change_done.html'
+
+
+class ExportView(TemplateView):
+    template_name = 'master/export.html'
