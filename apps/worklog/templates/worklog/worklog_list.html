@@ -47,22 +47,48 @@
   		</div>
 
 		<!-- form -->
-		<div class="col-5 p-3">
-	  		<div class="form-check">
-	  		<!-- work_type -->
-				<div class="form-check form-check-inline">
-				  <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
-				  <label class="form-check-label" for="inlineRadio1">設置</label>
+		<div class="col-5">
+	  		<div class="container border border-top-0 border-1 rounded-bottom">
+	  		<form method="POST">
+	  			{% csrf_token %}
+		  		<br>
+		  		
+		  		<!-- work_date -->
+		  		<div class="p-3 col-6">
+			  		<label class="form-label" for="work-date">作業日時</label>
+			  		<input type="text" class="form-control" name="work-date" id="work_date">
+			  	</div>
+		  		
+		  		
+		  		<!-- work_type -->
+		  		<div class="p-3">
+		  			<label class="form-label">作業区分</label><br>
+			  		<input type="radio" class="btn-check" name="work_type" id="installation" autocomplete="off" checked>
+					<label class="btn btn-outline-primary" for="installation">設置</label>
+		
+					<input type="radio" class="btn-check" name="work_type" id="removal" autocomplete="off">
+					<label class="btn btn-outline-primary" for="removal">撤去</label>
+					
+					<input type="radio" class="btn-check" name="work_type" id="other" autocomplete="off">
+					<label class="btn btn-outline-secondary" for="other">その他 (disabled)</label>
 				</div>
-				<div class="form-check form-check-inline">
-				  <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
-				  <label class="form-check-label" for="inlineRadio2">撤去</label>
-				</div>
-				<div class="form-check form-check-inline">
-				  <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3" disabled>
-				  <label class="form-check-label" for="inlineRadio3">その他 (disabled)</label>
+				
+				<!-- rack -->
+		  		<div class="p-3 col-6">
+			  		<label class="form-label" for="rack">ラック番号</label>
+			  		<input type="text" class="form-control" name="rack" id="rack">
+			  	</div>
+			  	
+			  	<!-- description -->
+		  		<div class="p-3">
+			  		<label class="form-label" for="description">詳細</label>
+			  		<input type="text" class="form-control" name="description" id="description">
+			  	</div>
+	  		
+	  			<button type="submit" class="submit btn btn-primary">Save</button>
+			</form>
 			</div>
-	  
+	  		
 		</div>
 
 	</div>
