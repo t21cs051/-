@@ -1,38 +1,56 @@
 {% extends "base.html" %}
 
 {% block main %}
-<!-- tabs -->
-<ul class="nav nav-tabs">
-	<li class="nav-item">
-  		<a class="nav-link active" aria-current="page" href="{% url "measurement:list" %}">電流記録</a>
-  	</li>
-  	<li class="nav-item">
-  		<a class="nav-link" aria-current="page" href="{% url "worklog:list" %}">作業記録</a>
-  	</li>
-</ul>
+<br>
 
-<div class="d-flex flex-row">
+<div class="px-3">
+	<!-- tabs -->
+	<div class="col-12">
+		<ul class="nav nav-tabs">
+			<li class="nav-item">
+		  		<a class="nav-link active" aria-current="page" href="{% url "measurement:list" %}">電流記録</a>
+		  	</li>
+		  	<li class="nav-item">
+		  		<a class="nav-link" aria-current="page" href="{% url "worklog:list" %}">作業記録</a>
+		  	</li>
+		</ul>
+	</div>
 
-  <!-- table -->
-  <div class="d-flex flex-fill p-3">
-    <table class="table">
-      <thead class="table-dark">
-        <tr>
-          <th>#</th>
-          <th>測定日時</th>
-          <th>電流値</th>
-          <th>電源系統</th>
-          <th>測定者</th>
-        </tr>
-      </thead>
-      <tbody>
-
-      </tbody>
-    </table>
-  </div>
+	<div class="row">
+	  <!-- table -->
+	  <div class="col-7 p-3">
+	    <table class="table text-center">
+	      <thead class="table-dark">
+	        <tr>
+	          <th>測定日時</th>
+	          <th>電流値</th>
+	          <th>電源系統</th>
+	          <th>測定者</th>
+	          <th>編集</th>
+	          <th>削除</th>
+	        </tr>
+	      </thead>
+	      <tbody>
+	        {% for CurrentMeasurement in object_list %}
+	        <tr>
+	          <td>{{ CurrentMeasurement.measurement_date }}</td>
+	          <td>{{ CurrentMeasurement.current_value }}</td>
+	          <td>{{ CurrentMeasurement.power_system }}</td>
+	          <td>{{ CurrentMeasurement.employee }}</td>
+	          <td><button class="btn btn-outline-secondary">
+		       	<a href="{% url 'measurement:update' CurrentMeasurement.id %}">編集</a>
+		 		</button></td>
+		   		<td><button class="btn btn-outline-secondary">
+	          		<a href="{% url 'measurement:delete' CurrentMeasurement.id %}">削除</a>
+	          	</button></td>
+	        </tr>
+	        {% endfor %}
+	      </tbody>
+	    </table>
+	  </div>
 
   <!-- form -->
-  <div class="d-flex flex-fill p-3">
+  <div class="col-5">
   <form class="form-horizontal" method="POST">
   {% csrf_token %}
   <div class="form-group row my-3">
@@ -62,10 +80,11 @@
 	    </div>
 	  </div>
     <div>
-	    <button>Delete</button>
 	    <button type="submit">Update</button>
 	    <button><a href="{% url "measurement:list" %}">キャンセル</a></button>
 	</div>
   </form>
-  
+  </div>
+  </div>
+
 {% endblock %}

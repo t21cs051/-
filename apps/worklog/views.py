@@ -40,7 +40,7 @@ class WorkLogAddView(CreateView, ListView):
         return context
 
 # WorkLogの更新ビュー
-class WorkLogUpdateView(UpdateView):
+class WorkLogUpdateView(UpdateView, ListView):
     model = WorkLog
     template_name = 'worklog/worklog_update.html'
     form_class = WorkLogUpdateForm
