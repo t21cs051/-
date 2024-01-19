@@ -29,7 +29,7 @@ class MeasurementListView(ListView):
         context['form_id'] = MeasurementIdForm()
         return context
     
-class MeasurementAddView(CreateView):
+class MeasurementAddView(CreateView, ListView):
     model = CurrentMeasurement
     template_name = 'measurement/measurement_add.html'
     form_class = MeasurementForm

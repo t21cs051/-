@@ -24,7 +24,7 @@ class WorkLogListView(ListView):
 
 
 # WorkLogの追加ビュー
-class WorkLogAddView(CreateView):
+class WorkLogAddView(CreateView, ListView):
     model = WorkLog
     template_name = 'worklog/worklog_add.html'
     form_class = WorkLogForm
