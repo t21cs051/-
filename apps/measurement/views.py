@@ -29,7 +29,7 @@ class MeasurementListView(ListView):
         context['form_id'] = MeasurementIdForm()
         return context
     
-class MeasurementAddView(CreateView):
+class MeasurementAddView(CreateView, ListView):
     model = CurrentMeasurement
     template_name = 'measurement/measurement_add.html'
     form_class = MeasurementForm
@@ -44,7 +44,7 @@ class MeasurementAddView(CreateView):
         context['form_id'] = MeasurementIdForm()
         return context
 
-class MeasurementUpdateView(UpdateView):
+class MeasurementUpdateView(UpdateView, ListView):
     model = CurrentMeasurement
     template_name = 'measurement/measurement_update.html'
     form_class = MeasurementUpdateForm
@@ -54,7 +54,6 @@ class MeasurementUpdateView(UpdateView):
         context = super().get_context_data(**kwargs)
         context['form_id'] = MeasurementIdForm()
         return context
-    
     
 class MeasurementDeleteView(DeleteView):
     model = CurrentMeasurement
