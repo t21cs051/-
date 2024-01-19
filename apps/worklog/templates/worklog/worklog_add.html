@@ -19,25 +19,53 @@
 	<div class="row">
 		<!-- forms -->
 		<div class="col-5">
-		<div class="container border border-top-0 border-1 rounded-bottom">
-		  <form method="POST">
-		  	{% csrf_token %}
-		      {% for item in form %}
-        		<div class="form-group p-3">
-           	 <label for="{{item.id_for_label}}">{{item.label}}</label>
-           		 <input
-		                type="{{item.field.widget.input_type}}"
-		                class="form-control"
-		                {% if item.field.required %}required{% endif %}
-		                name="{{item.name}}"
-		                id="{{item.id_for_label}}">
-        		</div>
-    			{% endfor %}
-		    <button type="submit" class="submit btn btn-primary">Save</button>
-		  </form>
-		  </div>
-		 </div>
-
+			<div class="container border border-top-0 border-1 rounded-bottom">
+		  		<form method="POST">
+		  			{% csrf_token %}
+					<!-- work_date -->
+			  		<div class="p-3 col-10">
+				  		<label class="form-label" for="{{ form.work_date.id_for_label }}">作業日時</label>
+				  		<input
+				  			type="{{ form.work_date.field.widget.input_type }}"
+				  			class="form-control"
+				  			{% if form.work_date.field.required %}required{% endif %}
+				  			name="{{ form.work_date.name }}"
+				  			id="{{ form.work_date.id_for_label }}">
+				  	</div>
+		  		
+			  		<!-- work_type -->
+			  		<div class="p-3">
+			  			<label class="form-label">作業区分</label><br>
+						{{ form.work_type }}
+					</div>
+				
+					<!-- rack -->
+			  		<div class="p-3 col-6">
+				  		<label class="form-label" for="{{ form.rack.id_for_label }}">ラック番号</label>
+				  		<input
+				  			type="{{ form.rack.field.widget.input_type }}"
+				  			class="form-control"
+				  			{% if form.rack.field.required %}required{% endif %}
+				  			name="{{ form.rack.name }}"
+				  			id="{{ form.rack.id_for_label }}">
+				  	</div>
+			  	
+				  	<!-- description -->
+			  		<div class="p-3">
+				  		<label class="form-label" for="{{ form.description.id_for_label }}">詳細</label>
+				  		<input
+				  			type="{{ form.description.field.widget.input_type }}"
+				  			class="form-control"
+				  			{% if form.description.field.required %}required{% endif %}
+				  			name="{{ form.description.name }}"
+				  			id="{{ form.description.id_for_label }}">
+				  	</div>
+	  		
+	  				<button type="submit" class="submit btn btn-primary">Save</button>
+				</form>
+			</div>
+		</div>
+		
 		 <!-- table -->
 		 <div class="col-7 p-3">
 			<table class="table">
@@ -58,9 +86,9 @@
 			           <td>{{ worklog.employee }}</td>
 		        	</tr>
 		        	{% endfor %}
-		        </tbody>
+		      </tbody>
 			</table>
-		  </div>
+		</div>
 	</div>
 
 </div>
