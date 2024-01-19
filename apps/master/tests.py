@@ -116,7 +116,7 @@ class RackEditTest(TestCase):
 
     def setUp(self):
         # テスト用のラックを作成
-        self.rack = Rack.objects.create(rack_number=42)
+        self.rack = Rack.objects.create(rack_number=42, description='Old Description')
 
     def test_edit_valid_rack_number(self):
         """
@@ -126,17 +126,21 @@ class RackEditTest(TestCase):
         url = reverse('master:rack_edit', args=[self.rack.id])
 
         # テストに使用する新しいラック番号
-        new_rack_number = 456
+        new_rack_data = {
+            'rack_number': 456,
+            'description': 'New Description',
+        }
 
         # POSTリクエストを送信
-        response = self.client.post(url, {'rack_number': new_rack_number})
+        response = self.client.post(url, new_rack_data)
 
         # リダイレクトが成功したかどうかを確認
         self.assertEqual(response.status_code, 302)
 
         # データベースのラックが正しく更新されたかを確認
         self.rack.refresh_from_db()
-        self.assertEqual(self.rack.rack_number, new_rack_number)
+        self.assertEqual(self.rack.rack_number, new_rack_data['rack_number'])
+        self.assertEqual(self.rack.description, new_rack_data['description'])
 
     def test_edit_invalid_negative_rack_number(self):
         """
@@ -146,14 +150,18 @@ class RackEditTest(TestCase):
         url = reverse('master:rack_edit', args=[self.rack.id])
 
         # 負のラック番号
-        invalid_rack_number = -1
+        invalid_rack_data = {
+            'rack_number': -1,
+            'description': 'Invalid Description',
+        }
 
         # POSTリクエストを送信
-        response = self.client.post(url, {'rack_number': invalid_rack_number})
+        response = self.client.post(url, invalid_rack_data)
 
         # ラックが更新されていないことを確認
         self.rack.refresh_from_db()
-        self.assertNotEqual(self.rack.rack_number, invalid_rack_number)
+        self.assertNotEqual(self.rack.rack_number, invalid_rack_data['rack_number'])
+        self.assertNotEqual(self.rack.description, invalid_rack_data['description'])
 
         # フォームがエラーを含んでいることを確認
         form = response.context['form']
@@ -167,14 +175,18 @@ class RackEditTest(TestCase):
         url = reverse('master:rack_edit', args=[self.rack.id])
 
         # 上限を超えるラック番号
-        invalid_rack_number = 1000
+        invalid_rack_data = {
+            'rack_number': 1000,
+            'description': 'Invalid Description',
+        }
 
         # POSTリクエストを送信
-        response = self.client.post(url, {'rack_number': invalid_rack_number})
+        response = self.client.post(url, invalid_rack_data)
 
         # ラックが更新されていないことを確認
         self.rack.refresh_from_db()
-        self.assertNotEqual(self.rack.rack_number, invalid_rack_number)
+        self.assertNotEqual(self.rack.rack_number, invalid_rack_data['rack_number'])
+        self.assertNotEqual(self.rack.description, invalid_rack_data['description'])
 
         # フォームがエラーを含んでいることを確認
         form = response.context['form']
@@ -290,7 +302,7 @@ class UpsEditTest(TestCase):
 
     def setUp(self):
         # テスト用のUPSを作成
-        self.ups = Ups.objects.create(ups_number=42)
+        self.ups = Ups.objects.create(ups_number=42, description='Old Description')
 
     def test_edit_valid_ups_number(self):
         """
@@ -300,17 +312,21 @@ class UpsEditTest(TestCase):
         url = reverse('master:ups_edit', args=[self.ups.id])
 
         # テストに使用する新しいUPS番号
-        new_ups_number = 45
+        new_ups_data = {
+            'ups_number': 45,
+            'description': 'New Description',
+        }
 
         # POSTリクエストを送信
-        response = self.client.post(url, {'ups_number': new_ups_number})
+        response = self.client.post(url, new_ups_data)
 
         # リダイレクトが成功したかどうかを確認
         self.assertEqual(response.status_code, 302)
 
         # データベースのUPSが正しく更新されたかを確認
         self.ups.refresh_from_db()
-        self.assertEqual(self.ups.ups_number, new_ups_number)
+        self.assertEqual(self.ups.ups_number, new_ups_data['ups_number'])
+        self.assertEqual(self.ups.description, new_ups_data['description'])
 
     def test_edit_invalid_negative_ups_number(self):
         """
@@ -320,14 +336,18 @@ class UpsEditTest(TestCase):
         url = reverse('master:ups_edit', args=[self.ups.id])
 
         # 負のUPS番号
-        invalid_ups_number = -1
+        invalid_ups_data = {
+            'ups_number': -1,
+            'description': 'Invalid Description',
+        }
 
         # POSTリクエストを送信
-        response = self.client.post(url, {'ups_number': invalid_ups_number})
+        response = self.client.post(url, invalid_ups_data)
 
         # UPSが更新されていないことを確認
         self.ups.refresh_from_db()
-        self.assertNotEqual(self.ups.ups_number, invalid_ups_number)
+        self.assertNotEqual(self.ups.ups_number, invalid_ups_data['ups_number'])
+        self.assertNotEqual(self.ups.description, invalid_ups_data['description'])
 
         # フォームがエラーを含んでいることを確認
         form = response.context['form']
@@ -341,14 +361,18 @@ class UpsEditTest(TestCase):
         url = reverse('master:ups_edit', args=[self.ups.id])
 
         # 上限を超えるUPS番号
-        invalid_ups_number = 100
+        invalid_ups_data = {
+            'ups_number': 100,
+            'description': 'Invalid Description',
+        }
 
         # POSTリクエストを送信
-        response = self.client.post(url, {'ups_number': invalid_ups_number})
+        response = self.client.post(url, invalid_ups_data)
 
         # UPSが更新されていないことを確認
         self.ups.refresh_from_db()
-        self.assertNotEqual(self.ups.ups_number, invalid_ups_number)
+        self.assertNotEqual(self.ups.ups_number, invalid_ups_data['ups_number'])
+        self.assertNotEqual(self.ups.description, invalid_ups_data['description'])
 
         # フォームがエラーを含んでいることを確認
         form = response.context['form']

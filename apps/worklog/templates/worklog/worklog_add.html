@@ -24,7 +24,7 @@
 		  			{% csrf_token %}
 					<!-- work_date -->
 			  		<div class="p-3 col-10">
-				  		<label class="form-label" for="{{ form.work_date.id_for_label }}">作業日時</label>
+				  		<label class="form-label" for="{{ form.work_date.id_for_label }}">記録日時</label>
 				  		<input
 				  			type="{{ form.work_date.field.widget.input_type }}"
 				  			class="form-control"
@@ -52,7 +52,7 @@
 			  	
 				  	<!-- description -->
 			  		<div class="p-3">
-				  		<label class="form-label" for="{{ form.description.id_for_label }}">詳細</label>
+				  		<label class="form-label" for="{{ form.description.id_for_label }}">備考</label>
 				  		<input
 				  			type="{{ form.description.field.widget.input_type }}"
 				  			class="form-control"
