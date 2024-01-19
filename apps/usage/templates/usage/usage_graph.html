@@ -9,8 +9,16 @@
 <body>
     <h2>電力使用状況閲覧</h2>
     <h3>ラック: {{ rack_number }}</h3>
+
     {% if not data %}
-    <p>指定した期間にデータがありません。</p>
+    <div class="container">
+        <div class="alert alert-warning d-flex align-items-center p-3" style="max-width: 300px;" role="alert">
+            <i class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Warning:"></i>
+            <div>
+                登録された電源系統がありません
+            </div>
+        </div>
+    </div>
     {% endif %}
     {% for power_system, measurements in data.items %}
         <div class="chart-container" style="position: relative; width: 1000px; height: 300px;">
@@ -196,6 +204,7 @@
             });
 
         {% endfor %}
+        
     </script>
 
     </body>

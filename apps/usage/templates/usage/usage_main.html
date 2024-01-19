@@ -5,26 +5,30 @@
 {% block main %}
 <body>
     <h2>電力使用状況閲覧</h2>
-    <table>
-        <tr>
-            <th>Rack</th>
-            <th>使用率</th>
-        </tr>
-        {% for rack in racks %}
-        <tr>
-            <td><a href="{% url 'usage:graph' rack_id=rack.id %}">{{ rack.id }}</a></td>
-            <td style="background-color: {% if rack.usage >= 70 %}#DC143C{% elif rack.usage >= 50 %}#FF8C00{% else %}#87CEFA{% endif %};">{{ rack.usage }}%</td>
-        </tr>
-        {% endfor %}
-    </table>
+    {% if not racks %}
+        <p>登録されたラックが見つかりません。</p>
+    {% else %}
+        <table>
+            <tr>
+                <th>Rack</th>
+                <th>使用率</th>
+            </tr>
+            {% for rack in racks %}
+            <tr>
+                <td><a href="{% url 'usage:graph' rack_id=rack.id %}">{{ rack.id }}</a></td>
+                <td style="background-color: {% if rack.usage >= 70 %}#DC143C{% elif rack.usage >= 50 %}#FF8C00{% else %}#87CEFA{% endif %};">{{ rack.usage }}%</td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
     
     <br>
     
     <button type="button" class="btn btn-dark btn-lg">
-    	<a href="{% url "export:csv_export" %}" style="color: white;">
-    	<svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#download"/></svg>
-    	CSVファイルの出力
-    	</a>
+        <a href="{% url "export:csv_export" %}" style="color: white;">
+        <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#download"/></svg>
+        CSVファイルの出力
+        </a>
     </button>
 </body>
 
