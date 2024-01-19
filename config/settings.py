@@ -123,6 +123,10 @@ USE_I18N = True
 
 USE_TZ = True
 
+# 日付と時刻の表示フォーマットを設定
+DATE_FORMAT = 'Y年n月j日'
+TIME_FORMAT = 'G:i'
+DATETIME_FORMAT = 'Y年n月j日 G:i'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
