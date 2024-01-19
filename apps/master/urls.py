@@ -3,6 +3,7 @@ from .views import RackList,RackAddView,RackEditView,RackDeleteView
 from .views import UpsList, UpsAddView, UpsEditView, UpsDeleteView
 from .views import PowerSystemList, PowerSystemAddView, PowerSystemEditView, PowerSystemDeleteView, mainpage
 from .views import EmployeeList, EmployeeEditView, EmployeeDeleteView, PasswordChangeView, PasswordChangeDoneView
+from .views import ExportView
 from django.contrib.auth import views as auth_views 
 
 app_name = "master"
@@ -25,4 +26,5 @@ urlpatterns = [
     path('password_change_form/', PasswordChangeView.as_view(template_name='master/password_change.html'), name='password_change_form'),
     path('password_change_done/', PasswordChangeDoneView.as_view(template_name='master/password_change_done.html'), name='password_change_done'),
     path('employee_delete/<int:pk>/', EmployeeDeleteView.as_view(), name='employee_delete'),
+    path('export/', ExportView.as_view(), name='export'),
 ]
