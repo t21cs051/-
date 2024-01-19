@@ -2,24 +2,56 @@
 {% extends "base.html" %}
 
 {% block main %}
-  <h2>ホーム</h2>
-  <h4>測定・作業履歴</h4>
-  <table>
-    <thead>
-      <tr>
-        <th>作業者</th>
-        <th>内容</th>
-        <th>日時</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for entry in history_data %}
-        <tr>
-          <td>{{ entry.employee }}</td>
-          <td>{{ entry.content }}</td>
-          <td>{{ entry.datetime }}</td>
-        </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+  <div class="container">
+    <div class="row">
+      <div class="col-8 p-2">
+        <h4>電力使用状況</h4>
+      </div>
+      <div class="col-4 p-2">
+        <h4>測定・作業履歴</h4>
+      </div>
+
+      <!-- usage -->
+      <div class="col-8 p-2">
+        <div class="container border border-3 rounded">
+          <table>
+            <tr>
+                <th>Rack</th>
+                <th>使用率</th>
+            </tr>
+            {% for rack in racks %}
+            <tr>
+                <td><a href="{% url 'usage:graph' rack_id=rack.id %}">{{ rack.id }}</a></td>
+                <td style="background-color: {% if rack.usage >= 70 %}#DC143C{% elif rack.usage >= 50 %}#FF8C00{% else %}#87CEFA{% endif %};">{{ rack.usage }}%</td>
+            </tr>
+            {% endfor %}
+        </table>
+        </div>
+      </div>
+
+      <!-- table -->
+      <div class="col-4 p-2">
+        <table class="table links">
+          <thead class="table-dark">
+              <tr>
+                <th>作業者</th>
+                <th>内容</th>
+                <th>日時</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for entry in history_data %}
+                <tr>
+                  <td>{{ entry.employee }}</td>
+                  <td>{{ entry.content }}</td>
+                  <td>{{ entry.datetime }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+        </table>
+      </div>
+
+    </div>
+  
+  </div>
 {% endblock %}
