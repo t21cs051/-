@@ -49,11 +49,50 @@
 	    </table>
 	  </div>
 
-	  <!-- form -->
-	  <div class="col-5 p-3">
-	  
-	  
-	  </div>
+		<!-- forms -->
+		 <div class="col-5">
+		    <div class="container border border-top-0 border-1 rounded-bottom">
+		        <form method="POST" class="form-group">
+		            {% csrf_token %}
+		            <!-- measurement_date -->
+		            <div class="p-3 col-10">
+		                <label class="form-label" for="{{ form.measurement_date.id_for_label }}">記録日時</label>
+		                <input
+		                    type="{{ form.measurement_date.field.widget.input_type }}"
+		                    class="form-control"
+		                    {% if form.measurement_date.field.required %}required{% endif %}
+		                    name="{{ form.measurement_date.name }}"
+		                    id="{{ form.measurement_date.id_for_label }}"
+		                    disabled>
+		            </div>
+		            
+		            <!-- current_value -->
+		            <div class="p-3 col-6">
+		                <label class="form-label" for="{{ form.current_value.id_for_label }}">電流値</label>
+		                <input
+		                    type="{{ form.current_value.field.widget.input_type }}"
+		                    class="form-control"
+		                    {% if form.current_value.field.required %}required{% endif %}
+		                    name="{{ form.current_value.name }}"
+		                    id="{{ form.current_value.id_for_label }}"
+		                    disabled>
+		            </div>
+		            
+		            <!-- power_system -->
+		            <div class="p-3 col-6">
+		                <label class="form-label" for="{{ form.power_system.id_for_label }}">系統番号</label>
+		                <input 
+		                    type="{{ form.power_system.field.widget.input_type }}" 
+		                    class="form-control" 
+		                    {% if form.power_system.field.required %}required{% endif %}
+		                    name="{{ form.power_system.name }}" 
+		                    id="{{ form.power_system.id_for_label }}"
+		                    disabled>
+		            </div>
+		            
+		            <button type="submit" class="submit btn btn-primary" disabled>Save</button>
+		        </form>
+		    </div>
 	  
 	</div>
 
