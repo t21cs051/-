@@ -8,19 +8,19 @@
 	<div class="col-12">
 		<ul class="nav nav-tabs">
 			<li class="nav-item">
-		  		<a class="nav-link active" aria-current="page" href="{% url "measurement:list" %}">電流記録</a>
-		  	</li>
-		  	<li class="nav-item">
-		  		<a class="nav-link" aria-current="page" href="{% url "worklog:list" %}">作業記録</a>
-		  	</li>
+				<a class="nav-link active" aria-current="page" href="{% url "measurement:list" %}">電流記録</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" aria-current="page" href="{% url "worklog:list" %}">作業記録</a>
+			</li>
 		</ul>
 	</div>
 
 	<div class="row">
 		<!-- table -->
 		<div class="col-7 p-3">
-	    	<table class="table text-center">
-	      	<thead class="table-dark">
+			<table class="table text-center">
+			<thead class="table-dark">
 				<tr>
 					<th>測定日時</th>
 					<th>電流値</th>
@@ -29,9 +29,9 @@
 					<th>編集</th>
 					<th>削除</th>
 				</tr>
-	      	</thead>
-	      	<tbody>
-	    		{% for CurrentMeasurement in object_list %}
+			</thead>
+			<tbody>
+				{% for CurrentMeasurement in object_list %}
 				<tr>
 					<td>{{ CurrentMeasurement.measurement_date }}</td>
 					<td>{{ CurrentMeasurement.current_value }}</td>
@@ -46,10 +46,10 @@
 							href="{% url 'measurement:delete' CurrentMeasurement.id %}">削除</a>
 					</td>
 				</tr>
-	        	{% endfor %}
-	      	</tbody>
-	    	</table>
-	  	</div>
+				{% endfor %}
+			</tbody>
+			</table>
+		</div>
 
 		<!-- form -->
 		<div class="col-5">
@@ -59,36 +59,34 @@
 					<!-- measurement_date -->
 					<div class="p-3 col-10">
 						<label class="form-label" for="{{ form.measurement_date.id_for_label }}">記録日時</label>
-	      				{{ form.measurement_date }}
-	    			</div>
-	  
+						{{ form.measurement_date }}
+					</div>
+
 					<!-- current_value -->
 					<div class="p-3 col-6">
 						<label class="form-label" for="{{ form.current_value.id_for_label }}">電流値</label>					
-	  					{{ form.current_value }}
-	    			</div>
+						{{ form.current_value }}
+					</div>
 
 					<!-- rack -->
 					<div class="p-3 col-6">
 						<label class="form-label" for="{{ form.rack.id_for_label }}">ラック番号</label>
 						{{ form.power_system }}
-	    			</div>
+					</div>
 
 					<!-- description -->
 					<div class="p-3 col-10">
 						<label class="form-label" for="{{ form.description.id_for_label }}">備考</label>
 						{{ form.employee }}
-	    			</div>
+					</div>
 
 					<div class="p-3">
 						<button type="submit" class="submit btn btn-primary">Update</button>
 						<a class="submit btn btn-secondary" href="{% url "measurement:list" %}">キャンセル</a>
 					</div>
-
-  				</form>
-  			</div>
-  		</div>
-
+				</form>
+			</div>
+		</div>
 	</div>
 </div>
 {% endblock %}
