@@ -58,13 +58,10 @@
 		  			{% csrf_token %}
 					<!-- work_date -->
 			  		<div class="p-3 col-10">
-				  		<label class="form-label" for="{{ form.work_date.id_for_label }}">記録日時</label>
+				  		<label class="form-label">記録日時</label>
 				  		<input
 				  			type="{{ form.work_date.field.widget.input_type }}"
 				  			class="form-control"
-				  			{% if form.work_date.field.required %}required{% endif %}
-				  			name="{{ form.work_date.name }}"
-				  			id="{{ form.work_date.id_for_label }}"
 				  			disabled>
 				  	</div>
 		  		
@@ -76,29 +73,27 @@
 				
 					<!-- rack -->
 			  		<div class="p-3 col-6">
-				  		<label class="form-label" for="{{ form.rack.id_for_label }}">ラック番号</label>
+				  		<label class="form-label">ラック番号</label>
 				  		<input
 				  			type="{{ form.rack.field.widget.input_type }}"
 				  			class="form-control"
-				  			{% if form.rack.field.required %}required{% endif %}
-				  			name="{{ form.rack.name }}"
-				  			id="{{ form.rack.id_for_label }}"
 				  			disabled>
 				  	</div>
 			  	
 				  	<!-- description -->
-			  		<div class="p-3">
-				  		<label class="form-label" for="{{ form.description.id_for_label }}">備考</label>
+			  		<div class="p-3 col-10">
+				  		<label class="form-label">備考</label>
 				  		<input
 				  			type="{{ form.description.field.widget.input_type }}"
 				  			class="form-control"
-				  			{% if form.description.field.required %}required{% endif %}
-				  			name="{{ form.description.name }}"
-				  			id="{{ form.description.id_for_label }}"
 				  			disabled>
 				  	</div>
 	  		
-	  				<button type="submit" class="submit btn btn-primary" disabled>Save</button>
+					<div class="p-3">
+						<button type="submit" class="submit btn btn-primary" disabled>Update</button>
+						<a class="submit btn btn-secondary" 
+							style="pointer-events: none; cursor: not-allowed;">キャンセル</a>
+					</div>
 				</form>
 			</div>
 		</div>
