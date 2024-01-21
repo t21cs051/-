@@ -38,12 +38,14 @@
 						<td>{{ worklog.get_work_type_display }}</td>
 						<td>{{ worklog.description }}</td>
 						<td>{{ worklog.employee }}</td>
-						<td><button class="btn btn-outline-secondary">
-						<a href="{% url 'worklog:update' worklog.id %}">編集</a>
-						</button></td>
-						<td><button class="btn btn-outline-secondary">
-							<a href="{% url 'worklog:delete' worklog.id %}">削除</a>
-						</button></td>
+						<td>
+							<a class="btn btn-outline-secondary" 
+								href="{% url 'worklog:update' worklog.id %}">編集</a>
+						</td>
+						<td>
+							<a class="btn btn-outline-secondary" 
+								href="{% url 'worklog:delete' worklog.id %}">削除</a>
+						</td>
 					</tr>
 					{% endfor %}
 				</tbody>
