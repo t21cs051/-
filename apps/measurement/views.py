@@ -33,7 +33,7 @@ class MeasurementAddView(CreateView, ListView):
     model = CurrentMeasurement
     template_name = 'measurement/measurement_add.html'
     form_class = MeasurementForm
-    success_url = reverse_lazy('measurement:list')
+    success_url = reverse_lazy('measurement:add')
     
     def form_valid(self, form):
         form.instance.employee = self.request.user
