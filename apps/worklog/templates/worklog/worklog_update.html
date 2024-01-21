@@ -30,29 +30,31 @@
 	         		<th>削除</th>
 	      		</tr>
 	 		</thead>
-	       <tbody>
+	       	<tbody>
 				{% for worklog in object_list %}
 	    		<tr>
 		           <td>{{ worklog.work_date }}</td>
 		           <td>{{ worklog.get_work_type_display }}</td>
 		           <td>{{ worklog.description }}</td>
 		           <td>{{ worklog.employee }}</td>
-					<td><button class="btn btn-outline-secondary">
-		          		<a href="{% url 'worklog:update' worklog.id %}">編集</a>
-		          	</button></td>
-		   			<td><button class="btn btn-outline-secondary">
-	          			<a href="{% url 'worklog:delete' worklog.id %}">削除</a>
-	          		</button></td>
+					<td>
+		          		<a class="btn btn-outline-secondary" 
+							href="{% url 'worklog:update' worklog.id %}">編集</a>
+		          	</td>
+		   			<td>
+	          			<a class="btn btn-outline-secondary" 
+							href="{% url 'worklog:delete' worklog.id %}">削除</a>
+	          		</td>
 	        	</tr>
 	        	{% endfor %}
 	        </tbody>
 			</table>
 	  	</div>
 
-	  <!-- form -->
-	  <div class="col-5">
-	  <form class="form-horizontal" method="POST">
-	  {% csrf_token %}
+		<!-- form -->
+		<div class="col-5">
+		<form class="form-horizontal" method="POST">
+		{% csrf_token %}
 	  	<div class="form-group row my-3">
 		    <div class="col-md-6">
 		      <label for="{{ form.work_date.id_for_label }}" class="col-sm-6 col-form-label">記録日時:</label>
