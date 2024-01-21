@@ -57,26 +57,26 @@
 				<form class="form-horizontal" method="POST">
 					{% csrf_token %}
 					<!-- measurement_date -->
-					<div class="p-3 col-10">
+					<div class="p-3 col-7">
 						<label class="form-label" for="{{ form.measurement_date.id_for_label }}">記録日時</label>
 						{{ form.measurement_date }}
 					</div>
 
 					<!-- current_value -->
-					<div class="p-3 col-6">
+					<div class="p-3 col-4">
 						<label class="form-label" for="{{ form.current_value.id_for_label }}">電流値</label>					
 						{{ form.current_value }}
 					</div>
 
 					<!-- rack -->
-					<div class="p-3 col-6">
+					<div class="p-3 col-4">
 						<label class="form-label" for="{{ form.rack.id_for_label }}">ラック番号</label>
 						{{ form.power_system }}
 					</div>
 
-					<!-- description -->
-					<div class="p-3 col-10">
-						<label class="form-label" for="{{ form.description.id_for_label }}">備考</label>
+					<!-- employee -->
+					<div class="p-3 col-7">
+						<label class="form-label" for="{{ form.employee.id_for_label }}">測定者</label>
 						{{ form.employee }}
 					</div>
 

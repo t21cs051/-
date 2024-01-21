@@ -57,7 +57,7 @@
 				<form method="POST" class="form-group">
 					{% csrf_token %}
 					<!-- measurement_date -->
-					<div class="p-3 col-10">
+					<div class="p-3 col-7">
 						<label class="form-label">記録日時</label>
 						<input
 							type="{{ form.measurement_date.field.widget.input_type }}"
@@ -66,7 +66,7 @@
 					</div>
 				
 					<!-- current_value -->
-					<div class="p-3 col-6">
+					<div class="p-3 col-4">
 						<label class="form-label">電流値</label>
 						<input
 							type="{{ form.current_value.field.widget.input_type }}"
@@ -75,8 +75,8 @@
 					</div>
 				
 					<!-- power_system -->
-					<div class="p-3 col-6">
-						<label class="form-label">系統番号</label>
+					<div class="p-3 col-4">
+						<label class="form-label">電源系統</label>
 						<input 
 							type="{{ form.power_system.field.widget.input_type }}" 
 							class="form-control" 
@@ -84,8 +84,8 @@
 					</div>
 
 					<!-- description -->
-					<div class="p-3 col-10">
-						<label class="form-label">備考</label>
+					<div class="p-3 col-7">
+						<label class="form-label">測定者</label>
 						<input 
 							type="{{ form.power_system.field.widget.input_type }}" 
 							class="form-control"

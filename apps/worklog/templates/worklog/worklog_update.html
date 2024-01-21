@@ -56,32 +56,40 @@
 				<form method="POST">
 					{% csrf_token %}
 					<!-- work_date -->
-					<div class="p-3 col-10">
-						<label for="{{ form.work_date.id_for_label }}" class="form-label">記録日時</label>
+					<div class="p-3 col-7">
+						<label class="form-label" for="{{ form.work_date.id_for_label }}" >記録日時</label>
 						{{ form.work_date }}
 					</div>
-				
+					
 					<!-- work_type -->
 					<div class="p-3">
 						<label class="form-label">作業区分</label><br>
 						{{ form.work_type }}
+						<input type="radio" class="btn-check" name="work_type" id="success-outlined" value="installation" autocomplete="off" {% if form.work_type.value == "installation" %}checked{% endif %}>
+						<label class="btn btn-outline-primary" for="success-outlined">設置</label>
+						
+						<input type="radio" class="btn-check" name="work_type" id="danger-outlined" value="removal" autocomplete="off" {% if form.work_type.value == "removal" %}checked{% endif %}>
+						<label class="btn btn-outline-primary" for="danger-outlined">撤去</label>
+
+						<input type="radio" class="btn-check" name="work_type" id="check-2-outlined" value="other" autocomplete="off" {% if form.work_type.value == "other" %}checked{% endif %}>
+						<label class="btn btn-outline-primary" for="check-2-outlined">その他</label><br>
 					</div>
 				
 					<!-- rack -->
-					<div class="p-3 col-6">
-						<label for="{{ form.rack.id_for_label }}" class="form-label">ラック番号</label>
+					<div class="p-3 col-4">
+						<label class="form-label" for="{{ form.rack.id_for_label }}">ラック番号</label>
 						{{ form.rack }}
 					</div>
 				
 					<!-- description -->
-					<div class="p-3 col-10">
-						<label for="{{ form.description.id_for_label }}" class="form-label">備考</label>
+					<div class="p-3">
+						<label class="form-label" for="{{ form.description.id_for_label }}">備考</label>
 						{{ form.description }}
 					</div>
 
 					<!-- employee -->
-					<div class="p-3 col-10">
-						<label for="{{ form.employee.id_for_label }}" class="form-label">作業者</label>
+					<div class="p-3 col-7">
+						<label class="form-label" for="{{ form.employee.id_for_label }}">作業者</label>
 						{{ form.employee }}
 					</div>
 
