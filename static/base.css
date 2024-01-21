@@ -1,0 +1,10 @@
+	/* スクロール可能なコンテナのスタイル */
+	.scrollable-container {
+		max-height: 400px;  /* ここに適切な高さを設定してください */
+		overflow-y: auto;   /* 縦スクロールを有効にする */
+	}
+
+	/* コンテンツのスタイル（任意） */
+	.content {
+		padding: 10px;
+	}
