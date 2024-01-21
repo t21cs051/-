@@ -3,9 +3,25 @@
 {% block title %} ラック編集 {% endblock %}
 
 {% block main %}
-<form method="POST">
+<form method="post">
 {% csrf_token %}
-{{ form.as_p }}
+<table>
+{% for field in form %}
+    {% if field.errors %}
+        <tr>
+            <td colspan="2">
+                <div class="alert alert-danger" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill"></i> {{ field.errors.as_text }}
+                </div>
+            </td>
+        </tr>
+    {% endif %}
+    <tr>
+        <th>{{ field.label_tag }}</th>
+        <td>{{ field }}</td>
+    </tr>
+{% endfor %}
+</table>
 <input type="submit"/>
 </form>
 {% endblock %}

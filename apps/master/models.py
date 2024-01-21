@@ -4,7 +4,10 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 # ラックを表すモデル
 class Rack(models.Model):
     # ラック番号(0~999)
-    rack_number = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(999)])
+    rack_number = models.IntegerField(
+        validators=[MinValueValidator(0), MaxValueValidator(999)],
+        unique=True,
+    )
 
     # ラックの説明
     description = models.TextField(default='')
@@ -15,7 +18,10 @@ class Rack(models.Model):
 # UPSを表すモデル
 class Ups(models.Model):
     # UPS番号(0~99)
-    ups_number = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(99)])
+    ups_number = models.IntegerField(
+        validators=[MinValueValidator(0), MaxValueValidator(99)],
+        unique=True,
+    )
 
     # UPSの説明
     description = models.TextField(default='')
@@ -26,7 +32,10 @@ class Ups(models.Model):
 # 電源系統を表すモデル
 class PowerSystem(models.Model):
     # 電源系統番号(0~999)
-    power_system_number = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(999)])
+    power_system_number = models.IntegerField(
+        validators=[MinValueValidator(0), MaxValueValidator(999)],
+        unique=True,
+    )
 
     # 電源系統の最大電流値(0.0~100.0[A])
     max_current = models.FloatField(default=0.0, validators=[MinValueValidator(0.0), MaxValueValidator(100.0)])
