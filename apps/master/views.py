@@ -38,7 +38,7 @@ class RackList(ListView):
 
 class RackAddView(CreateView):
     model = Rack
-    fields = ('rack_number',)
+    form_class = RackForm
     template_name = 'master/rack_add.html'
     success_url = reverse_lazy('master:rack')
 
@@ -83,7 +83,7 @@ class UpsList(ListView):
     
 class UpsAddView(CreateView):
     model = Ups
-    fields = ('ups_number',)
+    form_class = UpsForm
     template_name = 'master/ups_add.html'
     success_url = reverse_lazy('master:ups')
 
@@ -129,7 +129,7 @@ class PowerSystemList(ListView):
     
 class PowerSystemAddView(CreateView):
     model = PowerSystem
-    fields = ('power_system_number', 'max_current', 'supply_source', 'supply_rack')
+    form_class = PowerSystemForm
     template_name = 'master/power_system_add.html'
     success_url = reverse_lazy('master:power_system')
 
