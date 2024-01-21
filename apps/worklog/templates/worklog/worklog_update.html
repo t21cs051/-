@@ -50,51 +50,50 @@
 			</table>
 		</div>
 
-		<!-- form -->
+		<!-- forms -->
 		<div class="col-5">
-			<form class="form-horizontal" method="POST">
-				{% csrf_token %}
-				<div class="form-group row my-3">
-					<div class="col-md-6">
-						<label for="{{ form.work_date.id_for_label }}" class="col-sm-6 col-form-label">記録日時:</label>
-						{{ form.work_date }}
+			<div class="container border border-top-0 border-1 rounded-bottom">
+				<form method="POST">
+					{% csrf_token %}
+					<!-- work_date -->
+					<div class="p-3 col-10">
+						<label for="{{ form.work_date.id_for_label }}" class="form-label">記録日時</label>
+		      			{{ form.work_date }}
 					</div>
-				</div>
 				
-				<div class="form-group row my-3">
-					<div class="col-md-6">
-						<label for="{{ form.rack.id_for_label }}" class="col-sm-6 col-form-label">ラック:</label>
-						{{ form.rack }}
-					</div>
-				</div>
-				
-				<div class="form-group row my-3">
-					<div class="col-md-6">
-						<label for="{{ form.work_type.id_for_label }}" class="col-sm-6 col-form-label">作業区分:</label>
+					<!-- work_type -->
+					<div class="p-3">
+						<label class="form-label">作業区分</label><br>
 						{{ form.work_type }}
 					</div>
-				</div>
 				
-				<div class="form-group row my-3">
-					<div class="col-md-6">
-						<label for="{{ form.description.id_for_label }}" class="col-sm-6 col-form-label">備考:</label>
+					<!-- rack -->
+					<div class="p-3 col-6">
+						<label for="{{ form.rack.id_for_label }}" class="form-label">ラック番号</label>
+		      			{{ form.rack }}
+					</div>
+				
+					<!-- description -->
+					<div class="p-3 col-10">
+						<label for="{{ form.description.id_for_label }}" class="form-label">備考</label>
 						{{ form.description }}
 					</div>
-				</div>
-				
-				<div class="form-group row my-3">
-					<div class="col-md-6">
-						<label for="{{ form.employee.id_for_label }}" class="col-sm-6 col-form-label">備考:</label>
-						{{ form.employee }}
+
+					<!-- employee -->
+					<div class="p-3 col-10">
+						<label for="{{ form.employee.id_for_label }}" class="form-label">作業者</label>
+		      			{{ form.employee }}
 					</div>
-				</div>
-				
-				<div>
-					<button type="submit">Update</button>
-					<button><a href="{% url "worklog:list" %}">キャンセル</a></button>
-				</div>
-			</form>
+
+					<div class="p-3">
+						<button type="submit" class="submit btn btn-primary">Update</button>
+						<a class="submit btn btn-secondary" href="{% url "worklog:list" %}">キャンセル</a>
+					</div>
+				</form>
+			</div>
 		</div>
+
 	</div>
+
 </div>
 {% endblock %}
