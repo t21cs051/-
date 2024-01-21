@@ -10,8 +10,13 @@ class WorkLogForm(forms.ModelForm):
         model = WorkLog
         fields = ['work_date', 'rack', 'work_type', 'description']
         widgets = {
+            'work_date': forms.TextInput(attrs={'class': 'form-control'}),
+            'rack': forms.Select(attrs={'class': 'form-select'}),
             'work_type': forms.RadioSelect(),
+            'description': forms.Textarea(attrs={'class': 'form-control'}),
+            
         }
+
 
 class WorkLogUpdateForm(forms.ModelForm):
     class Meta:
