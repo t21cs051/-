@@ -12,7 +12,8 @@ class WorkLogForm(forms.ModelForm):
         widgets = {
             'work_date': forms.TextInput(attrs={'class': 'form-control'}),
             'rack': forms.Select(attrs={'class': 'form-select'}),
-            'work_type': forms.RadioSelect(),
+            # 'work_type': forms.RadioSelect(),
+            'work_type': forms.HiddenInput(), # Bootstrapを使用するために、Djangoによるラジオボタンを隠す
             'description': forms.Textarea(attrs={'class': 'form-control'}),
             
         }
