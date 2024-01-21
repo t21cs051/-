@@ -7,17 +7,14 @@
 	{% include "sidebar.html" %}
 
 	<div class="flex-fill p-4">	
-	<div class="alert alert-primary" role="alert">
-	CSV形式で測定記録を出力します。
+		<div class="alert alert-primary" role="alert">
+		CSV形式で測定記録を出力します。
+		</div>
+		
+		<button type="button" class="btn btn-dark btn-lg" onclick="location.href='{% url "export:csv_export" %}'">
+			<i class="bi-download pe-none me-2"></i>
+			CSVファイルの出力
+		</button>
 	</div>
-	
-	<button type="button" class="btn btn-dark btn-lg">
-        <a href="{% url "export:csv_export" %}" style="color: white;">
-        <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#download"/></svg>
-        CSVファイルの出力
-        </a>
-    </button>
-	</div>
-
 </div>
 {% endblock %}
