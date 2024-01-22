@@ -43,8 +43,14 @@
 								href="{% url 'measurement:update' CurrentMeasurement.id %}">編集</a>
 						</td>
 						<td>
-							<a class="btn btn-outline-secondary" 
-								href="{% url 'measurement:delete' CurrentMeasurement.id %}">削除</a>
+							<button type="button" class="btn btn-outline-secondary delete-btn" 
+								measurement-id="{{ CurrentMeasurement.id }}"
+								measurement-date="{{ CurrentMeasurement.measurement_date }}"
+								current-value="{{ CurrentMeasurement.current_value }}"
+								power-system="{{ CurrentMeasurement.power_system }}"
+								measurement-employee="{{ CurrentMeasurement.employee }}">
+								削除
+							</button>
 						</td>
 					</tr>
 					{% endfor %}
@@ -104,4 +110,66 @@
 		</div>
 	</div>
 </div>
+
+<!-- Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h1 class="modal-title fs-5" id="deleteModalLabel">電流記録の削除</h1>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<p><strong>以下の電流記録を本当に削除しますか？</strong></p>
+				<p><strong>測定日時:</strong> <span id="measurement-date"></span></p>
+				<p><strong>電流値:</strong> <span id="current-value"></span></p>
+				<p><strong>電源系統:</strong> <span id="power-system"></span></p>
+				<p><strong>測定者:</strong> <span id="measurement-employee"></span></p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
+				<button type="button" class="btn btn-primary" id="deleteBtn">削除</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- モーダル表示用 javascript-->
+<script>
+	document.addEventListener('DOMContentLoaded', function () {
+		// 削除ボタンがクリックされたときの処理
+		var deleteButtons = document.querySelectorAll('.delete-btn');
+		var deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+		
+		deleteButtons.forEach(function (button) {
+			button.addEventListener('click', function () {
+				var measurementId = this.getAttribute('measurement-id');
+				// モーダル表示のための処理
+				deleteModal.show();
+				
+				// モーダル内の要素に対してCurrentMeasurementの情報を設定
+				document.getElementById('measurement-date').innerText = this.getAttribute('measurement-date');
+				document.getElementById('current-value').innerText = this.getAttribute('current-value');
+				document.getElementById('power-system').innerText = this.getAttribute('power-system');
+				document.getElementById('measurement-employee').innerText = this.getAttribute('measurement-employee');
+
+				// モーダル内の削除ボタンにデータを設定
+				document.getElementById('deleteBtn').setAttribute('measurement-id', measurementId);
+			});
+		});
+		
+		// モーダル内の削除ボタンがクリックされたときの処理
+		document.getElementById('deleteBtn').addEventListener('click', function () {
+			var measurementId = this.getAttribute('measurement-id');
+			// 削除の処理を実行する（削除用のURLにリダイレクト）
+			window.location.href = '{% url "measurement:delete" 0 %}'.replace('0', measurementId);
+			// モーダルを閉じる
+			deleteModal.hide();
+		});
+	});
+</script>
+
+
+
 {% endblock %}
+
