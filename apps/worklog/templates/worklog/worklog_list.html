@@ -107,6 +107,15 @@
 							id="{{ form.description.id_for_label }}"
 							disabled>
 					</div>
+
+					<!-- employee -->
+					<div class="p-3 col-7">
+						<label class="form-label">作業者</label>
+						<input 
+							type="{{ form.employee.field.widget.input_type }}" 
+							class="form-control"
+							disabled>
+					</div>
 					
 					<div class="p-3">
 						<button type="submit" class="submit btn btn-primary" disabled>修正</button>
