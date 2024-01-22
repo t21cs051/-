@@ -54,8 +54,8 @@
 			<thead class="table-dark">
 				<tr>
 				<th>測定日時</th>
-				<th>電流値</th>
 				<th>電源系統</th>
+				<th>電流値</th>
 				<th>測定者</th>
 				</tr>
 			</thead>
@@ -63,8 +63,8 @@
 				{% for CurrentMeasurement in object_list %}
 				<tr>
 				<td>{{ CurrentMeasurement.measurement_date }}</td>
-				<td>{{ CurrentMeasurement.current_value }}</td>
 				<td>{{ CurrentMeasurement.power_system }}</td>
+				<td>{{ CurrentMeasurement }}</td> <!-- __str__ methodで単位付きの文字列を返す -->
 				<td>{{ CurrentMeasurement.employee }}</td>
 				</tr>
 				{% endfor %}
