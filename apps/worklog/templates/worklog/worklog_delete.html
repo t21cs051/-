@@ -7,17 +7,17 @@
 
     <table>
         <tbody>
-        <tr><td>ID</td><td>:</td><td>{{ object.id }}</td></tr>
-        <tr><td>作業日時</td><td>:</td><td>{{ object.work_date }}</td></tr>
-        <tr><td>作業区分</td><td>:</td><td>{{ object.get_work_type_display }}</td></tr>
-        <tr><td>作業内容</td><td>:</td><td>{{ object.description }}</td></tr>
-        <tr><td>作業者</td><td>:</td><td>{{ object.employee }}</td></tr>
-    </tbody>
+            <tr><td>作業日時</td><td>:</td><td>{{ worklog.work_date }}</td></tr>
+            <tr><td>ラック番号</td><td>:</td><td>{{ worklog.rack }}</td></tr>
+            <tr><td>作業区分</td><td>:</td><td>{{ worklog.get_work_type_display }}</td></tr>
+            <tr><td>作業内容</td><td>:</td><td>{{ worklog.description }}</td></tr>
+            <tr><td>作業者</td><td>:</td><td>{{ worklog.employee }}</td></tr>
+        </tbody>
     </table>
 
     <form method="POST">
-    {% csrf_token %}
-    <input type="submit" value="削除">
+        {% csrf_token %}
+        <input type="submit" value="削除">
     </form>
 
     <a href="{% url 'worklog:list' %}">キャンセル</a>

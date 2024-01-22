@@ -18,4 +18,4 @@ class WorkLog(models.Model):
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE) # 作業者
 
     def __str__(self):
-        return self.id
+        return str(self.id)
