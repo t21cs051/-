@@ -30,6 +30,9 @@ class WorkLogAddView(CreateView, ListView):
     form_class = WorkLogForm
     success_url = reverse_lazy('worklog:list')
 
+    def get_queryset(self):
+        return WorkLog.objects.order_by('-id')[:8] # 直近の入力を上から8件まで表示
+
     def form_valid(self, form):
         form.instance.employee = self.request.user
         return super().form_valid(form)

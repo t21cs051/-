@@ -19,4 +19,4 @@ class CurrentMeasurement(models.Model):
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'{self.measurement_date} - {self.current_value}'
+        return f'{self.current_value} [A]'
