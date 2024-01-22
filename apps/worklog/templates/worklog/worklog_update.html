@@ -1,6 +1,12 @@
 {% extends "base.html" %}
 
 {% block main %}
+<style>
+    textarea.form-control {
+        height: 100px; /* 作業内容のフォームの高さを指定 */
+    }
+</style>
+
 <br>
 
 <div class="px-3">
@@ -96,7 +102,7 @@
 					</div>
 
 					<div class="p-3">
-						<button type="submit" class="submit btn btn-primary">Update</button>
+						<button type="submit" class="submit btn btn-primary">修正</button>
 						<a class="submit btn btn-secondary" href="{% url "worklog:list" %}">キャンセル</a>
 					</div>
 				</form>

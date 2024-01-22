@@ -7,11 +7,38 @@
 
 <script src="{% static 'canvas.css' %}"></script>
 <body>
-    <h2>電力使用状況閲覧</h2>
-    <h3>ラック: {{ rack_number }}</h3>
+    <!-- header -->
+    <div class="container d-flex justify-content-between pt-3 border-bottom">
+        <div class="d-flex">
+            <h2>電力使用状況 ラック: {{ rack_number }}</h2>
+        </div>
+        
+        <!-- dropdown -->
+        <div class="d-flex dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                表示期間
+            </button>
+            
+            <ul class="dropdown-menu dropdown-menu-dark">
+                <li><a class="dropdown-item active" href="#">1か月</a></li>
+                <li><a class="dropdown-item" href="#">3か月</a></li>
+                <li><a class="dropdown-item" href="#">6か月</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <div class="p-3">
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button type="submit" class="submit btn btn-primary">期間を指定</button>
+                    </form>
+                </div>
+            </ul>
+        </div>
+        
+    </div>
+
 
     {% if not data %}
-    <div class="container">
+    <div class="container pt-3 pb-3">
         <div class="alert alert-warning d-flex align-items-center p-3" style="max-width: 300px;" role="alert">
             <i class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Warning:"></i>
             <div>
@@ -20,18 +47,15 @@
         </div>
     </div>
     {% endif %}
+    
     {% for power_system, measurements in data.items %}
-        <div class="chart-container" style="position: relative; width: 1000px; height: 300px;">
-            <!-- 描画領域 -->
-            <canvas id="Chart{{ power_system }}" height="100px"></canvas>
+        <div class="container pt-3 pb-3">
+            <div class="chart-container" style="position: relative; width: 100%; height: 300px;">
+                <!-- 描画領域 -->
+                <canvas id="Chart{{ power_system }}" height="100px"></canvas>
+            </div>
         </div>
     {% endfor %}
-    
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">期間を指定</button>
-    </form>
     
     <!-- ライブラリの読み込み -->
     <script src="{% static 'chart_js/dist/chart.umd.js' %}"></script>
