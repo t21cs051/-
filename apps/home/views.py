@@ -18,6 +18,7 @@ class HomeView(TemplateView):
 
         # 測定データと作業記録を結合
         history_data = list(measurement_queryset) + list(worklog_queryset)
+        print(history_data)
         history_data = history_data[:10]  # 最新5件
 
         # 日時でソート
