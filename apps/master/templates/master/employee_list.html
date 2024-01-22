@@ -11,9 +11,10 @@
 			社員番号 : {{ logged_in_user.employee_number }}<br>
 			社員氏名 : {{ logged_in_user.full_name }}</p><br>
 		<ul>
-			<a href="{% url 'master:employee_edit' logged_in_user.employee_number %}">社員氏名変更</a>
+			<a href="{% url 'master:employee_edit' logged_in_user.employee_number %}">社員番号・氏名変更</a>
 			<a href="{% url 'master:password_change_form' %}">パスワードの変更</a>
 			<a href="{% url 'master:employee_delete' logged_in_user.employee_number %}">削除</a>
+			<a href="{% url 'master:employee_add' %}">追加</a>
 		</ul>
 	</div>
 

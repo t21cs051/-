@@ -1,45 +1,117 @@
 {% extends "base.html" %}
 
 {% block main %}
-<!-- tabs -->
-<ul class="nav nav-tabs">
-	<li class="nav-item">
-  		<a class="nav-link" aria-current="page" href="{% url "measurement:list" %}">電流記録</a>
-  	</li>
-  	<li class="nav-item">
-  		<a class="nav-link active" aria-current="page" href="{% url "worklog:list" %}">作業記録</a>
-  	</li>
-</ul>
-  
-<div class="d-flex flex-row">
-  <!-- table -->
-  <div class="d-flex flex-fill p-3">
-	<table class="table">
-   		<thead class="table-dark">
-      		<tr>
-      			<th>#</th>
-          		<th>作業日時</th>
-         		<th>作業区分</th>
-          		<th>作業内容</th>
-         		<th>作業者</th>
-      		</tr>
- 		</thead>
-       <tbody>
+<style>
+    textarea.form-control {
+        height: 100px; /* 作業内容のフォームの高さを指定 */
+    }
+</style>
 
-        </tbody>
-	</table>
-  </div>
+<br>
 
-  <!-- form -->
-  <div class="d-flex flex-fill p-3">
-  <form method="POST">
-  {% csrf_token %}
-    {{ form.as_p }}
-    <div>
-	    <button>Delete</button>
-	    <button type="submit">Update</button>
-	    <button><a href="{% url "worklog:list" %}">キャンセル</a></button>
+<div class="px-3">
+	<!-- tabs -->
+	<div class="col-12">
+		<ul class="nav nav-tabs">
+			<li class="nav-item">
+				<a class="nav-link" aria-current="page" href="{% url "measurement:list" %}">電流記録</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link active" aria-current="page" href="{% url "worklog:list" %}">作業記録</a>
+			</li>
+		</ul>
 	</div>
-  </form>
+	<div class="row">
+		<!-- table -->
+		<div class="col-7">
+			<div class="scrollable-container border border-top-0 border-1 rounded-bottom p-3">
+				<table class="table text-center">
+				<thead class="table-dark">
+					<tr>
+							<th>作業日時</th>
+							<th>ラック番号</th>
+							<th>作業区分</th>
+							<th>作業内容</th>
+							<th>作業者</th>
+							<th>編集</th>
+							<th>削除</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for worklog in object_list %}
+					<tr>
+						<td>{{ worklog.work_date }}</td>
+						<td>{{ worklog.rack }}</td>
+						<td>{{ worklog.get_work_type_display }}</td>
+						<td>{{ worklog.description }}</td>
+						<td>{{ worklog.employee }}</td>
+						<td>
+							<a class="btn btn-outline-secondary" 
+								href="{% url 'worklog:update' worklog.id %}">編集</a>
+						</td>
+						<td>
+							<a class="btn btn-outline-secondary" 
+								href="{% url 'worklog:delete' worklog.id %}">削除</a>
+						</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+				</table>
+			</div>
+		</div>
 
+		<!-- forms -->
+		<div class="col-5">
+			<div class="container border border-top-0 border-1 rounded-bottom">
+				<form method="POST">
+					{% csrf_token %}
+					<!-- work_date -->
+					<div class="p-3 col-7">
+						<label class="form-label" for="{{ form.work_date.id_for_label }}" >記録日時</label>
+						{{ form.work_date }}
+					</div>
+					
+					<!-- work_type -->
+					<div class="p-3">
+						<label class="form-label">作業区分</label><br>
+						{{ form.work_type }}
+						<input type="radio" class="btn-check" name="work_type" id="success-outlined" value="installation" autocomplete="off" {% if form.work_type.value == "installation" %}checked{% endif %}>
+						<label class="btn btn-outline-primary" for="success-outlined">設置</label>
+						
+						<input type="radio" class="btn-check" name="work_type" id="danger-outlined" value="removal" autocomplete="off" {% if form.work_type.value == "removal" %}checked{% endif %}>
+						<label class="btn btn-outline-primary" for="danger-outlined">撤去</label>
+
+						<input type="radio" class="btn-check" name="work_type" id="check-2-outlined" value="other" autocomplete="off" {% if form.work_type.value == "other" %}checked{% endif %}>
+						<label class="btn btn-outline-primary" for="check-2-outlined">その他</label><br>
+					</div>
+				
+					<!-- rack -->
+					<div class="p-3 col-4">
+						<label class="form-label" for="{{ form.rack.id_for_label }}">ラック番号</label>
+						{{ form.rack }}
+					</div>
+				
+					<!-- description -->
+					<div class="p-3">
+						<label class="form-label" for="{{ form.description.id_for_label }}">備考</label>
+						{{ form.description }}
+					</div>
+
+					<!-- employee -->
+					<div class="p-3 col-7">
+						<label class="form-label" for="{{ form.employee.id_for_label }}">作業者</label>
+						{{ form.employee }}
+					</div>
+
+					<div class="p-3">
+						<button type="submit" class="submit btn btn-primary">修正</button>
+						<a class="submit btn btn-secondary" href="{% url "worklog:list" %}">キャンセル</a>
+					</div>
+				</form>
+			</div>
+		</div>
+
+	</div>
+
+</div>
 {% endblock %}

@@ -7,13 +7,12 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.shortcuts import get_object_or_404
 from django.urls.base import reverse_lazy
-# Create your views here.
-
 
 class MeasurementListView(ListView):
     model = CurrentMeasurement
     template_name = 'measurement/measurement_list.html'
     
+    # TODO: このメソッドの役割の確認、必要？
     def post(self, request, *args, **kwargs):
         measurement_id = self.request.POST.get('measurement_id')
         measurement_date = self.request.POST.get('measurement_date')
@@ -29,11 +28,14 @@ class MeasurementListView(ListView):
         context['form_id'] = MeasurementIdForm()
         return context
     
-class MeasurementAddView(CreateView):
+class MeasurementAddView(CreateView, ListView):
     model = CurrentMeasurement
     template_name = 'measurement/measurement_add.html'
     form_class = MeasurementForm
-    success_url = reverse_lazy('measurement:list')
+    success_url = reverse_lazy('measurement:add')
+
+    def get_queryset(self):
+        return CurrentMeasurement.objects.order_by('-id')[:8] # 直近の入力を上から8件まで表示
     
     def form_valid(self, form):
         form.instance.employee = self.request.user
@@ -44,7 +46,7 @@ class MeasurementAddView(CreateView):
         context['form_id'] = MeasurementIdForm()
         return context
 
-class MeasurementUpdateView(UpdateView):
+class MeasurementUpdateView(UpdateView, ListView):
     model = CurrentMeasurement
     template_name = 'measurement/measurement_update.html'
     form_class = MeasurementUpdateForm
@@ -54,7 +56,6 @@ class MeasurementUpdateView(UpdateView):
         context = super().get_context_data(**kwargs)
         context['form_id'] = MeasurementIdForm()
         return context
-    
     
 class MeasurementDeleteView(DeleteView):
     model = CurrentMeasurement

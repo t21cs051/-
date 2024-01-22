@@ -7,19 +7,34 @@ class RackIdForm(forms.Form):
     rack_id = forms.IntegerField(label='rack_id')
     
 class RackForm(forms.ModelForm):
+    description = forms.CharField(required=False, widget=forms.Textarea)  # 説明は任意入力
     class Meta:
         model = Rack
         fields = ['rack_number', 'description']
-        
+    
+    def clean(self):
+        cleaned_data = super().clean()
+        description = cleaned_data.get("description")
+        if description == "":
+            cleaned_data["description"] = ''
+        return cleaned_data
     
 #UPS
 class UpsIdForm(forms.Form):
     ups_id = forms.IntegerField(label='ups_id')
     
 class UpsForm(forms.ModelForm):
+    description = forms.CharField(required=False, widget=forms.Textarea)  # 説明は任意入力
     class Meta:
         model = Ups
         fields = ['ups_number', 'description']
+
+    def clean(self):
+        cleaned_data = super().clean()
+        description = cleaned_data.get("description")
+        if description == "":
+            cleaned_data["description"] = ''
+        return cleaned_data
     
 #電源系統
 class PowerSystemIdForm(forms.Form):

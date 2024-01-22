@@ -6,8 +6,13 @@
 <head>
     <meta charset="UTF-8">
     <title>電源使用状況管理システム</title>
+    <link href="{% static 'base.css' %}" rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="{% static '/bootstrap/css/bootstrap.min.css' %}">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css">  
+    <link rel="stylesheet" href="{% static '/bootstrap-icons/font/bootstrap-icons.css' %}">
+    <!-- Bootstrap JavaScript (Popper.jsと一緒に) -->
+    <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+
 </head>
 
 <style>
@@ -22,9 +27,10 @@
     <div class="px-3 py-2 text-bg-dark border-bottom">
       <div class="container">
         <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-          <a href="/" class="d-flex align-items-center my-2 my-lg-0 me-lg-auto text-white text-decoration-none">
-            <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"/></svg>
-			<span class="fs-4">CURRENT MEASUREMENT</span>
+          <a href="/home" class="d-flex align-items-center my-2 my-lg-0 me-lg-auto text-white text-decoration-none">
+            <i class="bi bi-hdd-rack" style="font-size: 40px;"></i>
+		<span class="fs-4 ps-3">CURRENT MEASUREMENT</span><!-- 【要修正】余白調整のために、全角スペースあり -->
+                                                      <!-- 【仮修正】余白調整のための全角スペースをps-3に置き換えた -->
           </a>
 
           <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
@@ -52,7 +58,7 @@
             <li>
               <a href="{% url "usage:main" %}" class="nav-link text-white">
                 <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#usage"/></svg>
-                Measurement
+                Graph
               </a>
             </li>
 

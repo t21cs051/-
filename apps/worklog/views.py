@@ -24,11 +24,14 @@ class WorkLogListView(ListView):
 
 
 # WorkLogの追加ビュー
-class WorkLogAddView(CreateView):
+class WorkLogAddView(CreateView, ListView):
     model = WorkLog
     template_name = 'worklog/worklog_add.html'
     form_class = WorkLogForm
     success_url = reverse_lazy('worklog:list')
+
+    def get_queryset(self):
+        return WorkLog.objects.order_by('-id')[:8] # 直近の入力を上から8件まで表示
 
     def form_valid(self, form):
         form.instance.employee = self.request.user
@@ -40,7 +43,7 @@ class WorkLogAddView(CreateView):
         return context
 
 # WorkLogの更新ビュー
-class WorkLogUpdateView(UpdateView):
+class WorkLogUpdateView(UpdateView, ListView):
     model = WorkLog
     template_name = 'worklog/worklog_update.html'
     form_class = WorkLogUpdateForm

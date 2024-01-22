@@ -6,11 +6,10 @@
 	{% include "sidebar.html" %}
 
 	<div class="flex-fill p-4">	
-		<div>
+		<div class="scrollable-container">
 			<table class="table">
 				<thead class="table-dark">
 					<tr>
-						<th style="width: 50px; text-align: center;">ID</th>
 						<th style="width: 100px; text-align: center;">ラック番号</th>
 						<th style="flex: 1; text-align: center;">備考</th>
 						<th style="width: 75px; text-align: center;">編集</th>
@@ -20,11 +19,14 @@
 				<tbody>
 					{% for rack in object_list %}
 					<tr>
-						<td scope="row" style="width: 50px; text-align: center;">{{ rack.id }}</td>
-						<td style="width: 100px; text-align: center;">{{ rack.rack_number }}</td>
+						<td scope="row" style="width: 100px; text-align: center;">{{ rack.rack_number }}</td>
 						<td style="flex: 1; text-align: center;">{{ rack.description }}</td>
-						<td style="width: 75px; text-align: center;"><a href="{% url 'master:rack_edit' rack.id %}">[編集]</a></td>
-						<td style="width: 75px; text-align: center;"><a href="{% url 'master:rack_delete' rack.id %}">[削除]</a></td>
+						<td style="width: 75px; text-align: center;">
+							<a class="btn btn-outline-secondary" href="{% url 'master:rack_edit' rack.id %}">編集</a>
+						</td>
+						<td style="width: 75px; text-align: center;">
+							<a class="btn btn-outline-secondary" href="{% url 'master:rack_delete' rack.id %}">削除</a>
+						</td>
 					</tr>
 					{% endfor %}
 				</tbody>
@@ -32,8 +34,8 @@
 		</div>
 	
 		<br>
-		<button type="button" class="btn btn-dark">
-			<a href="{% url 'master:rack_add' %}" style="color: white;">追加</a>
+		<button type="button" class="btn btn-dark" onclick="location.href='{% url 'master:rack_add' %}'">
+			新規登録
 		</button>
 	</div>
 

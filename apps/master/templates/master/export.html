@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block main %}
+
+<div class="d-flex flex-col">
+
+	{% include "sidebar.html" %}
+
+	<div class="flex-fill p-4">	
+		<div class="alert alert-primary" role="alert">
+		CSV形式で測定記録を出力します。
+		</div>
+		
+		<button type="button" class="btn btn-dark btn-lg" onclick="location.href='{% url "export:csv_export" %}'">
+			<i class="bi-download pe-none me-2"></i>
+			CSVファイルの出力
+		</button>
+	</div>
+</div>
+{% endblock %}
