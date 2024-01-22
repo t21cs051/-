@@ -22,11 +22,15 @@
 					{% for power_system in object_list %}
 					<tr>
 						<td scope="row" style="width: 120px; text-align: center;">{{ power_system.power_system_number }}</td>
-						<td style="width: 120px; text-align: center;">{{ power_system.max_current }}</td>
+						<td style="width: 120px; text-align: center;">{{ power_system.max_current }} [A]</td>
 						<td style="width: 120px; text-align: center;">{{ power_system.supply_source }}</td>
 						<td style="width: 120px; text-align: center;">{{ power_system.supply_rack }}</td>
-						<td style="width: 75px; text-align: center;"><a href="{% url 'master:power_system_edit' power_system.id %}">[編集]</a></td>
-						<td style="width: 75px; text-align: center;"><a href="{% url 'master:power_system_delete' power_system.id %}">[削除]</a></td>
+						<td style="width: 75px; text-align: center;">
+							<a class="btn btn-outline-secondary" href="{% url 'master:power_system_edit' power_system.id %}">編集</a>
+						</td>
+						<td style="width: 75px; text-align: center;">
+							<a class="btn btn-outline-secondary" href="{% url 'master:power_system_delete' power_system.id %}">削除</a>
+						</td>
 					</tr>
 					{% endfor %}
 				</tbody>
@@ -34,8 +38,8 @@
 		</div>
 
 		<br>
-		<button type="button" class="btn btn-dark">
-			<a href="{% url 'master:power_system_add' %}" style="color: white;">追加</a>
+		<button type="button" class="btn btn-dark" onclick="location.href='{% url 'master:power_system_add' %}'">
+			新規登録
 		</button>
 	</div>
 
