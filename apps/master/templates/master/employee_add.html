@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block main %}
+
+<div class="d-flex flex-col">
+	{% include "sidebar.html" %}
+	
+	<div class="content">
+		<h2>Add Employee</h2>
+		<form method="post">
+			{% csrf_token %}
+			{{ form.as_p }}
+			<button type="submit">Create Account</button>
+		</form>
+	</div>
+</div>
+
+{% endblock %}
