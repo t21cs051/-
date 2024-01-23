@@ -20,9 +20,9 @@
             </button>
             
             <ul class="dropdown-menu dropdown-menu-dark">
-                <li><a class="dropdown-item active" href="#">1か月</a></li>
-                <li><a class="dropdown-item" href="#">3か月</a></li>
-                <li><a class="dropdown-item" href="#">6か月</a></li>
+                <li><a id="month1" class="dropdown-item active" href="#">1か月</a></li>
+                <li><a id="month3" class="dropdown-item" href="#">3か月</a></li>
+                <li><a id="month6" class="dropdown-item" href="#">6か月</a></li>
                 <li><hr class="dropdown-divider"></li>
                 <div class="p-3">
                     <form method="post">
@@ -228,6 +228,22 @@
 
         {% endfor %}
         
+    </script>
+
+    <script>
+        var rackId = {{ rack_number }};
+
+        document.getElementById('month1').addEventListener('click', function() {
+            window.location.href = '/usage/graph/' + rackId + '/1/';
+        });
+
+        document.getElementById('month3').addEventListener('click', function() {
+            window.location.href = '/usage/graph/' + rackId + '/3/';
+        });
+
+        document.getElementById('month6').addEventListener('click', function() {
+            window.location.href = '/usage/graph/' + rackId + '/6/';
+        });
     </script>
 
     </body>
