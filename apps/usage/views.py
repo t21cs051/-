@@ -54,17 +54,31 @@ class UsageGraphView(TemplateView):
         context = self.get_context_data(form=form)
         return self.render_to_response(context)
 
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         rack_number = self.kwargs['rack_id']  # URL引数からラック番号を取得
 
+        period = self.kwargs.get('period') # 表示期間を取得
+
+        # 表示期間に基づいて開始日と終了日を計算
+        now = timezone.now().date()
+
         form = kwargs.get('form')
         if form.is_valid():
+            print('フォームは有効です')
             start_date = form.cleaned_data['start_date']
             end_date = form.cleaned_data['end_date'] + timedelta(days=1)
-        else:
-            end_date = timezone.now().date() + timedelta(days=1)
-            start_date = end_date - timedelta(days=31)
+        else: 
+            if period == 1:
+                start_date = now - timedelta(days=30)
+            elif period == 3:
+                start_date = now - timedelta(days=90)
+            elif period == 6:
+                start_date = now - timedelta(days=180)
+            else:
+                start_date = now - timedelta(days=30) # デフォルトは1か月
+            end_date = now + timedelta(days=1)
         
         # start_dateとend_dateをcontextに追加
         context['start_date'] = start_date
