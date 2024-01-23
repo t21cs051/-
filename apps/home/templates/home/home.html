@@ -24,15 +24,15 @@
 
   <div class="container">
     <div class="row">
-      <div class="col-8 p-2">
+      <div class="col-7 p-2">
         <h4>電力使用状況</h4>
       </div>
-      <div class="col-4 p-2">
+      <div class="col-5 p-2">
         <h4>測定・作業履歴</h4>
       </div>
 
       <!-- usage -->
-      <div class="col-8 p-2">
+      <div class="col-7 p-2">
         <div class="container border border-3 rounded" id="rounded-rectangle-container">
           {% for rack in racks %}
             <!-- 丸い四角形の表示 -->
@@ -50,21 +50,23 @@
       </div>
 
       <!-- table -->
-      <div class="col-4 p-2">
+      <div class="col-5 p-2">
         <table class="table links">
           <thead class="table-dark">
               <tr>
                 <th>作業者</th>
-                <th>内容</th>
                 <th>日時</th>
+                <th>種別</th>
+                <th>内容</th>
               </tr>
             </thead>
             <tbody>
               {% for entry in history_data %}
                 <tr>
                   <td>{{ entry.employee }}</td>
-                  <td>{{ entry.content }}</td>
                   <td>{{ entry.datetime }}</td>
+                  <td>{{ entry.type }}</td>
+                  <td>{{ entry.content }}</td>
                 </tr>
               {% endfor %}
             </tbody>
