@@ -28,7 +28,7 @@ class WorkLogAddView(CreateView, ListView):
     model = WorkLog
     template_name = 'worklog/worklog_add.html'
     form_class = WorkLogForm
-    success_url = reverse_lazy('worklog:list')
+    success_url = reverse_lazy('worklog:add')
 
     def get_queryset(self):
         return WorkLog.objects.order_by('-id')[:8] # 直近の入力を上から8件まで表示

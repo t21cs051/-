@@ -5,4 +5,5 @@ app_name = "usage"
 urlpatterns = [
     path('main/', views.UsageView.as_view(), name='main'),
     path('graph/<int:rack_id>/', views.UsageGraphView.as_view(), name='graph'),
+    path('graph/<int:rack_id>/<int:period>/', views.UsageGraphView.as_view(), name='graph'),
 ]
