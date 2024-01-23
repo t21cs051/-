@@ -45,8 +45,15 @@
 									href="{% url 'worklog:update' worklog.id %}">編集</a>
 							</td>
 							<td>
-								<a class="btn btn-outline-secondary" 
-									href="{% url 'worklog:delete' worklog.id %}">削除</a>
+								<button type="button" class="btn btn-outline-secondary delete-btn" 
+									worklog-id="{{ worklog.id }}"
+									work-date="{{ worklog.work_date }}"
+									worklog-rack="{{ worklog.rack }}"
+									work-type="{{ worklog.get_work_type_display }}"
+									worklog-description="{{ worklog.description }}"
+									worklog-employee="{{ worklog.employee }}">
+									削除
+								</button>
 							</td>
 						</tr>
 					{% endfor %}
@@ -129,4 +136,66 @@
 		</div>
 	</div>
 </div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="deleteModalLabel">電流記録の削除</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p><strong>以下の電流記録を本当に削除しますか？</strong></p>
+                <p><strong>記録日時:</strong> <span id="work-date"></span></p>
+                <p><strong>作業区分:</strong> <span id="work-type"></span></p>
+                <p><strong>ラック番号:</strong> <span id="worklog-rack"></span></p>
+                <p><strong>備考:</strong> <span id="worklog-description"></span></p>
+                <p><strong>作業者:</strong> <span id="worklog-employee"></span></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
+                <button type="button" class="btn btn-primary" id="delete-worklog">削除</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- モーダル表示用 javascript-->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // 削除ボタンがクリックされたときの処理
+        var deleteButtons = document.querySelectorAll('.delete-btn');
+        var deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+
+        deleteButtons.forEach(function (button) {
+            button.addEventListener('click', function () {
+                var worklogId = this.getAttribute('worklog-id');
+                // モーダル表示のための処理
+                deleteModal.show();
+
+                // モーダル内の要素に対してCurrentMeasurementの情報を設定
+                document.getElementById('work-date').innerText = this.getAttribute('work-date');
+                document.getElementById('worklog-rack').innerText = this.getAttribute('worklog-rack');
+                document.getElementById('work-type').innerText = this.getAttribute('work-type');
+                document.getElementById('worklog-description').innerText = this.getAttribute('worklog-description');
+                document.getElementById('worklog-employee').innerText = this.getAttribute('worklog-employee');
+
+                // モーダル内の削除ボタンにデータを設定
+                document.getElementById('delete-worklog').setAttribute('worklog-id', worklogId);
+            });
+        });
+
+        // モーダル内の削除ボタンがクリックされたときの処理
+        document.getElementById('delete-worklog').addEventListener('click', function () {
+            var worklogId = this.getAttribute('worklog-id');
+            // 削除の処理を実行する（削除用のURLにリダイレクト）
+            window.location.href = '{% url "worklog:delete" 0 %}'.replace('0', worklogId);
+            // モーダルを閉じる
+            deleteModal.hide();
+        });
+    });
+</script>
+
 {% endblock %}
