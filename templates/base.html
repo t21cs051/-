@@ -1,5 +1,4 @@
 {% load static %}
-{% include "icon.html" %}
 
 <!doctype html>
 <html lang="ja">
@@ -37,42 +36,42 @@
 
             <a href="{% url "home:home" %}" class="text-decoration-none text-white">
               <div class="d-flex flex-column align-items-center mt-2 mx-3" style="height: 60px;">
-                <i class="bi bi-house-door mb-1 flex-grow-1" style="font-size: 26px;"></i>
+                <i class="bi bi-house-door flex-grow-1" style="font-size: 26px;"></i>
                 <span class="flex-grow-1">Home</span>
               </div>
             </a>
 
             <a href="{% url "measurement:add" %}" class="text-decoration-none text-white">
               <div class="d-flex flex-column align-items-center mt-2 mx-3" style="height: 60px;">
-                <i class="bi bi-pencil mb-1 flex-grow-1" style="font-size: 26px;"></i>
+                <i class="bi bi-pencil flex-grow-1" style="font-size: 26px;"></i>
                 <span class="flex-grow-1">Record</span>
               </div>
             </a>
 
             <a href="{% url "measurement:list" %}" class="text-decoration-none text-white">
               <div class="d-flex flex-column align-items-center mt-2 mx-3" style="height: 60px;">
-                <i class="bi bi-eraser-fill mb-1 flex-grow-1" style="font-size: 26px;"></i>
+                <i class="bi bi-eraser-fill flex-grow-1" style="font-size: 26px;"></i>
                 <span class="flex-grow-1">Correction</span>
               </div>
             </a>
 
             <a href="{% url "usage:graph_no_rack_id" %}" class="text-decoration-none text-white">
               <div class="d-flex flex-column align-items-center mt-2 mx-3" style="height: 60px;">
-                <i class="bi bi-graph-up mb-1 flex-grow-1" style="font-size: 26px;"></i>
+                <i class="bi bi-graph-up flex-grow-1" style="font-size: 26px;"></i>
                 <span class="flex-grow-1">Graph</span>
               </div>
             </a>
 
             <a href="{% url "master:rack" %}" class="text-decoration-none text-white">
               <div class="d-flex flex-column align-items-center mt-2 mx-3" style="height: 60px;">
-                <i class="bi bi-wrench-adjustable mb-1 flex-grow-1" style="font-size: 26px;"></i>
+                <i class="bi bi-wrench-adjustable flex-grow-1" style="font-size: 26px;"></i>
                 <span class="flex-grow-1">Setting</span>
               </div>
             </a>
 
             <a href="{% url "accounts:logout" %}" class="text-decoration-none text-white">
               <div class="d-flex flex-column align-items-center mt-2 mx-3" style="height: 60px;">
-                <i class="bi bi-door-open-fill mb-1 flex-grow-1" style="font-size: 26px;"></i>
+                <i class="bi bi-door-open-fill flex-grow-1" style="font-size: 26px;"></i>
                 <span class="flex-grow-1">Logout</span>
               </div>
             </a>
