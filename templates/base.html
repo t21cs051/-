@@ -29,7 +29,7 @@
         <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
           <a href="/home" class="d-flex align-items-center my-2 my-lg-0 me-lg-auto text-white text-decoration-none">
             <i class="bi bi-hdd-rack" style="font-size: 40px;"></i>
-		<span class="fs-4 ps-3">CURRENT MEASUREMENT</span><!-- 【要修正】余白調整のために、全角スペースあり -->
+            <span class="fs-4 ps-3">CURRENT MEASUREMENT</span><!-- TODO:【要修正】余白調整のために、全角スペースあり -->
                                                       <!-- 【仮修正】余白調整のための全角スペースをps-3に置き換えた -->
           </a>
 
@@ -56,7 +56,7 @@
             </li>
 
             <li>
-              <a href="{% url "usage:main" %}" class="nav-link text-white">
+              <a href="{% url "usage:graph_no_rack_id" %}" class="nav-link text-white">
                 <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#usage"/></svg>
                 Graph
               </a>
@@ -69,12 +69,12 @@
               </a>
             </li>
 
-			<li>
-				<a href="{% url "accounts:logout" %}" class="nav-link text-white">
-				  <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#logout"/></svg>
-				  Logout
-				</a>
-			  </li>
+            <li>
+              <a href="{% url "accounts:logout" %}" class="nav-link text-white">
+              <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#logout"/></svg>
+                Logout
+              </a>
+            </li>
           </ul>
         </div>
       </div>
