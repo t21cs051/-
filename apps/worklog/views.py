@@ -9,13 +9,10 @@ from .forms import WorkLogIdForm, WorkLogForm, WorkLogUpdateForm
 
 class WorkLogListView(ListView):
     model = WorkLog
-    def post(self, request, *args, **kwargs):
-        worklog_id = self.request.POST.get('worklog_id')
-        worklog = get_object_or_404(WorkLog, pk=worklog_id)
-        worklog_status = self.request.POST.get('worklog_status')
-        # worklog.buy = worklog_status
-        worklog.save()
-        return HttpResponseRedirect(reverse('worklog:list'))
+    template_name = 'worklog/worklog_list.html'
+    
+    def get_queryset(self):
+        return WorkLog.objects.order_by('-work_date')
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -48,6 +45,9 @@ class WorkLogUpdateView(UpdateView, ListView):
     template_name = 'worklog/worklog_update.html'
     form_class = WorkLogUpdateForm
     success_url = reverse_lazy('worklog:list')
+
+    def get_queryset(self):
+        return WorkLog.objects.order_by('-work_date')
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
