@@ -11,9 +11,29 @@
 		CSV形式で測定記録を出力します。
 		</div>
 		
-		<button type="button" class="btn btn-dark btn-lg" onclick="location.href='{% url "export:csv_export" %}'">
+		<button type="button" class="btn btn-dark btn-lg" onclick="location.href='{% url "export:measurement_export" %}'">
 			<i class="bi-download pe-none me-2"></i>
-			CSVファイルの出力
+			電流測定記録の出力
+		</button>
+
+		<button type="button" class="btn btn-dark btn-lg" onclick="location.href='{% url "export:worklog_export" %}'">
+			<i class="bi-download pe-none me-2"></i>
+			作業記録の出力
+		</button>
+
+		<button type="button" class="btn btn-dark btn-lg" onclick="location.href='{% url "export:ups_export" %}'">
+			<i class="bi-download pe-none me-2"></i>
+			UPSマスタの出力
+		</button>
+
+		<button type="button" class="btn btn-dark btn-lg" onclick="location.href='{% url "export:rack_export" %}'">
+			<i class="bi-download pe-none me-2"></i>
+			ラックマスタの出力
+		</button>
+
+		<button type="button" class="btn btn-dark btn-lg" onclick="location.href='{% url "export:powersystem_export" %}'">
+			<i class="bi-download pe-none me-2"></i>
+			電源系統マスタの出力
 		</button>
 	</div>
 </div>
