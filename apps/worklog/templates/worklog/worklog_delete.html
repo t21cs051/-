@@ -1,24 +1,16 @@
 {% extends "base.html" %}
 
 {% block main %}
-    <h2>作業記録の削除</h2>
-
-    <p>以下の作業記録を本当に削除しますか？</p>
-
-    <table>
-        <tbody>
-            <tr><td>作業日時</td><td>:</td><td>{{ worklog.work_date }}</td></tr>
-            <tr><td>ラック番号</td><td>:</td><td>{{ worklog.rack }}</td></tr>
-            <tr><td>作業区分</td><td>:</td><td>{{ worklog.get_work_type_display }}</td></tr>
-            <tr><td>作業内容</td><td>:</td><td>{{ worklog.description }}</td></tr>
-            <tr><td>作業者</td><td>:</td><td>{{ worklog.employee }}</td></tr>
-        </tbody>
-    </table>
-
-    <form method="POST">
+    <form method="POST" id="deleteForm">
         {% csrf_token %}
-        <input type="submit" value="削除">
     </form>
 
-    <a href="{% url 'worklog:list' %}">キャンセル</a>
+    <!-- ページが読み込まれた瞬間にフォームを自動送信 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // フォームを即座に送信
+            document.getElementById('deleteForm').submit();
+        });
+    </script>
+
 {% endblock %}

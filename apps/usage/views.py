@@ -39,14 +39,35 @@ class UsageView(TemplateView):
         return context  # コンテキストデータを返す
 
 # 電源使用状況グラフのビュー
+# class UsageGraphView(TemplateView):
+#     template_name = "usage/usage_graph.html"
+
+#     def get(self, request, *args, **kwargs):
+#         form = DateRangeForm()
+#         rack_select_form = RackSelectForm()
+#         context = self.get_context_data(form=form, rack_select_form=rack_select_form)
+#         context['rack_id'] = kwargs['rack_id']  # ラックIDを取得
+#         return self.render_to_response(context)
+    
 class UsageGraphView(TemplateView):
     template_name = "usage/usage_graph.html"
 
     def get(self, request, *args, **kwargs):
         form = DateRangeForm()
         rack_select_form = RackSelectForm()
+        rack_id = kwargs.get('rack_id')
+        if rack_id is None:
+            # ラックIDが指定されていない場合は、最小のラックIDを取得
+            smallest_rack = Rack.objects.order_by('rack_number').first()
+            if smallest_rack is not None:
+                # 最小のラックIDが存在する場合は、そのラックIDを指定してリダイレクト
+                return redirect('usage:graph', rack_id=smallest_rack.rack_number)
+            else:
+                # 最小のラックIDが存在しない場合は、エラー画面にリダイレクト
+                return redirect('usage:main')
+
         context = self.get_context_data(form=form, rack_select_form=rack_select_form)
-        context['rack_id'] = kwargs['rack_id']  # ラックIDを取得
+        context['rack_id'] = rack_id  # ラックIDを取得
         return self.render_to_response(context)
 
     def post(self, request, *args, **kwargs):
@@ -54,17 +75,34 @@ class UsageGraphView(TemplateView):
         context = self.get_context_data(form=form)
         return self.render_to_response(context)
 
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         rack_number = self.kwargs['rack_id']  # URL引数からラック番号を取得
 
+        racks = Rack.objects.all().order_by('rack_number')  # すべてのRackを取得
+        context['all_racks'] = racks
+
+        period = self.kwargs.get('period') # 表示期間を取得
+
+        # 表示期間に基づいて開始日と終了日を計算
+        now = timezone.now().date()
+
         form = kwargs.get('form')
         if form.is_valid():
+            print('フォームは有効です')
             start_date = form.cleaned_data['start_date']
             end_date = form.cleaned_data['end_date'] + timedelta(days=1)
-        else:
-            end_date = timezone.now().date() + timedelta(days=1)
-            start_date = end_date - timedelta(days=31)
+        else: 
+            if period == 1:
+                start_date = now - timedelta(days=30)
+            elif period == 3:
+                start_date = now - timedelta(days=90)
+            elif period == 6:
+                start_date = now - timedelta(days=180)
+            else:
+                start_date = now - timedelta(days=30) # デフォルトは1か月
+            end_date = now + timedelta(days=1)
         
         # start_dateとend_dateをcontextに追加
         context['start_date'] = start_date
