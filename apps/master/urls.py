@@ -26,7 +26,7 @@ urlpatterns = [
     path('employee_edit/<str:pk>/', EmployeeEditView.as_view(), name='employee_edit'),
     path('password_change_form/', PasswordChangeView.as_view(template_name='master/password_change.html'), name='password_change_form'),
     path('password_change_done/', PasswordChangeDoneView.as_view(template_name='master/password_change_done.html'), name='password_change_done'),
-    path('employee_delete/<int:pk>/', EmployeeDeleteView.as_view(), name='employee_delete'),
+    path('employee_delete/<str:pk>/', EmployeeDeleteView.as_view(), name='employee_delete'),
     path('employee/add/', EmployeeAddView.as_view(), name='employee_add'),
     path('export/', ExportView.as_view(), name='export'),
 ]
