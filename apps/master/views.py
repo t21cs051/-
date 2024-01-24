@@ -159,6 +159,10 @@ class PowerSystemDeleteView(DeleteView):
 class EmployeeList(ListView):
     model = Employee
     template_name = 'master/employee_list.html'
+
+    def get_queryset(self):
+        return Employee.objects.order_by('employee_number')
+    
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

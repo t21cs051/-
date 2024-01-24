@@ -18,5 +18,26 @@
 		</ul>
 	</div>
 
+	<div class="flex-fill p-4">	
+		<div class="scrollable-container">
+			<table class="table">
+				<thead class="table-dark">
+					<tr>
+						<th>社員番号</th>
+						<th>氏名</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for employee in object_list %}
+					<tr>
+						<td>{{ employee.employee_number }}</td>
+						<td>{{ employee.full_name }}</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+
 </div>
 {% endblock %}
