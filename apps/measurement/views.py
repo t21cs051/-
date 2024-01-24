@@ -40,6 +40,9 @@ class MeasurementUpdateView(UpdateView, ListView):
     template_name = 'measurement/measurement_update.html'
     form_class = MeasurementUpdateForm
     success_url = reverse_lazy('measurement:list')
+
+    def get_queryset(self):
+        return CurrentMeasurement.objects.order_by('-measurement_date')
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

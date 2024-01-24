@@ -45,6 +45,9 @@ class WorkLogUpdateView(UpdateView, ListView):
     template_name = 'worklog/worklog_update.html'
     form_class = WorkLogUpdateForm
     success_url = reverse_lazy('worklog:list')
+
+    def get_queryset(self):
+        return WorkLog.objects.order_by('-work_date')
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
