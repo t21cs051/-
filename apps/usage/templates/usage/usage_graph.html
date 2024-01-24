@@ -8,34 +8,49 @@
 <script src="{% static 'canvas.css' %}"></script>
 <body>
     <!-- header -->
-    <div class="container d-flex justify-content-between pt-3 border-bottom">
-        <div class="d-flex">
-            <h2>電力使用状況 ラック: {{ rack_number }}</h2>
-        </div>
-        
-        <!-- dropdown -->
-        <div class="d-flex dropdown">
-            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                表示期間
-            </button>
-            
-            <ul class="dropdown-menu dropdown-menu-dark">
-                <li><a id="month1" class="dropdown-item active" href="#">1か月</a></li>
-                <li><a id="month3" class="dropdown-item" href="#">3か月</a></li>
-                <li><a id="month6" class="dropdown-item" href="#">6か月</a></li>
-                <li><hr class="dropdown-divider"></li>
-                <div class="p-3">
-                    <form method="post">
-                        {% csrf_token %}
-                        {{ form.as_p }}
-                        <button type="submit" class="submit btn btn-primary">期間を指定</button>
-                    </form>
-                </div>
-            </ul>
-        </div>
-        
-    </div>
+    <div class="container pt-3 border-bottom">
+        <div class="d-flex justify-content-between">
+            <!-- Left aligned element -->
+            <div>
+                <h2>電力使用状況 ラック: {{ rack_number }}</h2>
+            </div>
 
+            <!-- Right aligned elements -->
+            <div class="d-flex">
+                <!-- dropdown (Rack Select) -->
+                <div class="dropdown me-2">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        ラックを選択
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-dark" style="max-height: 200px; overflow-y: auto;">
+                        {% for rack in all_racks %}
+                        <li><a class="dropdown-item" href="{% url 'usage:graph' rack.id %}">{{rack.id}}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                
+                <!-- dropdown (Period Select) -->
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        表示期間
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-dark">
+                        <li><a id="month1" class="dropdown-item active" href="#">1か月</a></li>
+                        <li><a id="month3" class="dropdown-item" href="#">3か月</a></li>
+                        <li><a id="month6" class="dropdown-item" href="#">6か月</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <div class="p-3">
+                            <form method="post">
+                                {% csrf_token %}
+                                {{ form.as_p }}
+                                <button type="submit" class="submit btn btn-primary">期間を指定</button>
+                            </form>
+                        </div>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
 
     {% if not data %}
     <div class="container pt-3 pb-3">
