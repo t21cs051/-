@@ -34,7 +34,7 @@
 				<tbody>
 					{% for CurrentMeasurement in object_list %}
 					<tr>
-						<td>{{ CurrentMeasurement.measurement_date }}</td>
+						<td>{{ CurrentMeasurement.date }}</td>
 						<td>{{ CurrentMeasurement.power_system }}</td>
 						<td>{{ CurrentMeasurement }}</td> <!-- __str__メソッドを呼び出して単位付きの文字列を取得 -->
 						<td>{{ CurrentMeasurement.employee }}</td>
@@ -45,7 +45,7 @@
 						<td>
 							<button type="button" class="btn btn-outline-secondary delete-btn" 
 								measurement-id="{{ CurrentMeasurement.id }}"
-								measurement-date="{{ CurrentMeasurement.measurement_date }}"
+								measurement-date="{{ CurrentMeasurement.date }}"
 								current-value="{{ CurrentMeasurement.current_value }}"
 								power-system="{{ CurrentMeasurement.power_system }}"
 								measurement-employee="{{ CurrentMeasurement.employee }}">
@@ -64,11 +64,11 @@
 			<div class="container border border-top-0 border-1 rounded-bottom">
 				<form method="POST" class="form-group">
 					{% csrf_token %}
-					<!-- measurement_date -->
+					<!-- date -->
 					<div class="p-3 col-7">
 						<label class="form-label">記録日時</label>
 						<input
-							type="{{ form.measurement_date.field.widget.input_type }}"
+							type="{{ form.date.field.widget.input_type }}"
 							class="form-control"
 							disabled>
 					</div>

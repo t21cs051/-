@@ -7,6 +7,7 @@ class Rack(models.Model):
     rack_number = models.IntegerField(
         validators=[MinValueValidator(0), MaxValueValidator(999)],
         unique=True,
+        primary_key=True,
     )
 
     # ラックの説明
@@ -21,6 +22,7 @@ class Ups(models.Model):
     ups_number = models.IntegerField(
         validators=[MinValueValidator(0), MaxValueValidator(99)],
         unique=True,
+        primary_key=True,
     )
 
     # UPSの説明
@@ -35,6 +37,7 @@ class PowerSystem(models.Model):
     power_system_number = models.IntegerField(
         validators=[MinValueValidator(0), MaxValueValidator(999)],
         unique=True,
+        primary_key=True,
     )
 
     # 電源系統の最大電流値(0.0~100.0[A])

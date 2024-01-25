@@ -44,7 +44,7 @@ class CurrentMeasurementAddViewTest(TestCase):
 
         # 電流記録のデータを作成
         measurement_data = {
-            'measurement_date': timezone.now(),
+            'date': timezone.now(),
             'current_value': 1.0,
             'power_system': self.power_system.id,
         }
@@ -77,7 +77,7 @@ class CurrentMeasurementAddViewTest(TestCase):
 
         # 電流記録のデータを作成
         measurement_data = {
-            'measurement_date': timezone.now(),
+            'date': timezone.now(),
             'current_value': 101.0,#無効な電流値
             'power_system': self.power_system.id,
         }
@@ -109,7 +109,7 @@ class CurrentMeasurementAddViewTest(TestCase):
 
         # 電流記録のデータを作成
         measurement_data = {
-            'measurement_date': timezone.now(),
+            'date': timezone.now(),
             'current_value': -1.0,#無効な電流値
             'power_system': self.power_system.id,
         }
@@ -141,7 +141,7 @@ class CurrentMeasurementAddViewTest(TestCase):
 
         # 電流記録のデータを作成
         measurement_data = {
-            'measurement_date': timezone.now(),
+            'date': timezone.now(),
             'current_value': 1.0,
             'power_system': self.power_system.id+1,#無効な電源系統
         }

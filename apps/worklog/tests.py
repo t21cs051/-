@@ -35,7 +35,7 @@ class WorkLogAddViewTest(TestCase):
 
         # 作業記録のデータを作成
         worklog_data = {
-            'work_date': timezone.now(),
+            'date': timezone.now(),
             'rack': self.rack.id,
             'work_type': "installation",
             'description': 'テスト作業内容',
@@ -70,7 +70,7 @@ class WorkLogAddViewTest(TestCase):
 
         # 作業記録のデータを作成します
         worklog_data = {
-            'work_date': timezone.now(),
+            'date': timezone.now(),
             'rack': self.rack.id + 1,  # 無効なデータ
             'work_type': "installation",
             'description': 'テスト作業内容',
@@ -103,7 +103,7 @@ class WorkLogAddViewTest(TestCase):
 
         # 作業記録のデータを作成します
         worklog_data = {
-            'work_date': timezone.now(),
+            'date': timezone.now(),
             'rack': self.rack.id,
             'work_type': "invalid",  # 無効なデータ
             'description': 'テスト作業内容',
@@ -136,7 +136,7 @@ class WorkLogAddViewTest(TestCase):
 
         # 作業記録のデータを作成
         worklog_data = {
-            'work_date': timezone.now(),
+            'date': timezone.now(),
             'rack': self.rack.id,
             'work_type': "installation",
             'description': '',  # 無効なデータ
@@ -174,7 +174,7 @@ class WorkLogupdateViewTest(TestCase):
             )
         # テスト用作業記録を作成
         self.worklog = WorkLog.objects.create(
-            work_date=timezone.now(),
+            date=timezone.now(),
             rack=self.rack,
             work_type="installation",
             description='テスト作業内容',
@@ -198,7 +198,7 @@ class WorkLogupdateViewTest(TestCase):
 
         # 作業記録のデータを作成します
         worklog_data = {
-            'work_date': timezone.now(),
+            'date': timezone.now(),
             'rack': self.rack.id,
             'work_type': "installation",
             'description': 'テスト作業内容',
@@ -233,7 +233,7 @@ class WorkLogupdateViewTest(TestCase):
 
         # 作業記録のデータを作成します
         worklog_data = {
-            'work_date': timezone.now(),
+            'date': timezone.now(),
             'rack': self.rack.id + 5,  # 無効なデータ
             'work_type': "installation",
             'description': 'テスト作業内容',
@@ -264,7 +264,7 @@ class WorkLogupdateViewTest(TestCase):
 
         # 作業記録のデータを作成します
         worklog_data = {
-            'work_date': timezone.now(),
+            'date': timezone.now(),
             'rack': self.rack.id,
             'work_type': "invalid",  # 無効なデータ
             'description': 'テスト作業内容',
@@ -294,7 +294,7 @@ class WorkLogupdateViewTest(TestCase):
 
         # 作業記録のデータを作成します
         worklog_data = {
-            'work_date': timezone.now(),
+            'date': timezone.now(),
             'rack': self.rack.id,
             'work_type': "installation",
             'description': '',  # 無効なデータ

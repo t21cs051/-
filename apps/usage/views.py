@@ -26,7 +26,7 @@ class UsageView(TemplateView):
             capacity = 0  # 定格電流を保存するための変数を初期化
             for power_system in power_systems:  # 各PowerSystemに対して
                 # 現在のPowerSystemの最新の測定値を取得
-                latest_measurement = CurrentMeasurement.objects.filter(power_system=power_system).order_by('-measurement_date').first()
+                latest_measurement = CurrentMeasurement.objects.filter(power_system=power_system).order_by('-date').first()
                 if latest_measurement is not None:  # 最新の測定値が存在する場合
                     # 最大測定値が未設定、または最新の測定値が現在の最大測定値より大きい場合
                     if max_measurement is None or latest_measurement.current_value > max_measurement:
@@ -123,10 +123,10 @@ class UsageGraphView(TemplateView):
             measurement_queryset = CurrentMeasurement.objects.filter(
                 power_system=power_system['power_system_number'], # 電源系統で絞り込み
                 power_system__supply_rack=rack_number, # ラック番号で絞り込み
-                measurement_date__range=(start_date, end_date) # 開始日と終了日の範囲で絞り込み
-            ).order_by('measurement_date')
+                date__range=(start_date, end_date) # 開始日と終了日の範囲で絞り込み
+            ).order_by('date')
             # querysetのデータを辞書に追加
-            data[power_system['power_system_number']] = [{'x': timezone.localtime(obj.measurement_date), 'y': obj.current_value} for obj in measurement_queryset]
+            data[power_system['power_system_number']] = [{'x': timezone.localtime(obj.date), 'y': obj.current_value} for obj in measurement_queryset]
             max_currents[power_system['power_system_number']] = int(PowerSystem.objects.get(id=power_system['power_system_number']).max_current)
         context['data'] = data
         context['capacity'] = max_currents
@@ -136,13 +136,13 @@ class UsageGraphView(TemplateView):
         # 指定された期間の作業履歴を取得
         worklogs = WorkLog.objects.filter(
             rack__rack_number=rack_number, # ラック番号で絞り込み
-            work_date__range=(start_date, end_date) # 開始日と終了日の範囲で絞り込み
-        ).order_by('work_date')
+            date__range=(start_date, end_date) # 開始日と終了日の範囲で絞り込み
+        ).order_by('date')
 
         # worklogsをcontextに追加
         worklogs_dict = {'設置': [], '撤去': [], 'その他': []}
         for obj in worklogs:
-            worklogs_dict[obj.get_work_type_display()].append({'x': timezone.localtime(obj.work_date), 'y': obj.get_work_type_display(), 'z': obj.description.replace('\r\n', '').replace('\n', '')})
+            worklogs_dict[obj.get_work_type_display()].append({'x': timezone.localtime(obj.date), 'y': obj.get_work_type_display(), 'z': obj.description.replace('\r\n', '').replace('\n', '')})
         context['worklogs'] = worklogs_dict
 
         return context
