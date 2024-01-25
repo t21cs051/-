@@ -24,6 +24,9 @@ class mainpage(TemplateView):
 class RackList(ListView):
     model = Rack
     template_name = 'master/rack_list.html'
+
+    def get_queryset(self):
+        return Rack.objects.order_by('rack_number')
     
     def post(self, request, *args, **kwargs):
         rack_number = self.request.POST.get('rack_number')
@@ -69,6 +72,9 @@ class RackDeleteView(DeleteView):
 class UpsList(ListView):
     model = Ups 
     template_name = 'master/ups_list.html'
+
+    def get_queryset(self):
+        return Ups.objects.order_by('ups_number')
     
     def post(self, request, *args, **kwargs):
         ups_id = self.request.POST.get('ups_id')
@@ -114,6 +120,9 @@ class UpsDeleteView(DeleteView):
 class PowerSystemList(ListView):
     model = PowerSystem
     template_name = 'master/power_system_list.html'
+
+    def get_queryset(self):
+        return PowerSystem.objects.order_by('power_system_number')
     
     def post(self, request, *args, **kwargs):
         power_system_id = self.request.POST.get('power_system_id')
