@@ -22,10 +22,10 @@
 						<td scope="row" style="width: 100px; text-align: center;">{{ rack.rack_number }}</td>
 						<td style="flex: 1; text-align: center;">{{ rack.description }}</td>
 						<td style="width: 75px; text-align: center;">
-							<a class="btn btn-outline-secondary" href="{% url 'master:rack_edit' rack.rack_number %}">編集</a>
+							<a class="btn btn-outline-secondary" href="{% url 'master:rack_edit' rack.id %}">編集</a>
 						</td>
 						<td style="width: 75px; text-align: center;">
-							<a class="btn btn-outline-secondary" href="{% url 'master:rack_delete' rack.rack_number %}">削除</a>
+							<a class="btn btn-outline-secondary" href="{% url 'master:rack_delete' rack.id %}">削除</a>
 						</td>
 					</tr>
 					{% endfor %}

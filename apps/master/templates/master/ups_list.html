@@ -22,10 +22,10 @@
 						<td scope="row" style="width: 100px; text-align: center;">{{ ups.ups_number }}</td>
 						<td style="flex: 1; text-align: center;">{{ ups.description }}</td>
 						<td style="width: 75px; text-align: center;">
-							<a class="btn btn-outline-secondary" href="{% url 'master:ups_edit' ups.ups_number %}">編集</a>
+							<a class="btn btn-outline-secondary" href="{% url 'master:ups_edit' ups.id %}">編集</a>
 						</td>
 						<td style="width: 75px; text-align: center;">
-							<a class="btn btn-outline-secondary" href="{% url 'master:ups_delete' ups.ups_number %}">削除</a>
+							<a class="btn btn-outline-secondary" href="{% url 'master:ups_delete' ups.id %}">削除</a>
 						</td>
 					</tr>
 					{% endfor %}

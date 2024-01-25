@@ -26,10 +26,10 @@
 						<td style="width: 120px; text-align: center;">{{ power_system.supply_source }}</td>
 						<td style="width: 120px; text-align: center;">{{ power_system.supply_rack }}</td>
 						<td style="width: 75px; text-align: center;">
-							<a class="btn btn-outline-secondary" href="{% url 'master:power_system_edit' power_system.power_system_number %}">編集</a>
+							<a class="btn btn-outline-secondary" href="{% url 'master:power_system_edit' power_system.id %}">編集</a>
 						</td>
 						<td style="width: 75px; text-align: center;">
-							<a class="btn btn-outline-secondary" href="{% url 'master:power_system_delete' power_system.power_system_number %}">削除</a>
+							<a class="btn btn-outline-secondary" href="{% url 'master:power_system_delete' power_system.id %}">削除</a>
 						</td>
 					</tr>
 					{% endfor %}
