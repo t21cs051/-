@@ -36,13 +36,13 @@
         <div class="container border border-3 rounded" id="rounded-rectangle-container">
           {% for rack in racks %}
             <!-- 丸い四角形の表示 -->
-            <a href="{% url 'usage:graph' rack_id=rack.id %}">
+            <a href="{% url 'usage:graph' rack_number=rack.rack_number %}">
               <div class="rounded-rectangle" style="background-color:
                 {% if rack.usage >= 70 %}#DC143C
                 {% elif rack.usage >= 50 %}#FF8C00
                 {% else %}#87CEFA{% endif %};">
               
-                {{ rack.id }}
+                {{ rack.rack_number }}
               </div>
             </a>
           {% endfor %}
@@ -61,7 +61,7 @@
               </tr>
             </thead>
             <tbody>
-              {% for entry in history_data %}
+              {% for entry in combined_data %}
                 <tr>
                   <td>{{ entry.employee }}</td>
                   <td>{{ entry.datetime }}</td>

@@ -11,7 +11,7 @@ class WorkLog(models.Model):
         ('other', 'その他'),
     ]
 
-    work_date = models.DateTimeField(default=timezone.now) # 作業日時
+    date = models.DateTimeField(default=timezone.now) # 作業日時
     rack = models.ForeignKey(Rack, on_delete=models.CASCADE) # 作業対象のラック
     work_type = models.CharField(max_length=20, choices=WORK_TYPES, default="installation") # 作業種別
     description = models.TextField() # 作業内容

@@ -19,9 +19,9 @@ def measurement_export(request):
 
     writer = csv.writer(response)
     measurement_evaluation_list = CurrentMeasurement.objects.all()
-    writer.writerow(['measurement_date', 'current_value', 'power_system', 'employee'])
+    writer.writerow(['date', 'current_value', 'power_system', 'employee'])
     for evaluation in measurement_evaluation_list:
-        writer.writerow([evaluation.measurement_date, evaluation.current_value, evaluation.power_system.power_system_number, evaluation.employee])
+        writer.writerow([evaluation.date, evaluation.current_value, evaluation.power_system.power_system_number, evaluation.employee])
     return response
 
 
@@ -37,9 +37,9 @@ def worklog_export(request):
 
     writer = csv.writer(response)
     worklog_list = WorkLog.objects.all()
-    writer.writerow(['work_date', 'rack', 'work_type', 'description', 'employee'])
+    writer.writerow(['date', 'rack', 'work_type', 'description', 'employee'])
     for worklog in worklog_list:
-        writer.writerow([worklog.work_date, worklog.rack.rack_number, worklog.get_work_type_display(), worklog.description, worklog.employee])
+        writer.writerow([worklog.date, worklog.rack.rack_number, worklog.get_work_type_display(), worklog.description, worklog.employee])
     return response
 
 def ups_export(request):

@@ -37,5 +37,5 @@ class MeasurementExportTest(TestCase):
         
         
         # ヘッダーの確認
-        self.assertEqual(header, ['measurement_date', 'current_value', 'power_system', 'employee'])
+        self.assertEqual(header, ['date', 'current_value', 'power_system', 'employee'])
         '''

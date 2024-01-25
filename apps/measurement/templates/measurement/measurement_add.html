@@ -22,21 +22,24 @@
 			<div class="container border border-top-0 border-1 rounded-bottom">
 				<form method="POST" class="form-group">
 					{% csrf_token %}
-					<!-- measurement_date -->
+					<!-- date -->
 					<div class="p-3 col-7">
-						<label class="form-label" for="{{ form.measurement_date.id_for_label }}">記録日時</label>
-						{{ form.measurement_date }}
+						<label class="form-label" for="{{ form.date.id_for_label }}">測定日時</label>
+						{{ form.date }}
 					</div>
 
 					<!-- current_value -->
 					<div class="p-3 col-4">
 						<label class="form-label" for="{{ form.current_value.id_for_label }}">電流値</label>
-						{{ form.current_value }}
+						<div class="d-flex align-items-center">
+							{{ form.current_value }}
+							<span style="margin-left: 5px;">A</span>
+						</div>
 					</div>
 
 					<!-- power_system -->
 					<div class="p-3 col-4">
-						<label class="form-label" for="{{ form.power_system.id_for_label }}">系統番号</label>
+						<label class="form-label" for="{{ form.power_system.power_system_number_for_label }}">系統番号</label>
 						{{ form.power_system }}
 					</div>
 					
@@ -62,7 +65,7 @@
 			<tbody>
 				{% for CurrentMeasurement in object_list %}
 				<tr>
-				<td>{{ CurrentMeasurement.measurement_date }}</td>
+				<td>{{ CurrentMeasurement.date }}</td>
 				<td>{{ CurrentMeasurement.power_system }}</td>
 				<td>{{ CurrentMeasurement }}</td> <!-- __str__ methodで単位付きの文字列を返す -->
 				<td>{{ CurrentMeasurement.employee }}</td>
