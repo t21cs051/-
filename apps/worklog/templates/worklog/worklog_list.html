@@ -95,13 +95,13 @@
 					
 					<!-- rack -->
 					<div class="p-3 col-4">
-						<label class="form-label" for="{{ form.rack.id_for_label }}">ラック番号</label>
+						<label class="form-label" for="{{ form.rack.rack_number_for_label }}">ラック番号</label>
 						<input
 							type="{{ form.rack.field.widget.input_type }}"
 							class="form-control"
 							{% if form.rack.field.required %}required{% endif %}
 							name="{{ form.rack.name }}"
-							id="{{ form.rack.id_for_label }}"
+							id="{{ form.rack.rack_number_for_label }}"
 							disabled>
 					</div>
 

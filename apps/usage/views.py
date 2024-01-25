@@ -46,7 +46,7 @@ class UsageView(TemplateView):
 #         form = DateRangeForm()
 #         rack_select_form = RackSelectForm()
 #         context = self.get_context_data(form=form, rack_select_form=rack_select_form)
-#         context['rack_id'] = kwargs['rack_id']  # ラックIDを取得
+#         context['rack_number'] = kwargs['rack_number']  # ラックIDを取得
 #         return self.render_to_response(context)
     
 class UsageGraphView(TemplateView):
@@ -55,19 +55,19 @@ class UsageGraphView(TemplateView):
     def get(self, request, *args, **kwargs):
         form = DateRangeForm()
         rack_select_form = RackSelectForm()
-        rack_id = kwargs.get('rack_id')
-        if rack_id is None:
+        rack_number = kwargs.get('rack_number')
+        if rack_number is None:
             # ラックIDが指定されていない場合は、最小のラックIDを取得
             smallest_rack = Rack.objects.order_by('rack_number').first()
             if smallest_rack is not None:
                 # 最小のラックIDが存在する場合は、そのラックIDを指定してリダイレクト
-                return redirect('usage:graph', rack_id=smallest_rack.rack_number)
+                return redirect('usage:graph', rack_number=smallest_rack.rack_number)
             else:
                 # 最小のラックIDが存在しない場合は、エラー画面にリダイレクト
                 return redirect('usage:main')
 
         context = self.get_context_data(form=form, rack_select_form=rack_select_form)
-        context['rack_id'] = rack_id  # ラックIDを取得
+        context['rack_number'] = rack_number  # ラックIDを取得
         return self.render_to_response(context)
 
     def post(self, request, *args, **kwargs):
@@ -78,7 +78,7 @@ class UsageGraphView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        rack_number = self.kwargs['rack_id']  # URL引数からラック番号を取得
+        rack_number = self.kwargs['rack_number']  # URL引数からラック番号を取得
 
         racks = Rack.objects.all().order_by('rack_number')  # すべてのRackを取得
         context['all_racks'] = racks
@@ -127,7 +127,7 @@ class UsageGraphView(TemplateView):
             ).order_by('date')
             # querysetのデータを辞書に追加
             data[power_system['power_system_number']] = [{'x': timezone.localtime(obj.date), 'y': obj.current_value} for obj in measurement_queryset]
-            max_currents[power_system['power_system_number']] = int(PowerSystem.objects.get(id=power_system['power_system_number']).max_current)
+            max_currents[power_system['power_system_number']] = int(PowerSystem.objects.get(power_system_number=power_system['power_system_number']).max_current)
         context['data'] = data
         context['capacity'] = max_currents
 

@@ -4,7 +4,7 @@ from apps.accounts.models import CustomUser as Employee
 
 #ラック
 class RackIdForm(forms.Form):
-    rack_id = forms.IntegerField(label='rack_id')
+    rack_number = forms.IntegerField(label='rack_number')
     
 class RackForm(forms.ModelForm):
     description = forms.CharField(required=False, widget=forms.Textarea)  # 説明は任意入力

@@ -46,7 +46,7 @@ class CurrentMeasurementAddViewTest(TestCase):
         measurement_data = {
             'date': timezone.now(),
             'current_value': 1.0,
-            'power_system': self.power_system.id,
+            'power_system': self.power_system.power_system_number,
         }
         # 最初の時点ではデータがないことを確認
         self.assertEqual(CurrentMeasurement.objects.count(), 0)
@@ -61,7 +61,7 @@ class CurrentMeasurementAddViewTest(TestCase):
         self.assertEqual(CurrentMeasurement.objects.count(), 1)
         measurement = CurrentMeasurement.objects.first()
         self.assertEqual(measurement.current_value, measurement_data['current_value'])
-        self.assertEqual(measurement.power_system.id, measurement_data['power_system'])
+        self.assertEqual(measurement.power_system.power_system_number, measurement_data['power_system'])
         self.assertEqual(measurement.employee, self.user)
         
 
@@ -79,7 +79,7 @@ class CurrentMeasurementAddViewTest(TestCase):
         measurement_data = {
             'date': timezone.now(),
             'current_value': 101.0,#無効な電流値
-            'power_system': self.power_system.id,
+            'power_system': self.power_system.power_system_number,
         }
         # 最初の時点ではデータがないことを確認
         self.assertEqual(CurrentMeasurement.objects.count(), 0)
@@ -111,7 +111,7 @@ class CurrentMeasurementAddViewTest(TestCase):
         measurement_data = {
             'date': timezone.now(),
             'current_value': -1.0,#無効な電流値
-            'power_system': self.power_system.id,
+            'power_system': self.power_system.power_system_number,
         }
         # 最初の時点ではデータがないことを確認
         self.assertEqual(CurrentMeasurement.objects.count(), 0)
@@ -143,7 +143,7 @@ class CurrentMeasurementAddViewTest(TestCase):
         measurement_data = {
             'date': timezone.now(),
             'current_value': 1.0,
-            'power_system': self.power_system.id+1,#無効な電源系統
+            'power_system': self.power_system.power_system_number+1,#無効な電源系統
         }
         # 最初の時点ではデータがないことを確認
         self.assertEqual(CurrentMeasurement.objects.count(), 0)

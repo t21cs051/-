@@ -26,8 +26,8 @@ class RackList(ListView):
     template_name = 'master/rack_list.html'
     
     def post(self, request, *args, **kwargs):
-        rack_id = self.request.POST.get('rack_id')
-        rack = get_object_or_404(Rack, pk=rack_id)
+        rack_number = self.request.POST.get('rack_number')
+        rack = get_object_or_404(Rack, pk=rack_number)
         rack.save()
         return HttpResponseRedirect(reverse('master:rack'))
 
