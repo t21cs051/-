@@ -24,7 +24,7 @@
                     </button>
                     <ul class="dropdown-menu dropdown-menu-dark" style="max-height: 500px; overflow-y: auto;">
                         {% for rack in all_racks %}
-                        <li><a class="dropdown-item" href="{% url 'usage:graph' rack.id %}">{{rack.id}}</a></li>
+                        <li><a class="dropdown-item" href="{% url 'usage:graph' rack.rack_number %}">{{rack.rack_number}}</a></li>
                         {% endfor %}
                     </ul>
                 </div>
