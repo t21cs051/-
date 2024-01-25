@@ -17,22 +17,19 @@ class HomeView(TemplateView):
         worklog_queryset = WorkLog.objects.all().order_by('-date')[:10]
 
         # 測定データと作業記録を結合
-        history_data = list(measurement_queryset) + list(worklog_queryset)
-        history_data = history_data[:10]  # 最新10件
+        combined_data = (list(measurement_queryset) + list(worklog_queryset))[:10]
 
         # 日時でソート
-        history_data.sort(key=lambda entry: entry.date if hasattr(entry, 'date') else entry.date, reverse=True)
+        combined_data.sort(key=lambda entry: entry.date if hasattr(entry, 'date') else entry.date, reverse=True)
 
-        print(history_data)
-
-        context['history_data'] = [
+        context['combined_data'] = [
             {
                 'employee': entry.employee if hasattr(entry, 'employee') else 'N/A',
-                'type': '電流' if hasattr(entry, 'date') else '作業',
-                'datetime': entry.date if hasattr(entry, 'date') else entry.date,
+                'type': '電流' if isinstance(entry, CurrentMeasurement) else '作業',
+                'datetime': entry.date,
                 'content': f'系統{entry.power_system}: {entry.current_value}A' if isinstance(entry, CurrentMeasurement) else f'ラック{entry.rack}: {entry.get_work_type_display()}' if isinstance(entry, WorkLog) else 'N/A',
             }
-            for entry in history_data
+            for entry in combined_data
         ]
 
         racks = Rack.objects.all()
