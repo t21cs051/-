@@ -12,7 +12,7 @@ class WorkLogListView(ListView):
     template_name = 'worklog/worklog_list.html'
     
     def get_queryset(self):
-        return WorkLog.objects.order_by('-work_date')
+        return WorkLog.objects.order_by('-date')
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -47,7 +47,7 @@ class WorkLogUpdateView(UpdateView, ListView):
     success_url = reverse_lazy('worklog:list')
 
     def get_queryset(self):
-        return WorkLog.objects.order_by('-work_date')
+        return WorkLog.objects.order_by('-date')
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

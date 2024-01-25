@@ -10,7 +10,7 @@ class MeasurementListView(ListView):
     template_name = 'measurement/measurement_list.html'
 
     def get_queryset(self):
-        return CurrentMeasurement.objects.order_by('-measurement_date')
+        return CurrentMeasurement.objects.order_by('-date')
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -42,7 +42,7 @@ class MeasurementUpdateView(UpdateView, ListView):
     success_url = reverse_lazy('measurement:list')
 
     def get_queryset(self):
-        return CurrentMeasurement.objects.order_by('-measurement_date')
+        return CurrentMeasurement.objects.order_by('-date')
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
