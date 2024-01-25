@@ -95,7 +95,7 @@ class RackDeleteTest(TestCase):
         存在するラックを削除した場合、該当のラックが削除されることを確認する。
         """
         # RackDeleteViewに対するURLを取得
-        url = reverse('master:rack_delete', args=[self.rack.id])
+        url = reverse('master:rack_delete', args=[self.rack.rack_number])
 
         # DELETEリクエストを送信
         response = self.client.delete(url)
@@ -104,7 +104,7 @@ class RackDeleteTest(TestCase):
         self.assertEqual(response.status_code, 302)
 
         # データベースからラックが削除されたかを確認
-        self.assertFalse(Rack.objects.filter(id=self.rack.id).exists())
+        self.assertFalse(Rack.objects.filter(id=self.rack.rack_number).exists())
 
 
         #存在しないラック番号がフォームに渡されることはないのでテストケースは割愛している
@@ -123,7 +123,7 @@ class RackEditTest(TestCase):
         正しいラック番号を指定してラックを編集した場合、変更が正しく反映されることを確認する。
         """
         # RackEditViewに対するURLを取得
-        url = reverse('master:rack_edit', args=[self.rack.id])
+        url = reverse('master:rack_edit', args=[self.rack.rack_number])
 
         # テストに使用する新しいラック番号
         new_rack_data = {
@@ -147,7 +147,7 @@ class RackEditTest(TestCase):
         負のラック番号を指定してラックを編集しようとした場合、ValidationErrorが発生することを確認する。
         """
         # RackEditViewに対するURLを取得
-        url = reverse('master:rack_edit', args=[self.rack.id])
+        url = reverse('master:rack_edit', args=[self.rack.rack_number])
 
         # 負のラック番号
         invalid_rack_data = {
@@ -172,7 +172,7 @@ class RackEditTest(TestCase):
         上限を超えるラック番号を指定してラックを編集しようとした場合、ValidationErrorが発生することを確認する。
         """
         # RackEditViewに対するURLを取得
-        url = reverse('master:rack_edit', args=[self.rack.id])
+        url = reverse('master:rack_edit', args=[self.rack.rack_number])
 
         # 上限を超えるラック番号
         invalid_rack_data = {
@@ -281,7 +281,7 @@ class UpsDeleteTest(TestCase):
         存在するUPSを削除した場合、該当のUPSが削除されることを確認する。
         """
         # UpsDeleteViewに対するURLを取得
-        url = reverse('master:ups_delete', args=[self.ups.id])
+        url = reverse('master:ups_delete', args=[self.ups.ups_number])
 
         # DELETEリクエストを送信
         response = self.client.delete(url)
@@ -290,7 +290,7 @@ class UpsDeleteTest(TestCase):
         self.assertEqual(response.status_code, 302)
 
         # データベースからUPSが削除されたかを確認
-        self.assertFalse(Ups.objects.filter(id=self.ups.id).exists())
+        self.assertFalse(Ups.objects.filter(id=self.ups.ups_number).exists())
 
 
         #存在しないUPS番号がフォームに渡されることはないのでテストケースは割愛している
@@ -309,7 +309,7 @@ class UpsEditTest(TestCase):
         正しいUPS番号を指定してUPSを編集した場合、変更が正しく反映されることを確認する。
         """
         # UpsEditViewに対するURLを取得
-        url = reverse('master:ups_edit', args=[self.ups.id])
+        url = reverse('master:ups_edit', args=[self.ups.ups_number])
 
         # テストに使用する新しいUPS番号
         new_ups_data = {
@@ -333,7 +333,7 @@ class UpsEditTest(TestCase):
         負のUPS番号を指定してUPSを編集しようとした場合、ValidationErrorが発生することを確認する。
         """
         # UpsEditViewに対するURLを取得
-        url = reverse('master:ups_edit', args=[self.ups.id])
+        url = reverse('master:ups_edit', args=[self.ups.ups_number])
 
         # 負のUPS番号
         invalid_ups_data = {
@@ -358,7 +358,7 @@ class UpsEditTest(TestCase):
         上限を超えるUPS番号を指定してUPSを編集しようとした場合、ValidationErrorが発生することを確認する。
         """
         # UpsEditViewに対するURLを取得
-        url = reverse('master:ups_edit', args=[self.ups.id])
+        url = reverse('master:ups_edit', args=[self.ups.ups_number])
 
         # 上限を超えるUPS番号
         invalid_ups_data = {
@@ -401,8 +401,8 @@ class PowerSystemAddTest(TestCase):
         power_system_data = {
             'power_system_number': 1,
             'max_current': 50.0,
-            'supply_source': self.ups.id,
-            'supply_rack': self.rack.id,
+            'supply_source': self.ups.ups_number,
+            'supply_rack': self.rack.rack_number,
         }
         
         # PowerSystemAddViewに対するURLを取得
@@ -426,8 +426,8 @@ class PowerSystemAddTest(TestCase):
         invalid_power_system_data = {
             'power_system_number': -1, # 不正な電源系統番号
             'max_current': 2.0,  
-            'supply_source': self.ups.id,
-            'supply_rack': self.rack.id,
+            'supply_source': self.ups.ups_number,
+            'supply_rack': self.rack.rack_number,
         }
         
         # PowerSystemAddViewに対するURLを取得
@@ -452,8 +452,8 @@ class PowerSystemAddTest(TestCase):
         invalid_power_system_data = {
             'power_system_number': 2,
             'max_current': 150.0,  # 不正な最大電流値
-            'supply_source': self.ups.id,
-            'supply_rack': self.rack.id,
+            'supply_source': self.ups.ups_number,
+            'supply_rack': self.rack.rack_number,
         }
 
         # PowerSystemAddViewに対するURLを取得
@@ -492,7 +492,7 @@ class PowerSystemDeleteTest(TestCase):
         存在する電源系統を削除した場合、該当の電源系統が削除されることを確認する。
         """
         # PowerSystemDeleteViewに対するURLを取得
-        url = reverse('master:power_system_delete', args=[self.power_system.id])
+        url = reverse('master:power_system_delete', args=[self.power_system.power_system_number])
 
         # DELETEリクエストを送信
         response = self.client.delete(url)
@@ -501,7 +501,7 @@ class PowerSystemDeleteTest(TestCase):
         self.assertEqual(response.status_code, 302)
 
         # データベースから電源系統が正しく削除されたかを確認
-        self.assertFalse(PowerSystem.objects.filter(id=self.power_system.id).exists())
+        self.assertFalse(PowerSystem.objects.filter(id=self.power_system.power_system_number).exists())
 
 
 
@@ -510,7 +510,7 @@ class PowerSystemDeleteTest(TestCase):
         存在しない電源系統を削除しようとした場合、ObjectDoesNotExist例外が発生することを確認する。
         """
         # 存在しない電源系統番号を指定して削除を試みる
-        invalid_power_system_id = self.power_system.id + 1
+        invalid_power_system_id = self.power_system.power_system_number + 1
         
         # PowerSystemDeleteViewに対するURLを取得
         url = reverse('master:power_system_delete', args=[invalid_power_system_id])
@@ -519,7 +519,7 @@ class PowerSystemDeleteTest(TestCase):
         response = self.client.delete(url)
 
         # 電源系統が削除されていないことを確認
-        self.assertTrue(PowerSystem.objects.filter(id=self.power_system.id).exists())
+        self.assertTrue(PowerSystem.objects.filter(id=self.power_system.power_system_number).exists())
 
 
 class PowerSystemEditTest(TestCase):
@@ -548,12 +548,12 @@ class PowerSystemEditTest(TestCase):
         edited_power_system_data = {
             'power_system_number': 1,
             'max_current': 75.0,  # 新しい最大電流値
-            'supply_source': self.ups.id,
-            'supply_rack': self.rack.id,
+            'supply_source': self.ups.ups_number,
+            'supply_rack': self.rack.rack_number,
         }
         
         # PowerSystemEditViewに対するURLを取得
-        url = reverse('master:power_system_edit', args=[self.power_system.id])
+        url = reverse('master:power_system_edit', args=[self.power_system.power_system_number])
 
         # POSTリクエストを送信
         response = self.client.post(url, edited_power_system_data)
@@ -574,12 +574,12 @@ class PowerSystemEditTest(TestCase):
         invalid_power_system_data = {
             'power_system_number': 2,
             'max_current': 150.0,  # 許容範囲外の値
-            'supply_source': self.ups.id,
-            'supply_rack': self.rack.id,
+            'supply_source': self.ups.ups_number,
+            'supply_rack': self.rack.rack_number,
         }
 
         # PowerSystemEditViewに対するURLを取得
-        url = reverse('master:power_system_edit', args=[self.power_system.id])
+        url = reverse('master:power_system_edit', args=[self.power_system.power_system_number])
 
         # POSTリクエストを送信
         response = self.client.post(url, invalid_power_system_data)

@@ -26,7 +26,7 @@ class UsageView(TemplateView):
             capacity = 0  # 定格電流を保存するための変数を初期化
             for power_system in power_systems:  # 各PowerSystemに対して
                 # 現在のPowerSystemの最新の測定値を取得
-                latest_measurement = CurrentMeasurement.objects.filter(power_system=power_system).order_by('-measurement_date').first()
+                latest_measurement = CurrentMeasurement.objects.filter(power_system=power_system).order_by('-date').first()
                 if latest_measurement is not None:  # 最新の測定値が存在する場合
                     # 最大測定値が未設定、または最新の測定値が現在の最大測定値より大きい場合
                     if max_measurement is None or latest_measurement.current_value > max_measurement:
@@ -46,7 +46,7 @@ class UsageView(TemplateView):
 #         form = DateRangeForm()
 #         rack_select_form = RackSelectForm()
 #         context = self.get_context_data(form=form, rack_select_form=rack_select_form)
-#         context['rack_id'] = kwargs['rack_id']  # ラックIDを取得
+#         context['rack_number'] = kwargs['rack_number']  # ラックIDを取得
 #         return self.render_to_response(context)
     
 class UsageGraphView(TemplateView):
@@ -55,19 +55,19 @@ class UsageGraphView(TemplateView):
     def get(self, request, *args, **kwargs):
         form = DateRangeForm()
         rack_select_form = RackSelectForm()
-        rack_id = kwargs.get('rack_id')
-        if rack_id is None:
+        rack_number = kwargs.get('rack_number')
+        if rack_number is None:
             # ラックIDが指定されていない場合は、最小のラックIDを取得
             smallest_rack = Rack.objects.order_by('rack_number').first()
             if smallest_rack is not None:
                 # 最小のラックIDが存在する場合は、そのラックIDを指定してリダイレクト
-                return redirect('usage:graph', rack_id=smallest_rack.rack_number)
+                return redirect('usage:graph', rack_number=smallest_rack.rack_number)
             else:
                 # 最小のラックIDが存在しない場合は、エラー画面にリダイレクト
                 return redirect('usage:main')
 
         context = self.get_context_data(form=form, rack_select_form=rack_select_form)
-        context['rack_id'] = rack_id  # ラックIDを取得
+        context['rack_number'] = rack_number  # ラックIDを取得
         return self.render_to_response(context)
 
     def post(self, request, *args, **kwargs):
@@ -78,7 +78,7 @@ class UsageGraphView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        rack_number = self.kwargs['rack_id']  # URL引数からラック番号を取得
+        rack_number = self.kwargs['rack_number']  # URL引数からラック番号を取得
 
         racks = Rack.objects.all().order_by('rack_number')  # すべてのRackを取得
         context['all_racks'] = racks
@@ -86,7 +86,8 @@ class UsageGraphView(TemplateView):
         period = self.kwargs.get('period') # 表示期間を取得
 
         # 表示期間に基づいて開始日と終了日を計算
-        now = timezone.now().date()
+        now = timezone.localtime(timezone.now())
+        print(f'now: {now}')
 
         form = kwargs.get('form')
         if form.is_valid():
@@ -103,6 +104,14 @@ class UsageGraphView(TemplateView):
             else:
                 start_date = now - timedelta(days=30) # デフォルトは1か月
             end_date = now + timedelta(days=1)
+
+        # start_dateとend_dateをdatetimeオブジェクトに変換
+        start_date = datetime.combine(start_date, datetime.min.time())
+        end_date = datetime.combine(end_date, datetime.min.time())
+        
+        # start_dateとend_dateにタイムゾーン情報を付加
+        start_date = timezone.make_aware(start_date)
+        end_date = timezone.make_aware(end_date)
         
         # start_dateとend_dateをcontextに追加
         context['start_date'] = start_date
@@ -113,6 +122,7 @@ class UsageGraphView(TemplateView):
 
         # ラック番号でフィルタリングを行い、関連する電源系統を取得
         power_systems = PowerSystem.objects.filter(supply_rack=rack_number).values('power_system_number').order_by('power_system_number')
+        print(f'電源系統: {power_systems}')
 
         # 各電源系統をキーとする辞書を初期化
         data = {power_system['power_system_number']: [] for power_system in power_systems}
@@ -120,14 +130,15 @@ class UsageGraphView(TemplateView):
 
         max_currents = {}
         for power_system in power_systems:
+            power_system_instance = PowerSystem.objects.get(power_system_number=power_system['power_system_number'])
             measurement_queryset = CurrentMeasurement.objects.filter(
-                power_system=power_system['power_system_number'], # 電源系統で絞り込み
+                power_system=power_system_instance, # 電源系統で絞り込み
                 power_system__supply_rack=rack_number, # ラック番号で絞り込み
-                measurement_date__range=(start_date, end_date) # 開始日と終了日の範囲で絞り込み
-            ).order_by('measurement_date')
+                date__range=(start_date, end_date) # 開始日と終了日の範囲で絞り込み
+            ).order_by('date')
             # querysetのデータを辞書に追加
-            data[power_system['power_system_number']] = [{'x': timezone.localtime(obj.measurement_date), 'y': obj.current_value} for obj in measurement_queryset]
-            max_currents[power_system['power_system_number']] = int(PowerSystem.objects.get(id=power_system['power_system_number']).max_current)
+            data[power_system['power_system_number']] = [{'x': timezone.localtime(obj.date), 'y': obj.current_value} for obj in measurement_queryset]
+            max_currents[power_system['power_system_number']] = int(PowerSystem.objects.get(power_system_number=power_system['power_system_number']).max_current)
         context['data'] = data
         context['capacity'] = max_currents
 
@@ -136,13 +147,13 @@ class UsageGraphView(TemplateView):
         # 指定された期間の作業履歴を取得
         worklogs = WorkLog.objects.filter(
             rack__rack_number=rack_number, # ラック番号で絞り込み
-            work_date__range=(start_date, end_date) # 開始日と終了日の範囲で絞り込み
-        ).order_by('work_date')
+            date__range=(start_date, end_date) # 開始日と終了日の範囲で絞り込み
+        ).order_by('date')
 
         # worklogsをcontextに追加
         worklogs_dict = {'設置': [], '撤去': [], 'その他': []}
         for obj in worklogs:
-            worklogs_dict[obj.get_work_type_display()].append({'x': timezone.localtime(obj.work_date), 'y': obj.get_work_type_display(), 'z': obj.description.replace('\r\n', '').replace('\n', '')})
+            worklogs_dict[obj.get_work_type_display()].append({'x': timezone.localtime(obj.date), 'y': obj.get_work_type_display(), 'z': obj.description.replace('\r\n', '').replace('\n', '')})
         context['worklogs'] = worklogs_dict
 
         return context

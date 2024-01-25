@@ -5,7 +5,7 @@
 {% block main %}
 
 <div class="container pt-4">
-    <div class="col-3 p-3 border border-3 rounded">
+    <div class="col-4 p-3 border border-3 rounded">
         <h3>データを削除しますか？</h3>
 
         <br>
@@ -46,7 +46,6 @@
             
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
-                <!-- 修正点: method を form 要素に付与 -->
                 <form method="post">
                     {% csrf_token %}
                     <button type="submit" class="btn btn-danger">
@@ -57,6 +56,5 @@
         </div>
     </div>
 </div>
-
 
 {% endblock %}
