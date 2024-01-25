@@ -12,6 +12,8 @@ from django.template.context_processors import request
 from django.contrib.auth.views import PasswordChangeView, PasswordChangeDoneView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
+# TODO: 各ListViewのpostメソッドの必要性の判断
+
 #メインページ表示画面
 class mainpage(TemplateView):
     template_name = 'master/master_main.html'
@@ -28,11 +30,11 @@ class RackList(ListView):
     def get_queryset(self):
         return Rack.objects.order_by('rack_number')
     
-    def post(self, request, *args, **kwargs):
-        rack_number = self.request.POST.get('rack_number')
-        rack = get_object_or_404(Rack, pk=rack_number)
-        rack.save()
-        return HttpResponseRedirect(reverse('master:rack'))
+    # def post(self, request, *args, **kwargs):
+    #     rack_number = self.request.POST.get('rack_number')
+    #     rack = get_object_or_404(Rack, pk=rack_number)
+    #     rack.save()
+    #     return HttpResponseRedirect(reverse('master:rack'))
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -76,11 +78,11 @@ class UpsList(ListView):
     def get_queryset(self):
         return Ups.objects.order_by('ups_number')
     
-    def post(self, request, *args, **kwargs):
-        ups_id = self.request.POST.get('ups_id')
-        ups = get_object_or_404(Ups, pk=ups_id)
-        ups.save()
-        return HttpResponseRedirect(reverse('master:ups'))
+    # def post(self, request, *args, **kwargs):
+    #     ups_id = self.request.POST.get('ups_id')
+    #     ups = get_object_or_404(Ups, pk=ups_id)
+    #     ups.save()
+    #     return HttpResponseRedirect(reverse('master:ups'))
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -124,11 +126,11 @@ class PowerSystemList(ListView):
     def get_queryset(self):
         return PowerSystem.objects.order_by('power_system_number')
     
-    def post(self, request, *args, **kwargs):
-        power_system_id = self.request.POST.get('power_system_id')
-        power_system = get_object_or_404(PowerSystem, pk=power_system_id)
-        power_system.save()
-        return HttpResponseRedirect(reverse('master:power_system'))
+    # def post(self, request, *args, **kwargs):
+    #     power_system_id = self.request.POST.get('power_system_id')
+    #     power_system = get_object_or_404(PowerSystem, pk=power_system_id)
+    #     power_system.save()
+    #     return HttpResponseRedirect(reverse('master:power_system'))
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

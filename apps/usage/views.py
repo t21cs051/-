@@ -86,7 +86,8 @@ class UsageGraphView(TemplateView):
         period = self.kwargs.get('period') # 表示期間を取得
 
         # 表示期間に基づいて開始日と終了日を計算
-        now = timezone.now().date()
+        now = timezone.localtime(timezone.now())
+        print(f'now: {now}')
 
         form = kwargs.get('form')
         if form.is_valid():
@@ -103,6 +104,14 @@ class UsageGraphView(TemplateView):
             else:
                 start_date = now - timedelta(days=30) # デフォルトは1か月
             end_date = now + timedelta(days=1)
+
+        # start_dateとend_dateをdatetimeオブジェクトに変換
+        start_date = datetime.combine(start_date, datetime.min.time())
+        end_date = datetime.combine(end_date, datetime.min.time())
+        
+        # start_dateとend_dateにタイムゾーン情報を付加
+        start_date = timezone.make_aware(start_date)
+        end_date = timezone.make_aware(end_date)
         
         # start_dateとend_dateをcontextに追加
         context['start_date'] = start_date
@@ -113,6 +122,7 @@ class UsageGraphView(TemplateView):
 
         # ラック番号でフィルタリングを行い、関連する電源系統を取得
         power_systems = PowerSystem.objects.filter(supply_rack=rack_number).values('power_system_number').order_by('power_system_number')
+        print(f'電源系統: {power_systems}')
 
         # 各電源系統をキーとする辞書を初期化
         data = {power_system['power_system_number']: [] for power_system in power_systems}
@@ -120,8 +130,9 @@ class UsageGraphView(TemplateView):
 
         max_currents = {}
         for power_system in power_systems:
+            power_system_instance = PowerSystem.objects.get(power_system_number=power_system['power_system_number'])
             measurement_queryset = CurrentMeasurement.objects.filter(
-                power_system=power_system['power_system_number'], # 電源系統で絞り込み
+                power_system=power_system_instance, # 電源系統で絞り込み
                 power_system__supply_rack=rack_number, # ラック番号で絞り込み
                 date__range=(start_date, end_date) # 開始日と終了日の範囲で絞り込み
             ).order_by('date')
