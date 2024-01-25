@@ -8,7 +8,7 @@
 <script src="{% static 'canvas.css' %}"></script>
 <body>
     <!-- header -->
-    <div class="container pt-3 border-bottom">
+    <div class="container pt-3 border-bottom" id="titleBar">
         <div class="d-flex justify-content-between">
             <!-- Left aligned element -->
             <div>
@@ -22,9 +22,9 @@
                     <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         ラックを選択
                     </button>
-                    <ul class="dropdown-menu dropdown-menu-dark" style="max-height: 200px; overflow-y: auto;">
+                    <ul class="dropdown-menu dropdown-menu-dark" style="max-height: 500px; overflow-y: auto;">
                         {% for rack in all_racks %}
-                        <li><a class="dropdown-item" href="{% url 'usage:graph' rack.id %}">{{rack.id}}</a></li>
+                        <li><a class="dropdown-item" href="{% url 'usage:graph' rack.rack_number %}">{{rack.rack_number}}</a></li>
                         {% endfor %}
                     </ul>
                 </div>
@@ -61,16 +61,34 @@
             </div>
         </div>
     </div>
-    {% endif %}
-    
-    {% for power_system, measurements in data.items %}
-        <div class="container pt-3 pb-3">
-            <div class="chart-container" style="position: relative; width: 100%; height: 300px;">
-                <!-- 描画領域 -->
-                <canvas id="Chart{{ power_system }}" height="100px"></canvas>
+    {% else %}
+    <script>
+        window.onload = function() {
+            var headerHeight = document.getElementById('header').offsetHeight;
+            var titleBarHeight = document.getElementById('titleBar').offsetHeight;
+            var upperHeight = headerHeight + titleBarHeight;
+            var scrollableArea = document.getElementById('GraphScrollArea');
+            scrollableArea.style.height = 'calc(100vh - ' + upperHeight + 'px)';
+        };
+    </script>
+
+    <div class="overflow-auto" style="height: 80vh; overflow-y: auto;" id="GraphScrollArea">
+        {% for power_system, measurements in data.items %}
+            <div class="container pt-3 pb-3">
+                <div class="card">
+                    <div class="card-header">
+                        電源系統{{  power_system }}
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container" style="position: relative; width: 100%; height: 300px;">
+                            <!-- 描画領域 -->
+                            <canvas id="Chart{{ power_system }}" height="100px"></canvas>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-    {% endfor %}
+        {% endfor %}
+    </div>
     
     <!-- ライブラリの読み込み -->
     <script src="{% static 'chart_js/dist/chart.umd.js' %}"></script>
@@ -262,5 +280,6 @@
     </script>
 
     </body>
+    {% endif %}
     {% endblock %}
     
