@@ -31,7 +31,10 @@
 					<!-- current_value -->
 					<div class="p-3 col-4">
 						<label class="form-label" for="{{ form.current_value.id_for_label }}">電流値</label>
-						{{ form.current_value }}
+						<div class="d-flex align-items-center">
+							{{ form.current_value }}
+							<span style="margin-left: 5px;">A</span>
+						</div>
 					</div>
 
 					<!-- power_system -->

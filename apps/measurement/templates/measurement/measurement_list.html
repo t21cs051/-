@@ -76,10 +76,13 @@
 					<!-- current_value -->
 					<div class="p-3 col-4">
 						<label class="form-label">電流値</label>
-						<input
-							type="{{ form.current_value.field.widget.input_type }}"
-							class="form-control"
-							disabled>
+						<div class="d-flex align-items-center">
+							<input
+								type="{{ form.current_value.field.widget.input_type }}"
+								class="form-control"
+								disabled>
+							<span style="margin-left: 5px;">A</span>
+						</div>
 					</div>
 				
 					<!-- power_system -->
