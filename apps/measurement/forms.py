@@ -19,7 +19,7 @@ class MeasurementUpdateForm(forms.ModelForm):
         model = CurrentMeasurement
         fields = ['date', 'current_value', 'power_system', 'employee']
         widgets = {
-            'date': forms.TextInput(attrs={'class': 'form-control'}),
+            'date': forms.DateInput(format='%Y-%m-%d %H:%M', attrs={'class': 'form-control', 'type': 'datetime-local'}),
             'current_value': forms.NumberInput(attrs={'class': 'form-control'}),
             'power_system': forms.Select(attrs={'class': 'form-select'}),
             'employee': forms.Select(attrs={'class': 'form-select'}),

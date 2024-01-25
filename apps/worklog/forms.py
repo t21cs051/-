@@ -24,7 +24,7 @@ class WorkLogUpdateForm(forms.ModelForm):
         model = WorkLog
         fields = ['date', 'rack', 'work_type', 'description', 'employee']
         widgets = {
-            'date': forms.TextInput(attrs={'class': 'form-control'}),
+            'date': forms.DateInput(format='%Y-%m-%d %H:%M', attrs={'class': 'form-control', 'type': 'datetime-local'}),
             'rack': forms.Select(attrs={'class': 'form-select'}),
             'work_type': forms.HiddenInput(), # Bootstrapを使用するために、Djangoによるラジオボタンを隠す
             'description': forms.Textarea(attrs={'class': 'form-control'}),
