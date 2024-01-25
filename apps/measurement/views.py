@@ -31,7 +31,9 @@ class MeasurementAddView(CreateView, ListView):
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
+        create_view_context = super(CreateView, self).get_context_data(**kwargs)
+        list_view_context = super(ListView, self).get_context_data(**kwargs)
+        context = {**create_view_context, **list_view_context}
         context['form_id'] = MeasurementIdForm()
         return context
 
