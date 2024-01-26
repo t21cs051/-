@@ -23,6 +23,10 @@ class UserCreationForm(forms.ModelForm):
     class Meta:
         model = CustomUser
         fields = ('employee_number', 'full_name')
+        widgets = {
+            'rack_number': forms.NumberInput(attrs={'class': 'form-control'}),
+            'description': forms.Textarea(attrs={'class': 'form-control'}),
+        }
 
     def clean_password2(self):
         password1 = self.cleaned_data.get("password1")
