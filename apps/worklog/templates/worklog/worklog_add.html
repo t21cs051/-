@@ -88,17 +88,7 @@
 								<td>{{ worklog.description }}</td>
 								<td class="text-nowrap">{{ worklog.employee }}</td>
 							</tr>
-					</thead>
-					<tbody>
-						{% for worklog in object_list %}
-							<tr>
-								<td>{{ worklog.date }}</td>
-								<td>{{ worklog.rack }}</td>
-								<td>{{ worklog.get_work_type_display }}</td>
-								<td>{{ worklog.description }}</td>
-								<td>{{ worklog.employee }}</td>
-							</tr>
-							{% endfor %}
+						{% endfor %}
 					</tbody>
 				</table>
 			</div>
