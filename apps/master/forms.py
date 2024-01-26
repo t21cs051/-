@@ -11,6 +11,10 @@ class RackForm(forms.ModelForm):
     class Meta:
         model = Rack
         fields = ['rack_number', 'description']
+        widgets = {
+            'rack_number': forms.NumberInput(attrs={'class': 'form-control'}),
+            'description': forms.Textarea(attrs={'class': 'form-control'}),
+        }
     
     def clean(self):
         cleaned_data = super().clean()
@@ -28,6 +32,10 @@ class UpsForm(forms.ModelForm):
     class Meta:
         model = Ups
         fields = ['ups_number', 'description']
+        widgets = {
+            'ups_number': forms.NumberInput(attrs={'class': 'form-control'}),
+            'description': forms.Textarea(attrs={'class': 'form-control'}),
+        }
 
     def clean(self):
         cleaned_data = super().clean()
@@ -44,6 +52,12 @@ class PowerSystemForm(forms.ModelForm):
     class Meta:
         model = PowerSystem
         fields = ['power_system_number', 'max_current', 'supply_source', 'supply_rack']
+        widgets = {
+            'power_system_number': forms.NumberInput(attrs={'class': 'form-control'}),
+            'max_current': forms.NumberInput(attrs={'class': 'form-control'}),
+            'supply_source': forms.Select(attrs={'class': 'form-select'}),
+            'supply_rack': forms.Select(attrs={'class': 'form-select'}),
+        }
         
 #社員マスタ
 class EmployeeIdForm(forms.Form):
