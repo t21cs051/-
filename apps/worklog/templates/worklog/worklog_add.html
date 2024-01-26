@@ -78,6 +78,18 @@
 						</tr>
 					</thead>
 					<tbody>
+						<!-- 作業内容以外の要素は改行しないで表示する-->
+						{% for worklog in object_list %}
+							<tr>
+								<td class="text-nowrap">{{ worklog.date }}</td>
+								<!-- ラック番号の文字を最小で二行にするために余白を挿入-->
+								<td class="text-nowrap px-4">{{ worklog.rack }}</td>
+								<td class="text-nowrap">{{ worklog.get_work_type_display }}</td>
+								<td>{{ worklog.description }}</td>
+								<td class="text-nowrap">{{ worklog.employee }}</td>
+							</tr>
+					</thead>
+					<tbody>
 						{% for worklog in object_list %}
 							<tr>
 								<td>{{ worklog.date }}</td>

@@ -3,44 +3,43 @@
 
 <html>
 <head>
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<link href="{% static 'login.css' %}" rel='stylesheet' type='text/css'>
-  	<title>Login</title>
-  	
+  <title>Login</title>
 </head>
 </html>
 
 <body>	
-<div class="login">
-<center>
-  <h2>Current Measurement</h2>
-</center>
+  <div class="login">
+
+    <!-- title -->
+    <center>
+      <h2>Current Measurement</h2>
+    </center>
   
-  <h2 class="active"> sign in </h2>
+    <h2 class="active"> Login </h2>
 
+    <!-- form -->
+    <form action="" method="POST">
+      {% csrf_token %}
+      
+      {{ form.username }}
+      <span>社員番号</span>
 
-  <form action="" method="POST">
-   	{% csrf_token %}
-    
-	{% for field in form %}
-    	{{ field }}
-    <span>{{ field.label }}</span>
+      {{ form.password }}
+      <span>パスワード</span>
 
-    <br>
-    
-    {% endfor %}
-    
-    <button type="submit" class="signin">
-      Sign In
-    </button>
+      <br>
+      
+      <button type="submit" class="signin">
+        Login
+      </button>
 
+      <hr>
 
-    <hr>
+    </form>
 
-    <a href="#">Forgot Password?</a>
-  </form>
-
-</div>
+  </div>
 </body>
 
 

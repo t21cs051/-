@@ -84,6 +84,7 @@
 							{{ form.current_value }}
 							<span style="margin-left: 5px;">A</span>
 						</div>
+						<div class="p-3" id="error-message" style="color: red; white-space: nowrap;"></div>
 					</div>
 
 					<!-- power_system -->
@@ -165,6 +166,19 @@
 			deleteModal.hide();
 		});
 	});
+</script>
+
+<script>
+    document.querySelector("form").addEventListener("submit", function(event) {
+        var value = parseFloat(document.getElementById("id_current_value").value);
+        var errorMessageDiv = document.getElementById("error-message");
+        if (value < 0 || value > 100) {
+            errorMessageDiv.textContent = "0.0以上100.0以下の範囲で入力してください";
+            event.preventDefault(); // フォームの送信を中止
+        } else {
+            errorMessageDiv.textContent = ""; // エラーメッセージをクリア
+        }
+    });
 </script>
 
 {% endblock %}
