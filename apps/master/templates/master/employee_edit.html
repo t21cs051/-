@@ -3,11 +3,47 @@
 {% block title %} 社員編集 {% endblock %}
 
 {% block main %}
-<form method="post">
-{% csrf_token %}
-<table>
-{{ form.as_table }}
-</table>
-<input type="submit"/>
-</form>
+<div class="d-flex flex-row">
+
+	{% include "sidebar.html" %}
+
+    <div class="col-4 p-4">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="p-2">氏名の変更</h4>
+            </div>
+
+            <div class="card-body">
+                <!-- form -->
+                <form method="post">
+                    {% csrf_token %}
+                    <!-- employee_number -->
+                    {% if form.employee_number.errors %}
+                        <div class="alert alert-danger" role="alert">
+                            <i class="bi bi-exclamation-triangle-fill"></i> {{ form.employee_number.errors.as_text }}
+                        </div>
+                    {% endif %}
+                    <div class="p-3 col-7">
+                        <label class="form-label" for="{{ form.employee_number.id_for_label }}">社員番号</label>
+                        {{ form.employee_number }}
+                    </div>
+        
+                    <!-- full_name -->
+                    <div class="p-3 col-7">
+                        <label class="form-label" for="{{ form.full_name.id_for_label }}">氏名</label>
+                        {{ form.full_name }}
+                    </div>
+                    
+                    <div class="p-3">
+                        <button type="submit" class="submit btn btn-primary">変更</button>
+                    </div>
+        
+                </form>
+            </div>
+        
+        </div>
+    </div>
+
+</div>
+
 {% endblock %}

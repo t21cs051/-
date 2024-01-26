@@ -68,6 +68,10 @@ class EmployeeForm(forms.ModelForm):
     class Meta:
         model = Employee
         fields = ['employee_number', 'full_name']
+        widgets = {
+            'employee_number': forms.NumberInput(attrs={'class': 'form-control'}),
+            'full_name': forms.TextInput(attrs={'class': 'form-control'}),
+        }
         
     def __init__(self, *args, **kwargs):
         super(EmployeeForm, self).__init__(*args, **kwargs)
