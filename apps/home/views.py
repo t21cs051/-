@@ -17,7 +17,7 @@ class HomeView(TemplateView):
         worklog_queryset = WorkLog.objects.all().order_by('-date')[:10]
 
         # 測定データと作業記録を結合
-        combined_data = (list(measurement_queryset) + list(worklog_queryset))[:10]
+        combined_data = (list(worklog_queryset) + list(measurement_queryset))[:10]
 
         # 日時でソート
         combined_data.sort(key=lambda entry: entry.date if hasattr(entry, 'date') else entry.date, reverse=True)
