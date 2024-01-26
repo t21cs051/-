@@ -38,18 +38,20 @@
 					</tr>
 				</thead>
 				<tbody>
+					<!-- 作業内容以外の要素は改行しないで表示する-->
 					{% for worklog in object_list %}
 					<tr>
-						<td>{{ worklog.date }}</td>
-						<td>{{ worklog.rack }}</td>
-						<td>{{ worklog.get_work_type_display }}</td>
+						<td class="text-nowrap">{{ worklog.date }}</td>
+						<!-- ラック番号の文字を最小で二行にするために余白を挿入-->
+						<td class="text-nowrap px-4">{{ worklog.rack }}</td>
+						<td class="text-nowrap">{{ worklog.get_work_type_display }}</td>
 						<td>{{ worklog.description }}</td>
-						<td>{{ worklog.employee }}</td>
-						<td>
+						<td class="text-nowrap">{{ worklog.employee }}</td>
+						<td class="text-nowrap">
 							<a class="btn btn-outline-secondary" 
 								href="{% url 'worklog:update' worklog.id %}">編集</a>
 						</td>
-						<td>
+						<td class="text-nowrap">
 							<button type="button" class="btn btn-outline-secondary delete-btn" 
 								worklog-id="{{ worklog.id }}"
 								work-date="{{ worklog.date }}"
