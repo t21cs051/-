@@ -11,6 +11,12 @@ class DateRangeForm(forms.Form):
     start_date = forms.DateField(label='開始日', input_formats=['%Y-%m-%d'])
     end_date = forms.DateField(label='終了日', input_formats=['%Y-%m-%d'])
 
+    class Meta:
+        widgets = {
+            'start_date': forms.TextInput(attrs={'class': 'form-control'}),
+            'end_date': forms.TextInput(attrs={'class': 'form-control'}),
+        }
+
     def __init__(self, *args, **kwargs):
         super(DateRangeForm, self).__init__(*args, **kwargs)
         today = datetime.now().date()

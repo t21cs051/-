@@ -4,13 +4,17 @@ from apps.accounts.models import CustomUser as Employee
 
 #ラック
 class RackIdForm(forms.Form):
-    rack_id = forms.IntegerField(label='rack_id')
+    rack_number = forms.IntegerField(label='rack_number')
     
 class RackForm(forms.ModelForm):
     description = forms.CharField(required=False, widget=forms.Textarea)  # 説明は任意入力
     class Meta:
         model = Rack
         fields = ['rack_number', 'description']
+        widgets = {
+            'rack_number': forms.NumberInput(attrs={'class': 'form-control'}),
+            'description': forms.Textarea(attrs={'class': 'form-control'}),
+        }
     
     def clean(self):
         cleaned_data = super().clean()
@@ -28,6 +32,10 @@ class UpsForm(forms.ModelForm):
     class Meta:
         model = Ups
         fields = ['ups_number', 'description']
+        widgets = {
+            'ups_number': forms.NumberInput(attrs={'class': 'form-control'}),
+            'description': forms.Textarea(attrs={'class': 'form-control'}),
+        }
 
     def clean(self):
         cleaned_data = super().clean()
@@ -44,6 +52,12 @@ class PowerSystemForm(forms.ModelForm):
     class Meta:
         model = PowerSystem
         fields = ['power_system_number', 'max_current', 'supply_source', 'supply_rack']
+        widgets = {
+            'power_system_number': forms.NumberInput(attrs={'class': 'form-control'}),
+            'max_current': forms.NumberInput(attrs={'class': 'form-control'}),
+            'supply_source': forms.Select(attrs={'class': 'form-select'}),
+            'supply_rack': forms.Select(attrs={'class': 'form-select'}),
+        }
         
 #社員マスタ
 class EmployeeIdForm(forms.Form):
@@ -54,6 +68,10 @@ class EmployeeForm(forms.ModelForm):
     class Meta:
         model = Employee
         fields = ['employee_number', 'full_name']
+        widgets = {
+            'employee_number': forms.NumberInput(attrs={'class': 'form-control'}),
+            'full_name': forms.TextInput(attrs={'class': 'form-control'}),
+        }
         
     def __init__(self, *args, **kwargs):
         super(EmployeeForm, self).__init__(*args, **kwargs)

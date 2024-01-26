@@ -2,49 +2,72 @@
 {% extends "base.html" %}
 
 {% block main %}
+<style>
+  #rounded-rectangle-container {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  /* 四角のスタイルの定義 */
+  .rounded-rectangle {
+      width: 50px; /* 四角形の幅 */
+      height: 50px; /* 四角形の高さ */
+      border: 1px solid #000; /* 枠線のスタイル */
+      text-align: center;
+      line-height: 50px;
+      float: left;
+      margin: 5px;
+      border-radius: 10px; /* 四隅の丸みの半径 */
+  }
+</style>
+
+
   <div class="container">
     <div class="row">
-      <div class="col-8 p-2">
-        <h4>電力使用状況</h4>
+      <div class="col-7 p-2">
+        <h4>電力使用状況: ラック一覧
+        </h4>
       </div>
-      <div class="col-4 p-2">
+      <div class="col-5 p-2">
         <h4>測定・作業履歴</h4>
       </div>
 
       <!-- usage -->
-      <div class="col-8 p-2">
-        <div class="container border border-3 rounded">
-          <table>
-            <tr>
-                <th>Rack</th>
-                <th>使用率</th>
-            </tr>
-            {% for rack in racks %}
-            <tr>
-                <td><a href="{% url 'usage:graph' rack_id=rack.id %}">{{ rack.id }}</a></td>
-                <td style="background-color: {% if rack.usage >= 70 %}#DC143C{% elif rack.usage >= 50 %}#FF8C00{% else %}#87CEFA{% endif %};">{{ rack.usage }}%</td>
-            </tr>
-            {% endfor %}
-        </table>
+      <div class="col-7 p-2">
+        <div class="container border border-3 rounded" id="rounded-rectangle-container">
+          {% for rack in racks %}
+            <!-- 丸い四角形の表示 -->
+            <a href="{% url 'usage:graph' rack_number=rack.rack_number %}">
+              <div class="rounded-rectangle" style="background-color:
+                {% if rack.usage >= 70 %}#DC143C
+                {% elif rack.usage >= 50 %}#FF8C00
+                {% else %}#87CEFA{% endif %};">
+              
+                {{ rack.rack_number }}
+              </div>
+            </a>
+          {% endfor %}
         </div>
       </div>
 
       <!-- table -->
-      <div class="col-4 p-2">
+      <div class="col-5 p-2">
         <table class="table links">
           <thead class="table-dark">
               <tr>
                 <th>作業者</th>
-                <th>内容</th>
                 <th>日時</th>
+                <th>種別</th>
+                <th>内容</th>
               </tr>
             </thead>
             <tbody>
-              {% for entry in history_data %}
+              {% for entry in combined_data %}
                 <tr>
                   <td>{{ entry.employee }}</td>
-                  <td>{{ entry.content }}</td>
                   <td>{{ entry.datetime }}</td>
+                  <td>{{ entry.type }}</td>
+                  <td>{{ entry.content }}</td>
                 </tr>
               {% endfor %}
             </tbody>

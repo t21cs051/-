@@ -3,14 +3,58 @@
 {% block title %} 削除 {% endblock %}
 
 {% block main %}
-<a>本当に削除しますか？</a>
-<form method="post">
-    {% csrf_token %}
-    <dl>
-        <dt>社員番号</dt><dd>{{ logged_in_user.employee_number }}</dd>
-        <dt>社員氏名</dt><dd>{{ logged_in_user.full_name }}</dd>
-    </dl>
+<div class="container pt-4">
+    <div class="col-4 p-3 border border-3 rounded">
+        <h3>データを削除しますか？</h3>
 
-    <input type="submit" value="削除"/>
-</form>
+        <br>
+
+        <div class="row">
+            <div class="col">
+                社員番号<br>
+                社員氏名
+            </div>
+            <div class="col">
+                {{ logged_in_user.employee_number }}<br>
+                {{ logged_in_user.full_name }}
+            </div>
+        </div>
+
+        <br>
+
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#deleteModal">
+            削除
+        </button>
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="deleteModalLabel">社員データの削除</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                本当に削除しますか？
+            </div>
+            
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
+                <form method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">
+                        削除
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 {% endblock %}

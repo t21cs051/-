@@ -8,9 +8,9 @@ class WorkLogIdForm(forms.Form):
 class WorkLogForm(forms.ModelForm):
     class Meta:
         model = WorkLog
-        fields = ['work_date', 'rack', 'work_type', 'description']
+        fields = ['date', 'rack', 'work_type', 'description']
         widgets = {
-            'work_date': forms.TextInput(attrs={'class': 'form-control'}),
+            'date': forms.DateInput(format='%Y-%m-%d %H:%M', attrs={'class': 'form-control', 'type': 'datetime-local'}),
             'rack': forms.Select(attrs={'class': 'form-select'}),
             # 'work_type': forms.RadioSelect(),
             'work_type': forms.HiddenInput(), # Bootstrapを使用するために、Djangoによるラジオボタンを隠す
@@ -22,9 +22,9 @@ class WorkLogForm(forms.ModelForm):
 class WorkLogUpdateForm(forms.ModelForm):
     class Meta:
         model = WorkLog
-        fields = ['work_date', 'rack', 'work_type', 'description', 'employee']
+        fields = ['date', 'rack', 'work_type', 'description', 'employee']
         widgets = {
-            'work_date': forms.TextInput(attrs={'class': 'form-control'}),
+            'date': forms.DateInput(format='%Y-%m-%d %H:%M', attrs={'class': 'form-control', 'type': 'datetime-local'}),
             'rack': forms.Select(attrs={'class': 'form-select'}),
             'work_type': forms.HiddenInput(), # Bootstrapを使用するために、Djangoによるラジオボタンを隠す
             'description': forms.Textarea(attrs={'class': 'form-control'}),

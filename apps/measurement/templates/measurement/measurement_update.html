@@ -18,37 +18,52 @@
 
 	<div class="row">
 		<!-- table -->
-		<div class="col-7 p-3">
-			<table class="table text-center">
-			<thead class="table-dark">
-				<tr>
-					<th>測定日時</th>
-					<th>電流値</th>
-					<th>電源系統</th>
-					<th>測定者</th>
-					<th>編集</th>
-					<th>削除</th>
-				</tr>
-			</thead>
-			<tbody>
-				{% for CurrentMeasurement in object_list %}
-				<tr>
-					<td>{{ CurrentMeasurement.measurement_date }}</td>
-					<td>{{ CurrentMeasurement.current_value }}</td>
-					<td>{{ CurrentMeasurement.power_system }}</td>
-					<td>{{ CurrentMeasurement.employee }}</td>
-					<td>
-					<a class="btn btn-outline-secondary" 
-						href="{% url 'measurement:update' CurrentMeasurement.id %}">編集</a>
-					</td>
-					<td>
-						<a class="btn btn-outline-secondary" 
-							href="{% url 'measurement:delete' CurrentMeasurement.id %}">削除</a>
-					</td>
-				</tr>
-				{% endfor %}
-			</tbody>
-			</table>
+		<div class="col-7">
+			<div class="border border-top-0 border-1 rounded-bottom p-3">
+
+				<h4>電流記録一覧</h4>
+
+				<div class="scrollable-container">
+					<table class="table text-center">
+					<thead class="table-dark">
+						<tr>
+							<th>測定日時</th>
+							<th>電源系統</th>
+							<th>電流値</th>
+							<th>測定者</th>
+							<th>編集</th>
+							<th>削除</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for CurrentMeasurement in object_list %}
+						<tr>
+							<td>{{ CurrentMeasurement.date }}</td>
+							<td>{{ CurrentMeasurement.power_system }}</td>
+							<td>{{ CurrentMeasurement }}</td>
+							<td>{{ CurrentMeasurement.employee }}</td>
+							<td>
+							<a class="btn btn-outline-secondary" 
+								href="{% url 'measurement:update' CurrentMeasurement.id %}">編集</a>
+							</td>
+							<td>
+								<button type="button" class="btn btn-outline-secondary delete-btn" 
+									measurement-id="{{ CurrentMeasurement.id }}"
+									measurement-date="{{ CurrentMeasurement.date }}"
+									current-value="{{ CurrentMeasurement.current_value }}"
+									power-system="{{ CurrentMeasurement.power_system }}"
+									measurement-employee="{{ CurrentMeasurement.employee }}">
+									削除
+								</button>
+							</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+					</table>
+				</div>
+
+			</div>
+			
 		</div>
 
 		<!-- form -->
@@ -56,21 +71,25 @@
 			<div class="container border border-top-0 border-1 rounded-bottom">
 				<form class="form-horizontal" method="POST">
 					{% csrf_token %}
-					<!-- measurement_date -->
+					<!-- date -->
 					<div class="p-3 col-7">
-						<label class="form-label" for="{{ form.measurement_date.id_for_label }}">記録日時</label>
-						{{ form.measurement_date }}
+						<label class="form-label" for="{{ form.date.id_for_label }}">測定日時</label>
+						{{ form.date }}
 					</div>
 
 					<!-- current_value -->
 					<div class="p-3 col-4">
-						<label class="form-label" for="{{ form.current_value.id_for_label }}">電流値</label>					
-						{{ form.current_value }}
+						<label class="form-label" for="{{ form.current_value.id_for_label }}">電流値</label>
+						<div class="d-flex align-items-center">
+							{{ form.current_value }}
+							<span style="margin-left: 5px;">A</span>
+						</div>
+						<div class="p-3" id="error-message" style="color: red; white-space: nowrap;"></div>
 					</div>
 
-					<!-- rack -->
+					<!-- power_system -->
 					<div class="p-3 col-4">
-						<label class="form-label" for="{{ form.rack.id_for_label }}">ラック番号</label>
+						<label class="form-label" for="{{ form.power_system.power_system_number_for_label }}">電源系統</label>
 						{{ form.power_system }}
 					</div>
 
@@ -81,7 +100,7 @@
 					</div>
 
 					<div class="p-3">
-						<button type="submit" class="submit btn btn-primary">Update</button>
+						<button type="submit" class="submit btn btn-primary">修正</button>
 						<a class="submit btn btn-secondary" href="{% url "measurement:list" %}">キャンセル</a>
 					</div>
 				</form>
@@ -89,4 +108,77 @@
 		</div>
 	</div>
 </div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h1 class="modal-title fs-5" id="deleteModalLabel">電流記録の削除</h1>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<p><strong>以下の電流記録を本当に削除しますか？</strong></p>
+				<p><strong>測定日時:</strong> <span id="measurement-date"></span></p>
+				<p><strong>電流値:</strong> <span id="current-value"></span></p>
+				<p><strong>電源系統:</strong> <span id="power-system"></span></p>
+				<p><strong>測定者:</strong> <span id="measurement-employee"></span></p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
+				<button type="button" class="btn btn-primary" id="deleteBtn">削除</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- モーダル表示用 javascript-->
+<script>
+	document.addEventListener('DOMContentLoaded', function () {
+		// 削除ボタンがクリックされたときの処理
+		var deleteButtons = document.querySelectorAll('.delete-btn');
+		var deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+		
+		deleteButtons.forEach(function (button) {
+			button.addEventListener('click', function () {
+				var measurementId = this.getAttribute('measurement-id');
+				// モーダル表示のための処理
+				deleteModal.show();
+				
+				// モーダル内の要素に対してCurrentMeasurementの情報を設定
+				document.getElementById('measurement-date').innerText = this.getAttribute('measurement-date');
+				document.getElementById('current-value').innerText = this.getAttribute('current-value') + ' A';
+				document.getElementById('power-system').innerText = this.getAttribute('power-system');
+				document.getElementById('measurement-employee').innerText = this.getAttribute('measurement-employee');
+
+				// モーダル内の削除ボタンにデータを設定
+				document.getElementById('deleteBtn').setAttribute('measurement-id', measurementId);
+			});
+		});
+		
+		// モーダル内の削除ボタンがクリックされたときの処理
+		document.getElementById('deleteBtn').addEventListener('click', function () {
+			var measurementId = this.getAttribute('measurement-id');
+			// 削除の処理を実行する（削除用のURLにリダイレクト）
+			window.location.href = '{% url "measurement:delete" 0 %}'.replace('0', measurementId);
+			// モーダルを閉じる
+			deleteModal.hide();
+		});
+	});
+</script>
+
+<script>
+    document.querySelector("form").addEventListener("submit", function(event) {
+        var value = parseFloat(document.getElementById("id_current_value").value);
+        var errorMessageDiv = document.getElementById("error-message");
+        if (value < 0 || value > 100) {
+            errorMessageDiv.textContent = "0.0以上100.0以下の範囲で入力してください";
+            event.preventDefault(); // フォームの送信を中止
+        } else {
+            errorMessageDiv.textContent = ""; // エラーメッセージをクリア
+        }
+    });
+</script>
+
 {% endblock %}

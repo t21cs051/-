@@ -1,5 +1,4 @@
 {% load static %}
-{% include "icon.html" %}
 
 <!doctype html>
 <html lang="ja">
@@ -9,72 +8,85 @@
     <link href="{% static 'base.css' %}" rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="{% static '/bootstrap/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static '/bootstrap-icons/font/bootstrap-icons.css' %}">
+    <!-- Bootstrap JavaScript (Popper.jsと一緒に) -->
+    <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+
 </head>
 
 <style>
 	.bi {
-	  vertical-align: -.125em;
-	  fill: currentColor;
+    vertical-align: -.125em;
+    fill: currentColor;
 	}
-  </style>
+
+  
+  .table caption {
+      font-size: larger; /* または他の適切な値を指定 */
+  }
+</style>
+
 
 <!-- ヘッダー -->
-<header>
-    <div class="px-3 py-2 text-bg-dark border-bottom">
-      <div class="container">
-        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-          <a href="/" class="d-flex align-items-center my-2 my-lg-0 me-lg-auto text-white text-decoration-none">
-            <i class="bi bi-hdd-rack" style="font-size: 40px;"></i>
-			<span class="fs-4">　CURRENT MEASUREMENT</span><!-- 【要修正】余白調整のために、全角スペースあり -->
+<header id="header">
+  <div class="px-3 py-2 text-bg-dark border-bottom">
+    <div class="container">
+      <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+        <a href="/home" class="d-flex align-items-center my-2 my-lg-0 me-lg-auto text-white text-decoration-none">
+          <i class="bi bi-hdd-rack" style="font-size: 40px;"></i>
+          <span class="fs-4 ps-3">電源使用状況管理システム</span><!-- TODO:【要修正】余白調整のために、全角スペースあり -->
+                                                    <!-- 【仮修正】余白調整のための全角スペースをps-3に置き換えた -->
+        </a>
+
+        <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
+
+          <a href="{% url "home:home" %}" class="text-decoration-none text-white">
+            <div class="d-flex flex-column align-items-center mt-2 mx-3" style="height: 60px;">
+              <i class="bi bi-house-door-fill flex-grow-1" style="font-size: 26px;"></i>
+              <span class="flex-grow-1">Home</span>
+            </div>
           </a>
 
-          <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
-            <li>
-              <a href="{% url "home:home" %}" class="nav-link text-white">
-                <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#home"/></svg>
-                Home
-              </a>
-            </li>
+          <a href="{% url "measurement:add" %}" class="text-decoration-none text-white">
+            <div class="d-flex flex-column align-items-center mt-2 mx-3" style="height: 60px;">
+              <i class="bi bi-pencil-fill flex-grow-1" style="font-size: 26px;"></i>
+              <span class="flex-grow-1">Record</span>
+            </div>
+          </a>
 
-            <li>
-              <a href="{% url "measurement:add" %}" class="nav-link text-white">
-                <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#pencil"/></svg>
-                Record
-              </a>
-            </li>
+          <a href="{% url "measurement:list" %}" class="text-decoration-none text-white">
+            <div class="d-flex flex-column align-items-center mt-2 mx-3" style="height: 60px;">
+              <i class="bi bi-eraser-fill flex-grow-1" style="font-size: 26px;"></i>
+              <span class="flex-grow-1">Correction</span>
+            </div>
+          </a>
 
-            <li>
-              <a href="{% url "measurement:list" %}" class="nav-link text-white">
-                <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#eraser"/></svg>
-                Correction
-              </a>
-            </li>
+          <a href="{% url "usage:graph_no_rack_number" %}" class="text-decoration-none text-white">
+            <div class="d-flex flex-column align-items-center mt-2 mx-3" style="height: 60px;">
+              <i class="bi bi-graph-up flex-grow-1" style="font-size: 26px;"></i>
+              <span class="flex-grow-1">Graph</span>
+            </div>
+          </a>
 
-            <li>
-              <a href="{% url "usage:main" %}" class="nav-link text-white">
-                <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#usage"/></svg>
-                Graph
-              </a>
-            </li>
+          <a href="{% url "master:rack" %}" class="text-decoration-none text-white">
+            <div class="d-flex flex-column align-items-center mt-2 mx-3" style="height: 60px;">
+              <i class="bi bi-wrench-adjustable flex-grow-1" style="font-size: 26px;"></i>
+              <span class="flex-grow-1">Setting</span>
+            </div>
+          </a>
 
-            <li>
-              <a href="{% url "master:rack" %}" class="nav-link text-white">
-                <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#setting"/></svg>
-                Setting
-              </a>
-            </li>
-
-			<li>
-				<a href="{% url "accounts:logout" %}" class="nav-link text-white">
-				  <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#logout"/></svg>
-				  Logout
-				</a>
-			  </li>
-          </ul>
-        </div>
+          <a href="{% url "accounts:logout" %}" class="text-decoration-none text-white">
+            <div class="d-flex flex-column align-items-center mt-2 mx-3" style="height: 60px;">
+              <i class="bi bi-door-open-fill flex-grow-1" style="font-size: 26px;"></i>
+              <span class="flex-grow-1">Logout</span>
+            </div>
+          </a>
+          
+        </ul>
       </div>
     </div>
-  </header>
+  </div>
+</header>
 
 <body> 
     {% block main %}

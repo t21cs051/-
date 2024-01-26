@@ -14,8 +14,7 @@ class LoginForm(AuthenticationForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
-            field.widget.attrs['class'] = 'text'
-            field.widget.attrs['placeholder'] = field.label   
+            field.widget.attrs['class'] = 'text' 
 
 class UserCreationForm(forms.ModelForm):
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
@@ -24,6 +23,10 @@ class UserCreationForm(forms.ModelForm):
     class Meta:
         model = CustomUser
         fields = ('employee_number', 'full_name')
+        widgets = {
+            'rack_number': forms.NumberInput(attrs={'class': 'form-control'}),
+            'description': forms.Textarea(attrs={'class': 'form-control'}),
+        }
 
     def clean_password2(self):
         password1 = self.cleaned_data.get("password1")

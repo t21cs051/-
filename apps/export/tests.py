@@ -6,11 +6,11 @@ import csv
 import io
 import urllib
 
-class CSVExportTest(TestCase):
+class MeasurementExportTest(TestCase):
     
-    def test_csv_export(self):
+    def test_measurement_export(self):
         # CSV出力のURLを取得
-        url = reverse('export:csv_export')
+        url = reverse('export:measurement_export')
 
         # テスト用のクライアントを使用してHTTP GETリクエストを送信
         response = self.client.get(url)
@@ -37,5 +37,5 @@ class CSVExportTest(TestCase):
         
         
         # ヘッダーの確認
-        self.assertEqual(header, ['measurement_date', 'current_value', 'power_system', 'employee'])
+        self.assertEqual(header, ['date', 'current_value', 'power_system', 'employee'])
         '''
