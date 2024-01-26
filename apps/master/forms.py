@@ -11,6 +11,10 @@ class RackForm(forms.ModelForm):
     class Meta:
         model = Rack
         fields = ['rack_number', 'description']
+        widgets = {
+            'rack_number': forms.NumberInput(attrs={'class': 'form-control'}),
+            'description': forms.Textarea(attrs={'class': 'form-control'}),
+        }
     
     def clean(self):
         cleaned_data = super().clean()
@@ -28,6 +32,10 @@ class UpsForm(forms.ModelForm):
     class Meta:
         model = Ups
         fields = ['ups_number', 'description']
+        widgets = {
+            'ups_number': forms.NumberInput(attrs={'class': 'form-control'}),
+            'description': forms.Textarea(attrs={'class': 'form-control'}),
+        }
 
     def clean(self):
         cleaned_data = super().clean()
