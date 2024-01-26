@@ -87,11 +87,9 @@ class UsageGraphView(TemplateView):
 
         # 表示期間に基づいて開始日と終了日を計算
         now = timezone.localtime(timezone.now())
-        print(f'now: {now}')
 
         form = kwargs.get('form')
         if form.is_valid():
-            print('フォームは有効です')
             start_date = form.cleaned_data['start_date']
             end_date = form.cleaned_data['end_date'] + timedelta(days=1)
         else: 
@@ -122,11 +120,9 @@ class UsageGraphView(TemplateView):
 
         # ラック番号でフィルタリングを行い、関連する電源系統を取得
         power_systems = PowerSystem.objects.filter(supply_rack=rack_number).values('power_system_number').order_by('power_system_number')
-        print(f'電源系統: {power_systems}')
 
         # 各電源系統をキーとする辞書を初期化
         data = {power_system['power_system_number']: [] for power_system in power_systems}
-        print(f'データ: {data}')
 
         max_currents = {}
         for power_system in power_systems:
@@ -142,7 +138,6 @@ class UsageGraphView(TemplateView):
         context['data'] = data
         context['capacity'] = max_currents
 
-        print(f'データ: {data}')
         
         # 指定された期間の作業履歴を取得
         worklogs = WorkLog.objects.filter(
