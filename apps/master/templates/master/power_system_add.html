@@ -4,24 +4,40 @@
 
 {% block main %}
 <form action="{% url 'master:power_system_add' %}" method="post">
-{% csrf_token %}
-<table>
-{% for field in form %}
-    {% if field.errors %}
-        <tr>
-            <td colspan="2">
-                <div class="alert alert-danger" role="alert">
-                    <i class="bi bi-exclamation-triangle-fill"></i> {{ field.errors.as_text }}
-                </div>
-            </td>
-        </tr>
+    {% csrf_token %}
+    <!-- power_system_number -->
+    {% if form.power_system_number.errors %}
+        <div class="alert alert-danger" role="alert">
+            <i class="bi bi-exclamation-triangle-fill"></i> {{ form.power_system_number.errors.as_text }}
+        </div>
     {% endif %}
-    <tr>
-        <th>{{ field.label_tag }}</th>
-        <td>{{ field }}</td>
-    </tr>
-{% endfor %}
-</table>
-<input type="submit"/>
+    <div class="p-3 col-7">
+        <label class="form-label" for="{{ form.power_system_number.id_for_label }}">電源系統番号</label>
+        {{ form.power_system_number }}
+    </div>
+
+    <!-- max_current -->
+    <div class="p-3 col-4">
+        <label class="form-label" for="{{ form.max_current.id_for_label }}">最大電流値</label>
+        {{ form.max_current }}
+    </div>
+
+    <!-- supply_source -->
+    <div class="p-3 col-4">
+        <label class="form-label" for="{{ form.supply_source.id_for_label }}">供給元UPS</label>
+        {{ form.supply_source }}
+    </div>
+
+    <!-- supply_rack -->
+    <div class="p-3 col-4">
+        <label class="form-label" for="{{ form.supply_rack.id_for_label }}">供給先ラック</label>
+        {{ form.supply_rack }}
+    </div>
+    
+    <div class="p-3">
+        <button type="submit" class="submit btn btn-primary">追加</button>
+    </div>
+
 </form>
+
 {% endblock %}
