@@ -24,54 +24,63 @@
 
   <div class="container">
     <div class="row">
-      <div class="col-7 p-2">
-        <h4>電力使用状況: ラック一覧
-        </h4>
-      </div>
-      <div class="col-5 p-2">
-        <h4>測定・作業履歴</h4>
-      </div>
-
       <!-- usage -->
       <div class="col-7 p-2">
-        <div class="container border border-3 rounded" id="rounded-rectangle-container">
-          {% for rack in racks %}
-            <!-- 丸い四角形の表示 -->
-            <a href="{% url 'usage:graph' rack_number=rack.rack_number %}">
-              <div class="rounded-rectangle" style="background-color:
-                {% if rack.usage >= 70 %}#DC143C
-                {% elif rack.usage >= 50 %}#FF8C00
-                {% else %}#87CEFA{% endif %};">
-              
-                {{ rack.rack_number }}
-              </div>
-            </a>
-          {% endfor %}
+        <div class="card">
+          <div class="card-header">
+            <h6>電力使用状況: ラック一覧</h6>
+          </div>
+          <div class="card-body">
+                  {% for rack in racks %}
+                    <!-- 丸い四角形の表示 -->
+                    <a href="{% url 'usage:graph' rack_number=rack.rack_number %}">
+                      <div class="rounded-rectangle" style="background-color:
+                        {% if rack.usage >= 70 %}#DC143C
+                        {% elif rack.usage >= 50 %}#FF8C00
+                        {% else %}#87CEFA{% endif %};">
+                      
+                        {{ rack.rack_number }}
+                      </div>
+                    </a>
+                  {% endfor %}
+          </div>
+          <div class="card-footer text-muted">
+            total: {{ racks|length }}racks
+          </div>
         </div>
       </div>
-
       <!-- table -->
       <div class="col-5 p-2">
-        <table class="table links">
-          <thead class="table-dark">
-              <tr>
-                <th>作業者</th>
-                <th>日時</th>
-                <th>種別</th>
-                <th>内容</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for entry in combined_data %}
-                <tr>
-                  <td>{{ entry.employee }}</td>
-                  <td>{{ entry.datetime }}</td>
-                  <td>{{ entry.type }}</td>
-                  <td>{{ entry.content }}</td>
-                </tr>
-              {% endfor %}
-            </tbody>
-        </table>
+        <div class="card">
+          <div class="card-header">
+            <h6>測定・作業履歴</h6>
+          </div>
+          <div class="card-body">
+            <table class="table links">
+                      <thead class="table-dark">
+                          <tr>
+                            <th>作業者</th>
+                            <th>日時</th>
+                            <th>種別</th>
+                            <th>内容</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {% for entry in combined_data %}
+                            <tr>
+                              <td>{{ entry.employee }}</td>
+                              <td>{{ entry.datetime }}</td>
+                              <td>{{ entry.type }}</td>
+                              <td>{{ entry.content }}</td>
+                            </tr>
+                          {% endfor %}
+                        </tbody>
+                    </table>
+          </div>
+          <div class="card-footer text-muted">
+            latest {{ combined_data|length }} entries
+          </div>
+        </div>
       </div>
 
     </div>
