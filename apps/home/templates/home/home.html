@@ -21,22 +21,6 @@
   }
 </style>
 
-<script>
-	window.onload = function() {
-		var headerHeight = document.getElementById('header').offsetHeight;
-		var cardHeaderHeight = document.getElementById('cardHeader').offsetHeight;
-		var upperHeight = headerHeight + cardHeaderHeight + 40;
-		var scrollableArea = document.getElementById('tableArea');
-		var contentHeight = scrollableArea.scrollHeight;
-		var maxHeight = 'calc(90vh - ' + upperHeight + 'px)';
-		scrollableArea.style.height = maxHeight;
-		if (scrollableArea.offsetHeight > contentHeight) {
-			scrollableArea.style.height = contentHeight + 'px';
-		}
-	};
-</script>
-
-
   <div class="container p-3">
     <div class="row">
       <!-- usage -->
@@ -46,7 +30,7 @@
             <h6>電力使用状況: ラック一覧</h6>
           </div>
           <div class="card-body">
-            <div class="overflow-auto" style="height: 0vh; overflow-y: auto;" id="tableArea">
+            <div class="overflow-auto" style="height: 0vh; overflow-y: auto;" id="rackArea">
                   {% for rack in racks %}
                     <!-- 丸い四角形の表示 -->
                     <a href="{% url 'usage:graph' rack_number=rack.rack_number %}">
@@ -105,4 +89,27 @@
     </div>
   
   </div>
-{% endblock %}
+  
+  <script>
+    window.onload = function() {
+      var headerHeight = document.getElementById('header').offsetHeight;
+      var cardHeaderHeight = document.getElementById('cardHeader').offsetHeight;
+      var upperHeight = headerHeight + cardHeaderHeight + 100;
+      var scrollableArea1 = document.getElementById('rackArea');
+      var scrollableArea2 = document.getElementById('tableArea');
+      var contentHeight1 = scrollableArea1.scrollHeight;
+      var maxHeight1 = 'calc(90vh - ' + upperHeight + 'px)';
+      scrollableArea1.style.height = maxHeight1;
+		if (scrollableArea1.offsetHeight > contentHeight1) {
+      scrollableArea1.style.height = contentHeight1 + 'px';
+		}
+    var contentHeight2 = scrollableArea2.scrollHeight;
+		var maxHeight2 = 'calc(90vh - ' + upperHeight + 'px)';
+		scrollableArea2.style.height = maxHeight2;
+		if (scrollableArea2.offsetHeight > contentHeight2) {
+      scrollableArea2.style.height = contentHeight2 + 'px';
+		}
+	};
+</script>
+
+  {% endblock %}
