@@ -14,7 +14,7 @@ class WorkLogForm(forms.ModelForm):
             'rack': forms.Select(attrs={'class': 'form-select'}),
             # 'work_type': forms.RadioSelect(),
             'work_type': forms.HiddenInput(), # Bootstrapを使用するために、Djangoによるラジオボタンを隠す
-            'description': forms.Textarea(attrs={'class': 'form-control'}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'rows':3, 'placeholder': '*必須* 作業内容を入力してください'}),
             
         }
 
@@ -27,7 +27,7 @@ class WorkLogUpdateForm(forms.ModelForm):
             'date': forms.DateInput(format='%Y-%m-%d %H:%M', attrs={'class': 'form-control', 'type': 'datetime-local'}),
             'rack': forms.Select(attrs={'class': 'form-select'}),
             'work_type': forms.HiddenInput(), # Bootstrapを使用するために、Djangoによるラジオボタンを隠す
-            'description': forms.Textarea(attrs={'class': 'form-control'}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'rows':3, 'placeholder': '*必須* 作業内容を入力してください'}),
             'employee': forms.Select(attrs={'class': 'form-select'}),
 
         }

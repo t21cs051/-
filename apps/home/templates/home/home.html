@@ -21,60 +21,95 @@
   }
 </style>
 
-
-  <div class="container">
+  <div class="container p-3">
     <div class="row">
-      <div class="col-7 p-2">
-        <h4>電力使用状況: ラック一覧
-        </h4>
-      </div>
-      <div class="col-5 p-2">
-        <h4>測定・作業履歴</h4>
-      </div>
-
       <!-- usage -->
       <div class="col-7 p-2">
-        <div class="container border border-3 rounded" id="rounded-rectangle-container">
-          {% for rack in racks %}
-            <!-- 丸い四角形の表示 -->
-            <a href="{% url 'usage:graph' rack_number=rack.rack_number %}">
-              <div class="rounded-rectangle" style="background-color:
-                {% if rack.usage >= 70 %}#DC143C
-                {% elif rack.usage >= 50 %}#FF8C00
-                {% else %}#87CEFA{% endif %};">
-              
-                {{ rack.rack_number }}
-              </div>
-            </a>
-          {% endfor %}
+        <div class="card">
+          <div class="card-header">
+            <h6>電力使用状況: ラック一覧</h6>
+          </div>
+          <div class="card-body">
+            <div class="overflow-auto" style="height: 0vh; overflow-y: auto;" id="rackArea">
+                  {% for rack in racks %}
+                    <!-- 丸い四角形の表示 -->
+                    <a href="{% url 'usage:graph' rack_number=rack.rack_number %}">
+                      <div class="rounded-rectangle" style="background-color:
+                        {% if rack.usage >= 70 %}#DC143C
+                        {% elif rack.usage >= 50 %}#FF8C00
+                        {% else %}#87CEFA{% endif %};">
+                      
+                        {{ rack.rack_number }}
+                      </div>
+                    </a>
+                  {% endfor %}
+            </div>
+          </div>
+          <div class="card-footer text-muted">
+            total: {{ racks|length }}racks
+          </div>
         </div>
       </div>
-
       <!-- table -->
       <div class="col-5 p-2">
-        <table class="table links">
-          <thead class="table-dark">
-              <tr>
-                <th>作業者</th>
-                <th>日時</th>
-                <th>種別</th>
-                <th>内容</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for entry in combined_data %}
-                <tr>
-                  <td>{{ entry.employee }}</td>
-                  <td>{{ entry.datetime }}</td>
-                  <td>{{ entry.type }}</td>
-                  <td>{{ entry.content }}</td>
-                </tr>
-              {% endfor %}
-            </tbody>
-        </table>
+        <div class="card">
+          <div class="card-header" id="cardHeader">
+            <h6>測定・作業履歴</h6>
+          </div>
+          <div class="card-body">
+            <div class="overflow-auto" style="height: 0vh; overflow-y: auto;" id="tableArea">
+              <table class="table links">
+                <thead class="table-dark">
+                  <tr>
+                    <th>作業者</th>
+                    <th>日時</th>
+                    <th>種別</th>
+                    <th>内容</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for entry in combined_data %}
+                    <tr>
+                      <td>{{ entry.employee }}</td>
+                      <td>{{ entry.datetime }}</td>
+                      <td>{{ entry.type }}</td>
+                      <td>{{ entry.content }}</td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="card-footer text-muted">
+            latest {{ combined_data|length }} entries
+          </div>
+        </div>
       </div>
 
     </div>
   
   </div>
-{% endblock %}
+  
+  <script>
+    window.onload = function() {
+      var headerHeight = document.getElementById('header').offsetHeight;
+      var cardHeaderHeight = document.getElementById('cardHeader').offsetHeight;
+      var upperHeight = headerHeight + cardHeaderHeight + 100;
+      var scrollableArea1 = document.getElementById('rackArea');
+      var scrollableArea2 = document.getElementById('tableArea');
+      var contentHeight1 = scrollableArea1.scrollHeight;
+      var maxHeight1 = 'calc(90vh - ' + upperHeight + 'px)';
+      scrollableArea1.style.height = maxHeight1;
+		if (scrollableArea1.offsetHeight > contentHeight1) {
+      scrollableArea1.style.height = contentHeight1 + 'px';
+		}
+    var contentHeight2 = scrollableArea2.scrollHeight;
+		var maxHeight2 = 'calc(90vh - ' + upperHeight + 'px)';
+		scrollableArea2.style.height = maxHeight2;
+		if (scrollableArea2.offsetHeight > contentHeight2) {
+      scrollableArea2.style.height = contentHeight2 + 'px';
+		}
+	};
+</script>
+
+  {% endblock %}
