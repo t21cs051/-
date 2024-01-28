@@ -3,13 +3,18 @@
 {% block main %}
 
 <script>
-    window.onload = function() {
-        var headerHeight = document.getElementById('header').offsetHeight;
-        var cardHeaderHeight = document.getElementById('cardHeader').offsetHeight + document.getElementById('tableHeader').offsetHeight;
-        var upperHeight = headerHeight + cardHeaderHeight + 30;
-        var scrollableArea = document.getElementById('tableArea');
-        scrollableArea.style.height = 'calc(90vh - ' + upperHeight + 'px)';
-    };
+	window.onload = function() {
+		var headerHeight = document.getElementById('header').offsetHeight;
+		var cardHeaderHeight = document.getElementById('cardHeader').offsetHeight + document.getElementById('tableHeader').offsetHeight;
+		var upperHeight = headerHeight + cardHeaderHeight + 40;
+		var scrollableArea = document.getElementById('tableArea');
+		var contentHeight = scrollableArea.scrollHeight;
+		var maxHeight = 'calc(90vh - ' + upperHeight + 'px)';
+		scrollableArea.style.height = maxHeight;
+		if (scrollableArea.offsetHeight > contentHeight) {
+			scrollableArea.style.height = contentHeight + 'px';
+		}
+	};
 </script>
 
 <div class="container p-3">

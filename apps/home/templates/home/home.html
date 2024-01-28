@@ -21,8 +21,23 @@
   }
 </style>
 
+<script>
+	window.onload = function() {
+		var headerHeight = document.getElementById('header').offsetHeight;
+		var cardHeaderHeight = document.getElementById('cardHeader').offsetHeight;
+		var upperHeight = headerHeight + cardHeaderHeight + 40;
+		var scrollableArea = document.getElementById('tableArea');
+		var contentHeight = scrollableArea.scrollHeight;
+		var maxHeight = 'calc(90vh - ' + upperHeight + 'px)';
+		scrollableArea.style.height = maxHeight;
+		if (scrollableArea.offsetHeight > contentHeight) {
+			scrollableArea.style.height = contentHeight + 'px';
+		}
+	};
+</script>
 
-  <div class="container">
+
+  <div class="container p-3">
     <div class="row">
       <!-- usage -->
       <div class="col-7 p-2">
@@ -31,6 +46,7 @@
             <h6>電力使用状況: ラック一覧</h6>
           </div>
           <div class="card-body">
+            <div class="overflow-auto" style="height: 0vh; overflow-y: auto;" id="tableArea">
                   {% for rack in racks %}
                     <!-- 丸い四角形の表示 -->
                     <a href="{% url 'usage:graph' rack_number=rack.rack_number %}">
@@ -43,6 +59,7 @@
                       </div>
                     </a>
                   {% endfor %}
+            </div>
           </div>
           <div class="card-footer text-muted">
             total: {{ racks|length }}racks
@@ -52,30 +69,32 @@
       <!-- table -->
       <div class="col-5 p-2">
         <div class="card">
-          <div class="card-header">
+          <div class="card-header" id="cardHeader">
             <h6>測定・作業履歴</h6>
           </div>
           <div class="card-body">
-            <table class="table links">
-                      <thead class="table-dark">
-                          <tr>
-                            <th>作業者</th>
-                            <th>日時</th>
-                            <th>種別</th>
-                            <th>内容</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {% for entry in combined_data %}
-                            <tr>
-                              <td>{{ entry.employee }}</td>
-                              <td>{{ entry.datetime }}</td>
-                              <td>{{ entry.type }}</td>
-                              <td>{{ entry.content }}</td>
-                            </tr>
-                          {% endfor %}
-                        </tbody>
-                    </table>
+            <div class="overflow-auto" style="height: 0vh; overflow-y: auto;" id="tableArea">
+              <table class="table links">
+                <thead class="table-dark">
+                  <tr>
+                    <th>作業者</th>
+                    <th>日時</th>
+                    <th>種別</th>
+                    <th>内容</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for entry in combined_data %}
+                    <tr>
+                      <td>{{ entry.employee }}</td>
+                      <td>{{ entry.datetime }}</td>
+                      <td>{{ entry.type }}</td>
+                      <td>{{ entry.content }}</td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
           </div>
           <div class="card-footer text-muted">
             latest {{ combined_data|length }} entries
