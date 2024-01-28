@@ -24,7 +24,7 @@ class MeasurementAddView(CreateView, ListView):
     success_url = reverse_lazy('measurement:add')
 
     def get_queryset(self):
-        return CurrentMeasurement.objects.order_by('-id')[:8] # 直近の入力を上から8件まで表示
+        return CurrentMeasurement.objects.order_by('-id')[:10] # 直近の入力を上から10件まで表示
     
     def form_valid(self, form):
         form.instance.employee = self.request.user
